@@ -50,6 +50,13 @@ class Link extends MovingObject {
     if (this.down) vel = [vel[0], vel[1] + delta];
     if (this.right) vel = [vel[0] + delta, vel[1]];
 
+    if (vel[0] === 0 && vel[1] === 0) {
+      this.walking = false;
+    } else {
+      if (!this.walking) this.frameIndex = 0;
+      this.walking = true;
+    }
+
     const velocityScale = timeDelta / NORMAL_FRAME_TIME_DELTA,
       offsetX = vel[0] * velocityScale,
       offsetY = vel[1] * velocityScale;
@@ -70,7 +77,6 @@ class Link extends MovingObject {
     if (this.tickCount > this.ticksPerFrame) {
       this.tickCount = 0;
       if (this.frameIndex < this.frameLen - 1) {
-        // debugger
         this.frameIndex += 1;
       } else {
         this.frameIndex = 0;
@@ -78,30 +84,62 @@ class Link extends MovingObject {
     }
   }
 
+  stand(ctx) {
+
+  }
+
+  walk(ctx) {
+
+  }
+
   draw(ctx) {
+    // if (!this.down && !this.left && !this.right && !this.up) {
+    //   this.walking = false;
+    // } else {
+    //   if (!this.walking) this.frameIndex = 0;
+    //   this.walking = true;
+    // }
+    
     if (this.down && !this.left && !this.right && !this.up) {
+      if (this.walkDir !== 'down') this.frameIndex = 0;
       this.walkDir = 'down';
       this.frameLen = WALK_DOWN.length;
     } else if (!this.down && this.left && !this.right && !this.up) {
+      if (this.walkDir !== 'left') this.frameIndex = 0;
       this.walkDir = 'left';
       this.frameLen = WALK_SIDE.length;
     } else if (!this.down && !this.left && this.right && !this.up) {
+      if (this.walkDir !== 'right') this.frameIndex = 0;
       this.walkDir = 'right';
       this.frameLen = WALK_SIDE.length;
     } else if (!this.down && !this.left && !this.right && this.up) {
+      if (this.walkDir !== 'up') this.frameIndex = 0;
       this.walkDir = 'up';
       this.frameLen = WALK_UP.length;
     }
 
-    if (this.walkDir === 'down') {
-      ctx.drawImage(this.linkSprite, WALK_DOWN[this.frameIndex], 30, 16, 24, this.pos[0], this.pos[1], 32, 48);
-    } else if (this.walkDir === 'up') {
-      ctx.drawImage(this.linkSprite, WALK_UP[this.frameIndex], 120, 17, 24, this.pos[0], this.pos[1], 34, 48);
-    } else if (this.walkDir === 'right') {
-      ctx.drawImage(this.linkSprite, WALK_SIDE[this.frameIndex], 120, 19, 24, this.pos[0], this.pos[1], 38, 48);
-    } else if (this.walkDir === 'left') {
-      ctx.drawImage(this.linkSprite, WALK_SIDE[this.frameIndex], 30, 19, 24, this.pos[0], this.pos[1], 38, 48);
+    if (this.walking) {
+      if (this.walkDir === 'down') {
+        ctx.drawImage(this.linkSprite, WALK_DOWN[this.frameIndex], 30, 16, 24, this.pos[0], this.pos[1], 32, 48);
+      } else if (this.walkDir === 'up') {
+        ctx.drawImage(this.linkSprite, WALK_UP[this.frameIndex], 120, 17, 24, this.pos[0], this.pos[1], 34, 48);
+      } else if (this.walkDir === 'right') {
+        ctx.drawImage(this.linkSprite, WALK_SIDE[this.frameIndex], 120, 19, 24, this.pos[0], this.pos[1], 38, 48);
+      } else if (this.walkDir === 'left') {
+        ctx.drawImage(this.linkSprite, WALK_SIDE[this.frameIndex], 30, 19, 24, this.pos[0], this.pos[1], 38, 48);
+      }
+    } else {
+      if (this.walkDir === 'down') {
+        ctx.drawImage(this.linkSprite, 33, 1, 16, 22, this.pos[0], this.pos[1], 32, 44);
+      } else if (this.walkDir === 'up') {
+        ctx.drawImage(this.linkSprite, 63, 1, 16, 22, this.pos[0], this.pos[1], 32, 44);
+      } else if (this.walkDir === 'right') {
+        ctx.drawImage(this.linkSprite, 331, 120, 19, 23, this.pos[0], this.pos[1], 38, 46);
+      } else if (this.walkDir === 'left') {
+        ctx.drawImage(this.linkSprite, 151, 0, 19, 23, this.pos[0], this.pos[1], 38, 46);
+      }
     }
+
   }
 
 }
