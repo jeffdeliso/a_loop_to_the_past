@@ -22,7 +22,6 @@ The player can move before starting the game. Upon pressing play the game starts
 
 * Vanilla JavaScript for game logic.
 * HTML5 Canvas for rendering.
-* Web Audio API for sound effects.
 * Webpack to bundle various scripts into a single source.
 
 ##### Main files
