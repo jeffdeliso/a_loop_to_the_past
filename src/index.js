@@ -1,11 +1,12 @@
-import _ from 'lodash';
+import GameView from "./game_view";
+import Game from "./game";
 
-function component() {
-  let element = document.createElement('div');
+document.addEventListener("DOMContentLoaded", () => {
+  const canvasEl = document.getElementsByTagName("canvas")[0];
+  canvasEl.width = Game.DIM_X;
+  canvasEl.height = Game.DIM_Y;
 
-  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-
-  return element;
-}
-
-document.body.appendChild(component());
+  const ctx = canvasEl.getContext("2d");
+  const game = new Game();
+  new GameView(game, ctx).start();
+});

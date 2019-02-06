@@ -1,0 +1,24 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../backgrounds/zelda-tree.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;   
+  z-index: -1;
+}
+
+.game-container {
+  height: 600px;
+  width: 1050px;
+  background-image: url('../backgrounds/haunted_grove.png');
+  z-index: 1;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 1px solid black;
+  flex-shrink: 0;
+}
