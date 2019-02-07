@@ -6,5 +6,4 @@ class MovingObject extends Entity {
   }
 }
 
-
 export default MovingObject;

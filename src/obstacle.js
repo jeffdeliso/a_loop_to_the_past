@@ -2,6 +2,7 @@ import Entity from "./entity";
 
 class Obstacle extends Entity {
   // constructor(options) {
+  //   super(options);
   //   this.draw = this.draw.bind(this);
   // }
 

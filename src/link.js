@@ -64,20 +64,24 @@ class Link extends MovingObject {
 
   parseKeyUp(e) {
     e.preventDefault();
-    if (e.keyCode === 32) this.canSwing = true;
-    if (e.keyCode === 87 || e.keyCode === 38) this.up = false;
-    if (e.keyCode === 65 || e.keyCode === 37) this.left = false;
-    if (e.keyCode === 83 || e.keyCode === 40) this.down = false;
-    if (e.keyCode === 68 || e.keyCode === 39) this.right = false;
+    if (!this.game.paused) {
+      if (e.keyCode === 32) this.canSwing = true;
+      if (e.keyCode === 87 || e.keyCode === 38) this.up = false;
+      if (e.keyCode === 65 || e.keyCode === 37) this.left = false;
+      if (e.keyCode === 83 || e.keyCode === 40) this.down = false;
+      if (e.keyCode === 68 || e.keyCode === 39) this.right = false;
+    }
   }
 
   parseKeyDown(e) {
     e.preventDefault();
-    if (e.keyCode === 32) this.swingSword();
-    if (e.keyCode === 87 || e.keyCode === 38) this.up = true;
-    if (e.keyCode === 65 || e.keyCode === 37) this.left = true;
-    if (e.keyCode === 83 || e.keyCode === 40) this.down = true;
-    if (e.keyCode === 68 || e.keyCode === 39) this.right = true;
+    if (!this.game.paused) {
+      if (e.keyCode === 32) this.swingSword();
+      if (e.keyCode === 87 || e.keyCode === 38) this.up = true;
+      if (e.keyCode === 65 || e.keyCode === 37) this.left = true;
+      if (e.keyCode === 83 || e.keyCode === 40) this.down = true;
+      if (e.keyCode === 68 || e.keyCode === 39) this.right = true;
+    }
   }
 
   move(timeDelta) {
@@ -120,7 +124,7 @@ class Link extends MovingObject {
         this.pos = newPosY;
       }
     } else {
-      this.pos = newPos; 
+      this.pos = newPos;
     }
   }
 
