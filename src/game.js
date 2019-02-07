@@ -2,17 +2,20 @@ import Link from "./link";
 import Util from "./util";
 import Obstacle from "./obstacle";
 import Entity from "./entity";
+import Moblin from "./moblin";
 
 class Game {
   constructor() {
-    this.links = [];
+    this.link = new Link({ game: this });
     this.obstacles = [];
+    this.enemies = [];
     this.addObstacles();
+    this.addMoblin();
   }
   
   add(object) {
-    if (object instanceof Link) {
-      this.links.push(object);
+    if (object instanceof Moblin) {
+      this.enemies.push(object);
     } else if (object instanceof Obstacle) {
       this.obstacles.push(object);
     } else {
@@ -20,10 +23,11 @@ class Game {
     }
   }
 
-  addLink() {
-    const link = new Link({ game: this });
-    this.add(link);
-    return link;
+  addMoblin() {
+    this.add(new Moblin({ game: this, link: this.link, pos: [250, -50] }));
+    this.add(new Moblin({ game: this, link: this.link, pos: [750, -50] }));
+    // this.add(moblin);
+    // return moblin;
   }
 
   addObstacles() {
@@ -80,11 +84,11 @@ class Game {
   }
 
   allObjects() {
-    return [].concat(this.links).concat(this.obstacles);
+    return [this.link].concat(this.enemies);
   }
 
   allMovingObjects() {
-    return [].concat(this.links);
+    return [this.link].concat(this.enemies);
   }
 
   checkObstacles() {
@@ -121,12 +125,21 @@ class Game {
   //   return false;
   // }
 
-  isCollidedWithObstacle(object) {
-    for (let i = 0; i < this.obstacles.length; i++) {
-      const obstacle = this.obstacles[i];
-      if (object.isCollidedWith(obstacle)) {
-        return true;
-      }
+  // isCollidedWithObstacle(object) {
+  //   for (let i = 0; i < this.obstacles.length; i++) {
+  //     const obstacle = this.obstacles[i];
+  //     if (object.isCollidedWith(obstacle)) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+  enemyWillCollideWithEnemy(pos, enemy) {
+    const obj = new Entity({ pos, box: enemy.box });
+    for (let i = 0; i < this.enemies.length; i++) {
+      const otherEnemy = this.enemies[i];
+      if (enemy === otherEnemy) continue;
+      if (obj.isCollidedWith(otherEnemy)) return true;
     }
     return false;
   }
@@ -153,6 +166,10 @@ class Game {
   isOutOfBounds(pos, box) {
     return ((pos[0] < 0) || (pos[1] < 0) ||
       (pos[0] > Game.DIM_X - box[0]) || (pos[1] > Game.DIM_Y - box[1])) || this.willCollideWithObstacle(pos, box);
+  }
+
+  enemyIsOutOfBounds(pos, enemy) {
+    return this.willCollideWithObstacle(pos, enemy.box) || this.enemyWillCollideWithEnemy(pos, enemy);
   }
 
   moveObjects(delta) {

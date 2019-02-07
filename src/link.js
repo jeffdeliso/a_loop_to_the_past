@@ -40,21 +40,22 @@ class Link extends MovingObject {
     super(options);
     this.linkSprite = new Image();
     this.linkSprite.src = "../assets/sprites/link.png";
-    this.move = this.move.bind(this);
-    this.parseKeyDown = this.parseKeyDown.bind(this);
-    this.parseKeyUp = this.parseKeyUp.bind(this);
-    this.update = this.update.bind(this);
     this.scale = 2;
     this.frameIndex = 0;
     this.tickCount = 0;
     this.ticksPerFrame = 6;
     this.pos = [473, 310];
-    this.draw = this.draw.bind(this);
     this.walkDir = 'down';
     this.frameLen = 7;
     this.box = [32, 48];
-    this.toggleSword = this.toggleSword.bind(this);
     this.canSwing = true;
+    
+    this.draw = this.draw.bind(this);
+    this.move = this.move.bind(this);
+    this.parseKeyDown = this.parseKeyDown.bind(this);
+    this.toggleSword = this.toggleSword.bind(this);
+    this.parseKeyUp = this.parseKeyUp.bind(this);
+    this.update = this.update.bind(this);
   }
 
   parseKeyUp(e) {

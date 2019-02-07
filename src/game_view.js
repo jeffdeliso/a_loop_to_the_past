@@ -2,7 +2,7 @@ class GameView {
   constructor(game, ctx) {
     this.ctx = ctx;
     this.game = game;
-    this.link = this.game.addLink();
+    this.link = this.game.link;
   }
 
   bindKeyHandlers() {
