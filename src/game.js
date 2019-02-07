@@ -1,5 +1,4 @@
 import Link from "./link";
-import Util from "./util";
 import Obstacle from "./obstacle";
 import Entity from "./entity";
 import Moblin from "./moblin";
@@ -10,7 +9,7 @@ class Game {
     this.obstacles = [];
     this.enemies = [];
     this.addObstacles();
-    this.addMoblin();
+    // this.addMoblin();
   }
   
   add(object) {
@@ -91,24 +90,24 @@ class Game {
     return [this.link].concat(this.enemies);
   }
 
-  checkObstacles() {
+  // checkObstacles() {
 
-  }
+  // }
 
-  checkCollisions() {
-    // const allObjects = this.allMovingObjects();
-    // for (let i = 0; i < allObjects.length; i++) {
-    //   for (let j = 0; j < allObjects.length; j++) {
-    //     const obj1 = allObjects[i];
-    //     const obj2 = allObjects[j];
+  // checkCollisions() {
+  //   const allObjects = this.allMovingObjects();
+  //   for (let i = 0; i < allObjects.length; i++) {
+  //     for (let j = 0; j < allObjects.length; j++) {
+  //       const obj1 = allObjects[i];
+  //       const obj2 = allObjects[j];
 
-    //     if (obj1.isCollidedWith(obj2)) {
-    //       const collision = obj1.collideWith(obj2);
-    //       if (collision) return;
-    //     }
-    //   }
-    // }
-  }
+  //       if (obj1.isCollidedWith(obj2)) {
+  //         const collision = obj1.collideWith(obj2);
+  //         if (collision) return;
+  //       }
+  //     }
+  //   }
+  // }
 
   // checkObstacleCollisions() {
   //   for (let i = 0; i < allObjects.length; i++) {
@@ -134,12 +133,24 @@ class Game {
   //   }
   //   return false;
   // }
+
+  
   enemyWillCollideWithEnemy(pos, enemy) {
     const obj = new Entity({ pos, box: enemy.box });
     for (let i = 0; i < this.enemies.length; i++) {
       const otherEnemy = this.enemies[i];
       if (enemy === otherEnemy) continue;
       if (obj.isCollidedWith(otherEnemy)) return true;
+    }
+    return false;
+  }
+
+  checkEnemyCollidedWithLink() {
+    for (let i = 0; i < this.enemies.length; i++) {
+      const enemy = this.enemies[i];
+      if (enemy.isCollidedWith(this.link)) {
+        this.link.hitByEnemy(enemy.vect);
+      }
     }
     return false;
   }
@@ -185,28 +196,28 @@ class Game {
     ];
   }
 
-  remove(object) {
-    // if (object instanceof Bullet) {
-    //   this.bullets.splice(this.bullets.indexOf(object), 1);
-    // } else if (object instanceof Asteroid) {
-    //   this.asteroids.splice(this.asteroids.indexOf(object), 1);
-    if (object instanceof Link) {
-      this.links.splice(this.links.indexOf(object), 1);
-    } else {
-      throw new Error("unknown type of object");
-    }
-  }
+  // remove(object) {
+  //   // if (object instanceof Bullet) {
+  //   //   this.bullets.splice(this.bullets.indexOf(object), 1);
+  //   // } else if (object instanceof Asteroid) {
+  //   //   this.asteroids.splice(this.asteroids.indexOf(object), 1);
+  //   if (object instanceof Link) {
+  //     this.links.splice(this.links.indexOf(object), 1);
+  //   } else {
+  //     throw new Error("unknown type of object");
+  //   }
+  // }
 
   step(delta) {
     this.moveObjects(delta);
-    this.checkCollisions();
+    this.checkEnemyCollidedWithLink();
   }
 
-  wrap(pos) {
-    return [
-      Util.wrap(pos[0], Game.DIM_X), Util.wrap(pos[1], Game.DIM_Y)
-    ];
-  }
+  // wrap(pos) {
+  //   return [
+  //     Util.wrap(pos[0], Game.DIM_X), Util.wrap(pos[1], Game.DIM_Y)
+  //   ];
+  // }
 }
 
 Game.DIM_X = 1050;

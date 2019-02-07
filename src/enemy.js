@@ -24,9 +24,9 @@ class Enemy extends MovingObject {
 
 
   move(timeDelta) {
-    const vect = this.vectorTowardsLink(this.link);
+    this.vect = this.vectorTowardsLink(this.link);
     const delta = 1;
-    const vel = [vect[0] * delta, vect[1] * delta];
+    const vel = [this.vect[0] * delta, this.vect[1] * delta];
 
     if (vel[0] > 0 && vel[1] > 0) {
       if (vel[0] > vel[1]) {
