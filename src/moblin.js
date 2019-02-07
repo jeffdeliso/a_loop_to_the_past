@@ -35,47 +35,8 @@ class Moblin extends Enemy {
     this.box = [28, 48];
 
     this.draw = this.draw.bind(this);
-    // this.move = this.move.bind(this);
     this.update = this.update.bind(this);
   }
-
-  // move(timeDelta) {
-  //   let vel = [0, 0];
-  //   const delta = 2;
-  //   if (!this.sword) {
-  //     if (this.up) vel = [vel[0], vel[1] - delta];
-  //     if (this.left) vel = [vel[0] - delta, vel[1]];
-  //     if (this.down) vel = [vel[0], vel[1] + delta];
-  //     if (this.right) vel = [vel[0] + delta, vel[1]];
-  //   }
-
-  //   if (vel[0] === 0 && vel[1] === 0) {
-  //     this.walking = false;
-  //   } else {
-  //     if (!this.walking) this.frameIndex = 0;
-  //     this.walking = true;
-  //   }
-
-  //   const velocityScale = timeDelta / NORMAL_FRAME_TIME_DELTA,
-  //     offsetX = vel[0] * velocityScale,
-  //     offsetY = vel[1] * velocityScale;
-
-  //   const newPos = [this.pos[0] + offsetX, this.pos[1] + offsetY];
-
-  //   if (this.game.isOutOfBounds(newPos, this.box)) {
-  //     const newPosX = [this.pos[0] + offsetX, this.pos[1]];
-  //     const newPosY = [this.pos[0], this.pos[1] + offsetY];
-
-  //     if (!this.game.isOutOfBounds(newPosX, this.box)) {
-  //       this.pos = newPosX;
-  //     }
-  //     if (!this.game.isOutOfBounds(newPosY, this.box)) {
-  //       this.pos = newPosY;
-  //     }
-  //   } else {
-  //     this.pos = newPos;
-  //   }
-  // }
 
   update() {
     this.tickCount += 1;
@@ -84,8 +45,8 @@ class Moblin extends Enemy {
       if (this.frameIndex < this.frameLen - 1) {
         this.frameIndex += 1;
       } else {
+        if (this.life === 0) this.remove();
         this.frameIndex = 0;
-        if (this.life === 0) this.game.remove(this);
       }
     }
   }
@@ -151,7 +112,5 @@ class Moblin extends Enemy {
   }
 
 }
-
-const NORMAL_FRAME_TIME_DELTA = 1000 / 60;
 
 export default Moblin;

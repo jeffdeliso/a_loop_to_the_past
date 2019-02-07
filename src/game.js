@@ -3,15 +3,37 @@ import Obstacle from "./obstacle";
 import Entity from "./entity";
 import Moblin from "./moblin";
 
+const SPAWN_POS = [
+  [340, 650],
+  [750, 650],
+  [285, -50],
+  [720, -50],
+];
+
 class Game {
   constructor() {
     this.link = new Link({ game: this });
+    this.spawnEnemies = false;
     this.obstacles = [];
     this.enemies = [];
     this.addObstacles();
-    this.addMoblin();
+    this.parseKeyDown = this.parseKeyDown.bind(this);
   }
-  
+
+  addMoblins() {
+    SPAWN_POS.forEach(pos => {
+      this.add(new Moblin({ game: this, link: this.link, pos }));
+    });
+  }
+
+  parseKeyDown(e) {
+    e.preventDefault();
+    if (e.keyCode === 13) {
+      if (!this.spawnEnemies) this.addMoblins();
+      this.spawnEnemies = true;
+    }
+  }
+
   add(object) {
     if (object instanceof Moblin) {
       this.enemies.push(object);
@@ -20,13 +42,6 @@ class Game {
     } else {
       throw new Error("unknown type of object");
     }
-  }
-
-  addMoblin() {
-    this.add(new Moblin({ game: this, link: this.link, pos: [250, -50] }));
-    this.add(new Moblin({ game: this, link: this.link, pos: [750, -50] }));
-    // this.add(moblin);
-    // return moblin;
   }
 
   addObstacles() {
@@ -90,57 +105,11 @@ class Game {
     return [this.link].concat(this.enemies);
   }
 
-  // checkObstacles() {
-
-  // }
-
-  // checkCollisions() {
-  //   const allObjects = this.allMovingObjects();
-  //   for (let i = 0; i < allObjects.length; i++) {
-  //     for (let j = 0; j < allObjects.length; j++) {
-  //       const obj1 = allObjects[i];
-  //       const obj2 = allObjects[j];
-
-  //       if (obj1.isCollidedWith(obj2)) {
-  //         const collision = obj1.collideWith(obj2);
-  //         if (collision) return;
-  //       }
-  //     }
-  //   }
-  // }
-
-  // checkObstacleCollisions() {
-  //   for (let i = 0; i < allObjects.length; i++) {
-  //     for (let j = 0; j < allObjects.length; j++) {
-  //       const obj1 = allMovingObjects[i];
-  //       const obj2 = this.obstacles[j];
-
-  //       if (obj1.isCollidedWith(obj2)) {
-  //         return true;
-  //       }
-  //     }
-  //   }
-
-  //   return false;
-  // }
-
-  // isCollidedWithObstacle(object) {
-  //   for (let i = 0; i < this.obstacles.length; i++) {
-  //     const obstacle = this.obstacles[i];
-  //     if (object.isCollidedWith(obstacle)) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-
   enemyWillCollideWithEnemy(pos, enemy) {
-    const obj = new Entity({ pos, box: enemy.box });
     for (let i = 0; i < this.enemies.length; i++) {
       const otherEnemy = this.enemies[i];
       if (enemy === otherEnemy) continue;
-      if (obj.isCollidedWith(otherEnemy)) return true;
+      if (otherEnemy.willCollideWith(pos, enemy.box)) return true;
     }
     return false;
   }
@@ -166,10 +135,9 @@ class Game {
   }
 
   willCollideWithObstacle(pos, box) {
-    const obj = new Entity({pos, box});
     for (let i = 0; i < this.obstacles.length; i++) {
       const obstacle = this.obstacles[i];
-      if (obj.isCollidedWith(obstacle)) {
+      if (obstacle.willCollideWith(pos, box)) {
         return true;
       }
     }
@@ -199,12 +167,11 @@ class Game {
     });
   }
 
-  // randomPosition() {
-  //   return [
-  //     Game.DIM_X * Math.random(),
-  //     Game.DIM_Y * Math.random()
-  //   ];
-  // }
+  addEnemyToRandomSpawn() {
+    const idx = Math.floor(Math.random() * 4);
+    const pos = SPAWN_POS[idx];
+    this.add(new Moblin({ game: this, link: this.link, pos }));
+  }
 
   remove(object) {
     if (object instanceof Moblin) {
@@ -215,16 +182,11 @@ class Game {
   }
 
   step(delta) {
+    if (this.spawnEnemies && this.enemies.length < 4) this.addEnemyToRandomSpawn();
     this.moveObjects(delta);
     this.checkEnemyWillCollideWithSword();
     this.checkEnemyCollidedWithLink();
   }
-
-  // wrap(pos) {
-  //   return [
-  //     Util.wrap(pos[0], Game.DIM_X), Util.wrap(pos[1], Game.DIM_Y)
-  //   ];
-  // }
 }
 
 Game.DIM_X = 1050;

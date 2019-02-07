@@ -7,6 +7,7 @@ class GameView {
 
   bindKeyHandlers() {
     document.addEventListener('keydown', this.link.parseKeyDown);
+    document.addEventListener('keydown', this.game.parseKeyDown);
     document.addEventListener('keyup', this.link.parseKeyUp);
   }
 
@@ -30,4 +31,4 @@ class GameView {
 
 export default GameView;
 
-const NORMAL_FRAME_TIME_DELTA = 1000 / 60;
+// const NORMAL_FRAME_TIME_DELTA = 1000 / 60;

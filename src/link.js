@@ -103,8 +103,6 @@ class Link extends MovingObject {
       }
     }
 
-
-
     const velocityScale = timeDelta / NORMAL_FRAME_TIME_DELTA,
       offsetX = vel[0] * velocityScale,
       offsetY = vel[1] * velocityScale;
@@ -254,17 +252,14 @@ class Link extends MovingObject {
         } else if (!this.down && this.left && !this.right && !this.up) {
           if (this.walkDir !== 'left') this.frameIndex = 0;
           this.walkDir = 'left';
-          // this.createHurtBox({ pos: [this.x() - 30, this.y()], box: [40, 60] });
           this.frameLen = WALK_SIDE.length;
         } else if (!this.down && !this.left && this.right && !this.up) {
           if (this.walkDir !== 'right') this.frameIndex = 0;
           this.walkDir = 'right';
-          // this.createHurtBox({ pos: [this.x() + 25, this.y()], box: [40, 60] });
           this.frameLen = WALK_SIDE.length;
         } else if (!this.down && !this.left && !this.right && this.up) {
           if (this.walkDir !== 'up') this.frameIndex = 0;
           this.walkDir = 'up';
-          // this.createHurtBox({ pos: [this.x() - 25, this.y() - 25], box: [70, 45] });
           this.frameLen = WALK_UP.length;
         }
 
@@ -292,12 +287,7 @@ class Link extends MovingObject {
       }
     }
 
-    // ctx.beginPath();
-    // ctx.lineWidth = "1";
-    // ctx.strokeStyle = "black";
-    // ctx.rect(this.pos[0], this.pos[1], this.width(), this.height());
-    // ctx.stroke()
-    if (this.hurtBox) this.hurtBox.draw(ctx);
+    // if (this.hurtBox) this.hurtBox.draw(ctx);
     this.update();
   }
 
