@@ -85,18 +85,23 @@ class Link extends MovingObject {
 
   move(timeDelta) {
     let vel;
+    let dx = 0;
+    let dy = 0;
     if (this.hit) {
       const delta = 4;
       vel = [this.vect[0] * delta, this.vect[1] * delta];
     } else {
-      vel = [0, 0];
-      const delta = 2;
       if (!this.sword) {
-        if (this.up) vel = [vel[0], vel[1] - delta];
-        if (this.left) vel = [vel[0] - delta, vel[1]];
-        if (this.down) vel = [vel[0], vel[1] + delta];
-        if (this.right) vel = [vel[0] + delta, vel[1]];
+        if (this.up) dy = -1;
+        if (this.left) dx = -1;
+        if (this.down) dy = 1;
+        if (this.right) dx = 1;
       }
+
+      const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+      const vect = [dx / len || 0, dy / len || 0];
+      const delta = 2;
+      vel = [vect[0] * delta, vect[1] * delta];
 
       if (vel[0] === 0 && vel[1] === 0) {
         this.walking = false;
