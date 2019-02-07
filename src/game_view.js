@@ -46,6 +46,8 @@ class GameView {
     parent.removeChild(btn);
     parent.style.visibility = 'hidden';
     parent.style.opacity = 0;
+    const enterEl = document.getElementById('enter');
+    enterEl.style.visibility = 'visible';
     this.game = new Game();
     this.link = this.game.link;
     this.start();

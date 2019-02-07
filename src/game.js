@@ -30,6 +30,8 @@ class Game {
     e.preventDefault();
     if (e.keyCode === 13) {
       if (!this.spawnEnemies) this.addMoblins();
+      const enterEl = document.getElementById('enter');
+      enterEl.style.visibility = 'hidden';
       this.spawnEnemies = true;
     } else if (e.keyCode === 80) {
       this.togglePause();
@@ -37,7 +39,13 @@ class Game {
   }
 
   togglePause() {
+    const pauseEl = document.getElementById('pause');
     this.paused = !this.paused;
+    if (this.paused) {
+      pauseEl.style.visibility = 'visible';
+    } else {
+      pauseEl.style.visibility = 'hidden';
+    }
   }
 
   add(object) {
@@ -104,7 +112,7 @@ class Game {
       this.allObjects().forEach((object) => {
         object.draw(ctx);
       });
-      
+
       if (this.link.life === 0) {
         this.gameover = true;
       }
