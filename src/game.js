@@ -1,82 +1,162 @@
 import Link from "./link";
 import Util from "./util";
+import Obstacle from "./obstacle";
+import Entity from "./entity";
 
 class Game {
   constructor() {
-    // this.asteroids = [];
-    // this.bullets = [];
     this.links = [];
-
-    // this.addAsteroids();
+    this.obstacles = [];
+    this.addObstacles();
   }
-
+  
   add(object) {
-
-    // if (object instanceof Asteroid) {
-    //   this.asteroids.push(object);
-    // } else if (object instanceof Bullet) {
-    //   this.bullets.push(object);
     if (object instanceof Link) {
       this.links.push(object);
+    } else if (object instanceof Obstacle) {
+      this.obstacles.push(object);
     } else {
       throw new Error("unknown type of object");
     }
   }
 
-  // addAsteroids() {
-  //   for (let i = 0; i < Game.NUM_ASTEROIDS; i++) {
-  //     this.add(new Asteroid({ game: this }));
-  //   }
-  // }
-
   addLink() {
-
-    const link = new Link({
-      pos: [473, 310],
-      game: this
-    });
-
+    const link = new Link({ game: this });
     this.add(link);
-
     return link;
   }
 
+  addObstacles() {
+    this.add(new Obstacle({ pos: [0, 0], box: [125, 193] }));
+    this.add(new Obstacle({ pos: [125, 0], box: [55, 77] }));
+    this.add(new Obstacle({ pos: [125, 77], box: [15, 40] }));
+    this.add(new Obstacle({ pos: [180, 0], box: [14, 38] }));
+    this.add(new Obstacle({ pos: [436, 214], box: [76, 70] }));
+    this.add(new Obstacle({ pos: [0, 537], box: [134, 63] }));
+    this.add(new Obstacle({ pos: [0, 487], box: [96, 50] }));
+    this.add(new Obstacle({ pos: [96, 497], box: [18, 40] }));
+    this.add(new Obstacle({ pos: [114, 511], box: [10, 26] }));
+    this.add(new Obstacle({ pos: [182, 391], box: [116, 150] }));
+    this.add(new Obstacle({ pos: [174, 410], box: [8, 92] }));
+    this.add(new Obstacle({ pos: [165, 420], box: [9, 34] }));
+    this.add(new Obstacle({ pos: [297, 420], box: [17, 38] }));
+    this.add(new Obstacle({ pos: [214, 375], box: [52, 16] }));
+    this.add(new Obstacle({ pos: [415, 0], box: [115, 72] }));
+    this.add(new Obstacle({ pos: [434, 575], box: [153, 25] }));
+    this.add(new Obstacle({ pos: [447, 560], box: [13, 15] }));
+    this.add(new Obstacle({ pos: [566, 560], box: [13, 15] }));
+    this.add(new Obstacle({ pos: [460, 542], box: [106, 33] }));
+    this.add(new Obstacle({ pos: [490, 528], box: [45, 14] }));
+    this.add(new Obstacle({ pos: [0, 193], box: [80, 28] }));
+    this.add(new Obstacle({ pos: [0, 220], box: [58, 75] }));
+    this.add(new Obstacle({ pos: [0, 295], box: [17, 190] }));
+    this.add(new Obstacle({ pos: [17, 415], box: [58, 71] }));
+    this.add(new Obstacle({ pos: [17, 385], box: [38, 30] }));
+    this.add(new Obstacle({ pos: [688, 391], box: [116, 150] }));
+    this.add(new Obstacle({ pos: [680, 410], box: [8, 92] }));
+    this.add(new Obstacle({ pos: [671, 420], box: [9, 34] }));
+    this.add(new Obstacle({ pos: [803, 420], box: [17, 38] }));
+    this.add(new Obstacle({ pos: [720, 375], box: [52, 16] }));
+    this.add(new Obstacle({ pos: [688, 391], box: [116, 150] }));
+    this.add(new Obstacle({ pos: [680, 410], box: [8, 92] }));
+    this.add(new Obstacle({ pos: [671, 420], box: [9, 34] }));
+    this.add(new Obstacle({ pos: [803, 420], box: [17, 38] }));
+    this.add(new Obstacle({ pos: [720, 375], box: [52, 16] }));
+    this.add(new Obstacle({ pos: [648, 118], box: [116, 150] }));
+    this.add(new Obstacle({ pos: [640, 136], box: [8, 92] }));
+    this.add(new Obstacle({ pos: [631, 144], box: [9, 34] }));
+    this.add(new Obstacle({ pos: [763, 144], box: [17, 38] }));
+    this.add(new Obstacle({ pos: [680, 102], box: [52, 16] }));
+    this.add(new Obstacle({ pos: [890, 0], box: [160, 70] }));
+    this.add(new Obstacle({ pos: [950, 70], box: [100, 115] }));
+    this.add(new Obstacle({ pos: [927, 70], box: [23, 60] }));
+    this.add(new Obstacle({ pos: [1005, 185], box: [45, 119] }));
+    this.add(new Obstacle({ pos: [989, 185], box: [16, 51] }));
+    this.add(new Obstacle({ pos: [929, 520], box: [121, 80] }));
+    this.add(new Obstacle({ pos: [989, 404], box: [61, 116] }));
+    this.add(new Obstacle({ pos: [953, 499], box: [36, 21] }));
+    this.add(new Obstacle({ pos: [1012, 384], box: [38, 20] }));
+    this.add(new Obstacle({ pos: [1042, 302], box: [8, 82] }));
+  }
+
   allObjects() {
+    return [].concat(this.links).concat(this.obstacles);
+  }
+
+  allMovingObjects() {
     return [].concat(this.links);
   }
 
-  checkCollisions() {
-    const allObjects = this.allObjects();
-    for (let i = 0; i < allObjects.length; i++) {
-      for (let j = 0; j < allObjects.length; j++) {
-        const obj1 = allObjects[i];
-        const obj2 = allObjects[j];
+  checkObstacles() {
 
-        if (obj1.isCollidedWith(obj2)) {
-          const collision = obj1.collideWith(obj2);
-          if (collision) return;
-        }
+  }
+
+  checkCollisions() {
+    // const allObjects = this.allMovingObjects();
+    // for (let i = 0; i < allObjects.length; i++) {
+    //   for (let j = 0; j < allObjects.length; j++) {
+    //     const obj1 = allObjects[i];
+    //     const obj2 = allObjects[j];
+
+    //     if (obj1.isCollidedWith(obj2)) {
+    //       const collision = obj1.collideWith(obj2);
+    //       if (collision) return;
+    //     }
+    //   }
+    // }
+  }
+
+  // checkObstacleCollisions() {
+  //   for (let i = 0; i < allObjects.length; i++) {
+  //     for (let j = 0; j < allObjects.length; j++) {
+  //       const obj1 = allMovingObjects[i];
+  //       const obj2 = this.obstacles[j];
+
+  //       if (obj1.isCollidedWith(obj2)) {
+  //         return true;
+  //       }
+  //     }
+  //   }
+
+  //   return false;
+  // }
+
+  isCollidedWithObstacle(object) {
+    for (let i = 0; i < this.obstacles.length; i++) {
+      const obstacle = this.obstacles[i];
+      if (object.isCollidedWith(obstacle)) {
+        return true;
       }
     }
+    return false;
+  }
+
+  willCollideWithObstacle(pos, box) {
+    const obj = new Entity({pos, box});
+    for (let i = 0; i < this.obstacles.length; i++) {
+      const obstacle = this.obstacles[i];
+      if (obj.isCollidedWith(obstacle)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   draw(ctx) {
     ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
-    // ctx.fillStyle = Game.BG_COLOR;
-    // ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
 
     this.allObjects().forEach((object) => {
       object.draw(ctx);
     });
   }
 
-  isOutOfBounds(pos) {
-    return (pos[0] < 0) || (pos[1] < 0) ||
-      (pos[0] > Game.DIM_X) || (pos[1] > Game.DIM_Y);
+  isOutOfBounds(pos, box) {
+    return ((pos[0] < 0) || (pos[1] < 0) ||
+      (pos[0] > Game.DIM_X - box[0]) || (pos[1] > Game.DIM_Y - box[1])) || this.willCollideWithObstacle(pos, box);
   }
 
   moveObjects(delta) {
-    this.allObjects().forEach((object) => {
+    this.allMovingObjects().forEach((object) => {
       object.move(delta);
     });
   }
