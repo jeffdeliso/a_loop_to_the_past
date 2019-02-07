@@ -1,8 +1,11 @@
+import Game from "./game";
+
 class GameView {
   constructor(game, ctx) {
     this.ctx = ctx;
     this.game = game;
     this.link = this.game.link;
+    this.animate = this.animate.bind(this);
   }
 
   bindKeyHandlers() {
@@ -15,20 +18,38 @@ class GameView {
     this.bindKeyHandlers();
     this.lastTime = 0;
 
-    requestAnimationFrame(this.animate.bind(this));
+    requestAnimationFrame(this.animate);
   }
 
   animate(time) {
-    const timeDelta = time - this.lastTime;
+    if (!this.game.gameover) {
+      const timeDelta = time - this.lastTime;
+  
+      this.game.step(timeDelta);
+      this.game.draw(this.ctx);
+      this.lastTime = time;
+  
+      requestAnimationFrame(this.animate);
+    } else {
+      const btn = document.createElement("BUTTON");
+      const text = document.createTextNode("restart");
+      const gameover = document.getElementById('gameover');
+      btn.appendChild(text);
+      btn.onclick = () => this.newGame(btn, gameover);
+      gameover.appendChild(btn);
+      gameover.style.visibility = 'visible';
+      gameover.style.opacity = 1;
+    }
+  }
 
-    this.game.step(timeDelta);
-    this.game.draw(this.ctx);
-    this.lastTime = time;
-
-    requestAnimationFrame(this.animate.bind(this));
+  newGame(btn, parent) {
+    parent.removeChild(btn);
+    parent.style.visibility = 'hidden';
+    parent.style.opacity = 0;
+    this.game = new Game();
+    this.link = this.game.link;
+    this.start();
   }
 }
 
 export default GameView;
-
-// const NORMAL_FRAME_TIME_DELTA = 1000 / 60;

@@ -104,6 +104,10 @@ class Game {
       this.allObjects().forEach((object) => {
         object.draw(ctx);
       });
+      
+      if (this.link.life === 0) {
+        this.gameover = true;
+      }
     }
 
     // this.obstacles.forEach((object) => {

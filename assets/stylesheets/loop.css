@@ -1,3 +1,13 @@
+@font-face {
+  font-family: hylian;
+  src: url('../fonts/HyliaSerifBeta-Regular.otf') format("opentype");
+}
+
+@font-face {
+  font-family: menu;
+  src: url('../fonts/ReturnofGanon.ttf') format('truetype');
+}
+
 body {
   height: 100vh;
   width: 100vw;
@@ -12,7 +22,7 @@ body {
   z-index: -1;
 }
 
-.game-container {
+#game-container {
   height: 600px;
   width: 1050px;
   background-image: url('../backgrounds/haunted_grove.png');
@@ -21,4 +31,43 @@ body {
   background-repeat: no-repeat;
   border: 1px solid black;
   flex-shrink: 0;
+  position: relative;
+}
+
+#gameover {
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  height: 600px;
+  width: 1050px;
+  z-index: 10;
+  transition: opacity .5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  font-family: hylian;
+  color: #bb0200;
+  font-size: 50px;
+  flex-direction: column;
+}
+
+#game {
+  top: 0;
+  left: 0;
+  position: absolute;
+  height: 600px;
+  width: 1050px;
+}
+
+#gameover button {
+  color: #fff;
+  font-size: 30px;
+  font-family: menu;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-top: 10px;
 }
