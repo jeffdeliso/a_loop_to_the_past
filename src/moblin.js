@@ -25,6 +25,7 @@ const MOBLIN_RIGHT = [
   [165, 122, 14, 24]
 ];
 
+
 class Moblin extends Enemy {
   constructor(options) {
     super(options);
@@ -84,6 +85,7 @@ class Moblin extends Enemy {
         this.frameIndex += 1;
       } else {
         this.frameIndex = 0;
+        if (this.life === 0) this.game.remove(this);
       }
     }
   }
@@ -95,51 +97,54 @@ class Moblin extends Enemy {
     //   if (!this.walking) this.frameIndex = 0;
     //   this.walking = true;
     // }
-
-    if (this.walkDir === 'down') {
-      ctx.drawImage(this.moblinSprite,
-        MOBLIN_DOWN[this.frameIndex][0],
-        MOBLIN_DOWN[this.frameIndex][1],
-        MOBLIN_DOWN[this.frameIndex][2],
-        MOBLIN_DOWN[this.frameIndex][3],
-        this.pos[0],
-        this.pos[1],
-        MOBLIN_DOWN[this.frameIndex][2] * this.scale,
-        MOBLIN_DOWN[this.frameIndex][3] * this.scale
-      );
-    } else if (this.walkDir === 'up') {
-      ctx.drawImage(this.moblinSprite,
-        MOBLIN_UP[this.frameIndex][0],
-        MOBLIN_UP[this.frameIndex][1],
-        MOBLIN_UP[this.frameIndex][2],
-        MOBLIN_UP[this.frameIndex][3],
-        this.pos[0],
-        this.pos[1] - MOBLIN_UP[this.frameIndex][3] * this.scale + 48,
-        MOBLIN_UP[this.frameIndex][2] * this.scale,
-        MOBLIN_UP[this.frameIndex][3] * this.scale
-      );
-    } else if (this.walkDir === 'left') {
-      ctx.drawImage(this.moblinSprite,
-        MOBLIN_LEFT[this.frameIndex][0],
-        MOBLIN_LEFT[this.frameIndex][1],
-        MOBLIN_LEFT[this.frameIndex][2],
-        MOBLIN_LEFT[this.frameIndex][3],
-        this.pos[0] - MOBLIN_LEFT[this.frameIndex][2] * this.scale + 28,
-        this.pos[1],
-        MOBLIN_LEFT[this.frameIndex][2] * this.scale,
-        MOBLIN_LEFT[this.frameIndex][3] * this.scale
-      );
-    } else if (this.walkDir === 'right') {
-      ctx.drawImage(this.moblinSprite,
-        MOBLIN_RIGHT[this.frameIndex][0],
-        MOBLIN_RIGHT[this.frameIndex][1],
-        MOBLIN_RIGHT[this.frameIndex][2],
-        MOBLIN_RIGHT[this.frameIndex][3],
-        this.pos[0],
-        this.pos[1],
-        MOBLIN_RIGHT[this.frameIndex][2] * this.scale,
-        MOBLIN_RIGHT[this.frameIndex][3] * this.scale
-      );
+    if (this.life === 0) {
+      this.drawDeath(ctx);
+    } else {
+      if (this.walkDir === 'down') {
+        ctx.drawImage(this.moblinSprite,
+          MOBLIN_DOWN[this.frameIndex][0],
+          MOBLIN_DOWN[this.frameIndex][1],
+          MOBLIN_DOWN[this.frameIndex][2],
+          MOBLIN_DOWN[this.frameIndex][3],
+          this.pos[0],
+          this.pos[1],
+          MOBLIN_DOWN[this.frameIndex][2] * this.scale,
+          MOBLIN_DOWN[this.frameIndex][3] * this.scale
+        );
+      } else if (this.walkDir === 'up') {
+        ctx.drawImage(this.moblinSprite,
+          MOBLIN_UP[this.frameIndex][0],
+          MOBLIN_UP[this.frameIndex][1],
+          MOBLIN_UP[this.frameIndex][2],
+          MOBLIN_UP[this.frameIndex][3],
+          this.pos[0],
+          this.pos[1] - MOBLIN_UP[this.frameIndex][3] * this.scale + 48,
+          MOBLIN_UP[this.frameIndex][2] * this.scale,
+          MOBLIN_UP[this.frameIndex][3] * this.scale
+        );
+      } else if (this.walkDir === 'left') {
+        ctx.drawImage(this.moblinSprite,
+          MOBLIN_LEFT[this.frameIndex][0],
+          MOBLIN_LEFT[this.frameIndex][1],
+          MOBLIN_LEFT[this.frameIndex][2],
+          MOBLIN_LEFT[this.frameIndex][3],
+          this.pos[0] - MOBLIN_LEFT[this.frameIndex][2] * this.scale + 28,
+          this.pos[1],
+          MOBLIN_LEFT[this.frameIndex][2] * this.scale,
+          MOBLIN_LEFT[this.frameIndex][3] * this.scale
+        );
+      } else if (this.walkDir === 'right') {
+        ctx.drawImage(this.moblinSprite,
+          MOBLIN_RIGHT[this.frameIndex][0],
+          MOBLIN_RIGHT[this.frameIndex][1],
+          MOBLIN_RIGHT[this.frameIndex][2],
+          MOBLIN_RIGHT[this.frameIndex][3],
+          this.pos[0],
+          this.pos[1],
+          MOBLIN_RIGHT[this.frameIndex][2] * this.scale,
+          MOBLIN_RIGHT[this.frameIndex][3] * this.scale
+        );
+      }
     }
 
     this.update();

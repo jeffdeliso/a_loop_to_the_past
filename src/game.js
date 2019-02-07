@@ -9,7 +9,7 @@ class Game {
     this.obstacles = [];
     this.enemies = [];
     this.addObstacles();
-    // this.addMoblin();
+    this.addMoblin();
   }
   
   add(object) {
@@ -134,13 +134,23 @@ class Game {
   //   return false;
   // }
 
-  
+
   enemyWillCollideWithEnemy(pos, enemy) {
     const obj = new Entity({ pos, box: enemy.box });
     for (let i = 0; i < this.enemies.length; i++) {
       const otherEnemy = this.enemies[i];
       if (enemy === otherEnemy) continue;
       if (obj.isCollidedWith(otherEnemy)) return true;
+    }
+    return false;
+  }
+
+  checkEnemyWillCollideWithSword() {
+    for (let i = 0; i < this.enemies.length; i++) {
+      const enemy = this.enemies[i];
+      if (this.link.hurtBox && enemy.isCollidedWith(this.link.hurtBox)) {
+        enemy.hitByLink();
+      }
     }
     return false;
   }
@@ -189,27 +199,24 @@ class Game {
     });
   }
 
-  randomPosition() {
-    return [
-      Game.DIM_X * Math.random(),
-      Game.DIM_Y * Math.random()
-    ];
-  }
-
-  // remove(object) {
-  //   // if (object instanceof Bullet) {
-  //   //   this.bullets.splice(this.bullets.indexOf(object), 1);
-  //   // } else if (object instanceof Asteroid) {
-  //   //   this.asteroids.splice(this.asteroids.indexOf(object), 1);
-  //   if (object instanceof Link) {
-  //     this.links.splice(this.links.indexOf(object), 1);
-  //   } else {
-  //     throw new Error("unknown type of object");
-  //   }
+  // randomPosition() {
+  //   return [
+  //     Game.DIM_X * Math.random(),
+  //     Game.DIM_Y * Math.random()
+  //   ];
   // }
+
+  remove(object) {
+    if (object instanceof Moblin) {
+      this.enemies.splice(this.enemies.indexOf(object), 1);
+    } else {
+      throw new Error("unknown type of object");
+    }
+  }
 
   step(delta) {
     this.moveObjects(delta);
+    this.checkEnemyWillCollideWithSword();
     this.checkEnemyCollidedWithLink();
   }
 
