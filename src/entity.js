@@ -38,6 +38,32 @@ class Entity {
   remove() {
     this.game.remove(this);
   }
+
+  angleToPos(pos) {
+    const dx = this.x() - pos[0];
+    const dy = this.y() - pos[1];
+
+    if (dx > 0) {
+      return  Math.atan(dy / dx) + Math.PI;
+    } else {
+      return Math.atan(dy / dx);
+    }
+  }
+
+  distanceToObject(obj) {
+    return Math.sqrt(Math.pow(this.x() - obj.x(), 2) + Math.pow(this.y() - obj.y(), 2));
+  }
+
+  angleRangeToObject(obj) {
+    const lowerLeft = this.angleToPos([obj.x(), obj.y() + obj.height()]);
+    const lowerRight = this.angleToPos([obj.x() + obj.width(), obj.y() + obj.height()]);
+    const upperLeft = this.angleToPos([obj.x(), obj.y()]);
+    const upperRight = this.angleToPos([obj.x() + obj.width(), obj.y()]);
+    const max = Math.max(lowerLeft, lowerRight, upperLeft, upperRight);
+    const min = Math.min(lowerLeft, lowerRight, upperLeft, upperRight);
+
+    return [min, max];
+  }
 }
 
 export default Entity;

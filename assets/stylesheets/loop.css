@@ -41,7 +41,7 @@ h1 {
 }
 
 .horizontal-centering {
-  width: 75px;
+  width: 80px;
 }
 
 section {
@@ -53,28 +53,20 @@ section {
 aside {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
 }
 
 aside a {
   z-index: 2;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  height: 75px;
-  width: 75px;
-  margin-bottom: 75px; 
+  display: flex;
+  justify-content: center;
+  color: black;
+  transition: all 0.2s ease-in-out;
 }
 
-.github {
-  background-image: url('../images/github.png');
-}
-
-.linkedin {
-  background-image: url('../images/linkedin.svg');  
-}
-
-.personal {
-  background-image: url('../images/personal.png');  
+aside a:hover {
+  color: #fff;
+  transform: scale(1.05);
 }
 
 #game-container {

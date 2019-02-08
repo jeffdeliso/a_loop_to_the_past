@@ -23,6 +23,8 @@ class Enemy extends MovingObject {
     this.walkDir = 'down';
     this.life = 3;
     this.delta = 1;
+    this.angle1 = true;
+    this.angle2 = true;
 
     this.move = this.move.bind(this);
     this.toggleHit = this.toggleHit.bind(this);
@@ -36,40 +38,155 @@ class Enemy extends MovingObject {
     return [dx / len || 0, dy / len || 0];
   }
 
+  findMoveAngle() {
+
+    const angleToLink = this.angleToPos(this.link.pos);
+    let angleToLink1 = angleToLink;
+    let angleToLink2 = angleToLink;
+    let dist = this.distanceToObject(this.link);
+    let first = true;
+
+    if (dist > 400) {
+      dist = 400;
+    }
+
+
+    while (true) {
+      if (this.link.walking) {
+        this.angle1 = true;
+        this.angle2 = true;
+      }
+      if (this.angle1 && !this.checkObstacles(angleToLink1, dist)) {
+        // if (!this.first) angleToLink1 += 0.1;
+        this.angle2 = false;
+        setTimeout(() => this.angle2 = true, 5000);
+        return angleToLink1;
+      }
+      if (this.angle2 && !this.checkObstacles(angleToLink2, dist)) {
+        // if (!this.first) angleToLink2 += 0.1;
+        this.angle1 = false;
+        setTimeout(() => this.angle1 = true, 5000);
+        return angleToLink2;
+      }
+      if (angleToLink1 > Math.PI + angleToLink) {
+        return angleToLink;
+      }
+
+      first = false;
+      angleToLink1 += 0.1;
+      angleToLink2 -= 0.1;
+    }
+  }
+
+  checkObstacles(angle, dist) {
+    const obstacles = this.game.obstacles;
+    for (let i = 0; i < obstacles.length; i++) {
+      const obj = obstacles[i];
+      if (this.objectBetweenSelfAndLink(obj, angle, dist)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  checkLinkBehindObstacle(obj, angle) {
+    const angleRange = this.angleRangeToObject(obj);
+    if (angle > angleRange[0] && angle < angleRange[1]) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  objectBetweenSelfAndLink(obj, angle, dist) {
+    const borders = [
+      [obj.x(), obj.y(), obj.x() + obj.width(), obj.y()],
+      [obj.x(), obj.y(), obj.x(), obj.y() + obj.height()],
+      [obj.x() + obj.width(), obj.y() + obj.height(), obj.x() + obj.width(), obj.y()],
+      [obj.x() + obj.width(), obj.y() + obj.height(), obj.x(), obj.y() + obj.height()]
+    ];
+
+    const corners = [
+      [this.x(), this.y()],
+      [this.x(), this.y() + this.height()],
+      [this.x() + this.width(), this.y()],
+      [this.x() + this.width(), this.y() + this.height()]
+    ]
+    
+    for (let i = 0; i < borders.length; i++) {
+      for (let j = 0; j < corners.length; j++) {
+        const corner = corners[j];
+        
+        const pos = borders[i];
+  
+        const newPos = this.findNewPoint(corner[0], corner[1], angle, dist);
+        if (this.intersects(corner[0], corner[1], newPos.x, newPos.y, ...pos)) {
+          return true;
+        }
+      }
+    }
+  }
+
+  intersects(a, b, c, d, p, q, r, s) {
+    let det, gamma, lambda;
+    det = (c - a) * (s - q) - (r - p) * (d - b);
+    if (det === 0) {
+      return false;
+    } else {
+      lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+      gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+      return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+    }
+  }
+
+  findNewPoint(x, y, angle, distance) {
+    let result = {};
+
+    result.x = Math.round(Math.cos(angle) * distance + x);
+    result.y = Math.round(Math.sin(angle) * distance + y);
+
+    return result;
+  }
+
+
   move(timeDelta) {
     let vel;
     if (this.life === 0) {
       vel = [0, 0];
     } else if (!this.hit) {
-      this.vect = this.vectorTowardsLink(this.link);
+      const linkVect = this.vectorTowardsLink(this.link);
+      // const angle = this.angleToPos(this.link.pos);
+      const angle = this.findMoveAngle();
+      this.vect = [Math.cos(angle), Math.sin(angle)];
+
       vel = [this.vect[0] * this.delta, this.vect[1] * this.delta];
 
-      if (vel[0] > 0 && vel[1] > 0) {
-        if (vel[0] > vel[1]) {
+      if (linkVect[0] > 0 && linkVect[1] > 0) {
+        if (linkVect[0] > linkVect[1]) {
           if (this.walkDir !== 'right') this.frameIndex = 0;
           this.walkDir = 'right';
         } else {
           if (this.walkDir !== 'down') this.frameIndex = 0;
           this.walkDir = 'down';
         }
-      } else if (vel[0] > 0 && vel[1] < 0) {
-        if (vel[0] > Math.abs(vel[1])) {
+      } else if (linkVect[0] > 0 && linkVect[1] < 0) {
+        if (linkVect[0] > Math.abs(linkVect[1])) {
           if (this.walkDir !== 'right') this.frameIndex = 0;
           this.walkDir = 'right';
         } else {
           if (this.walkDir !== 'up') this.frameIndex = 0;
           this.walkDir = 'up';
         }
-      } else if (vel[0] < 0 && vel[1] > 0) {
-        if (Math.abs(vel[0]) > vel[1]) {
+      } else if (linkVect[0] < 0 && linkVect[1] > 0) {
+        if (Math.abs(linkVect[0]) > linkVect[1]) {
           if (this.walkDir !== 'left') this.frameIndex = 0;
           this.walkDir = 'left';
         } else {
           if (this.walkDir !== 'down') this.frameIndex = 0;
           this.walkDir = 'down';
         }
-      } else if (vel[0] < 0 && vel[1] < 0) {
-        if (Math.abs(vel[0]) > Math.abs(vel[1])) {
+      } else if (linkVect[0] < 0 && linkVect[1] < 0) {
+        if (Math.abs(linkVect[0]) > Math.abs(linkVect[1])) {
           if (this.walkDir !== 'left') this.frameIndex = 0;
           this.walkDir = 'left';
         } else {
@@ -81,6 +198,7 @@ class Enemy extends MovingObject {
       const delta = 4;
       vel = [this.hitVect[0] * delta, this.hitVect[1] * delta];
     }
+
 
     const velocityScale = timeDelta / NORMAL_FRAME_TIME_DELTA,
       offsetX = vel[0] * velocityScale,

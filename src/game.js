@@ -8,7 +8,7 @@ const SPAWN_POS = [
   [340, 650],
   [750, 650],
   [285, -50],
-  [720, -50],
+  [720, -50]
 ];
 
 class Game {
@@ -94,6 +94,10 @@ class Game {
 
   allMovingObjects() {
     return [this.link].concat(this.enemies);
+  }
+
+  allEnemiesAndObstacles() {
+    return [].concat(this.enemies).concat(this.obstacles);
   }
 
   enemyWillCollideWithEnemy(pos, enemy) {

@@ -209,7 +209,7 @@ class Link extends MovingObject {
       } else {
         spriteX = 440;
       }
-      ctx.drawImage(this.linkSprite2, spriteX, 147, 7, 7, 940 + i * 25, 10, 21, 21);
+      ctx.drawImage(this.linkSprite2, spriteX, 147, 7, 7, 900 + i * 35, 10, 28, 28);
       
     }
   }
