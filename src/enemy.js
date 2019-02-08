@@ -13,12 +13,16 @@ class Enemy extends MovingObject {
     this.link = options.link;
     this.deathSprite = new Image();
     this.deathSprite.src = "../assets/sprites/death-effects.png";
+    this.hitSound = new Audio('../assets/sounds/LTTP_Enemy_Hit.wav');
+    this.deathSound = new Audio('../assets/sounds/LTTP_Enemy_Kill.wav');
+
     this.scale = 2;
     this.frameIndex = 0;
     this.tickCount = 0;
     this.ticksPerFrame = 6;
     this.walkDir = 'down';
     this.life = 3;
+    this.delta = 1;
 
     this.move = this.move.bind(this);
     this.toggleHit = this.toggleHit.bind(this);
@@ -38,31 +42,38 @@ class Enemy extends MovingObject {
       vel = [0, 0];
     } else if (!this.hit) {
       this.vect = this.vectorTowardsLink(this.link);
-      const delta = 1;
-      vel = [this.vect[0] * delta, this.vect[1] * delta];
+      vel = [this.vect[0] * this.delta, this.vect[1] * this.delta];
 
       if (vel[0] > 0 && vel[1] > 0) {
         if (vel[0] > vel[1]) {
+          if (this.walkDir !== 'right') this.frameIndex = 0;
           this.walkDir = 'right';
         } else {
+          if (this.walkDir !== 'down') this.frameIndex = 0;
           this.walkDir = 'down';
         }
       } else if (vel[0] > 0 && vel[1] < 0) {
         if (vel[0] > Math.abs(vel[1])) {
+          if (this.walkDir !== 'right') this.frameIndex = 0;
           this.walkDir = 'right';
         } else {
+          if (this.walkDir !== 'up') this.frameIndex = 0;
           this.walkDir = 'up';
         }
       } else if (vel[0] < 0 && vel[1] > 0) {
         if (Math.abs(vel[0]) > vel[1]) {
+          if (this.walkDir !== 'left') this.frameIndex = 0;
           this.walkDir = 'left';
         } else {
+          if (this.walkDir !== 'down') this.frameIndex = 0;
           this.walkDir = 'down';
         }
       } else if (vel[0] < 0 && vel[1] < 0) {
         if (Math.abs(vel[0]) > Math.abs(vel[1])) {
+          if (this.walkDir !== 'left') this.frameIndex = 0;
           this.walkDir = 'left';
         } else {
+          if (this.walkDir !== 'up') this.frameIndex = 0;
           this.walkDir = 'up';
         }
       }
@@ -94,6 +105,7 @@ class Enemy extends MovingObject {
 
   hitByLink() {
     if (!this.hit) {
+      this.hitSound.play();
       this.hitVect = [this.vect[0] * -1, this.vect[1] * -1];
       this.hit = true;
       setTimeout(this.toggleHit, 300);
@@ -110,6 +122,7 @@ class Enemy extends MovingObject {
   }
 
   drawDeath(ctx) {
+    this.deathSound.play();
     ctx.drawImage(this.deathSprite,
       DEATH[this.frameIndex][0],
       DEATH[this.frameIndex][1],

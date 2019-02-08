@@ -33,6 +33,7 @@ class Moblin extends Enemy {
     this.moblinSprite.src = "../assets/sprites/enemies.png";
     this.frameLen = 4;
     this.box = [28, 48];
+    this.delta = 0.75;
 
     this.draw = this.draw.bind(this);
     this.update = this.update.bind(this);

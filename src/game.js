@@ -1,6 +1,7 @@
 import Link from "./link";
 import Obstacle from "./obstacle";
 import Moblin from "./moblin";
+import Lynel from "./lynel";
 
 const SPAWN_POS = [
   [340, 650],
@@ -18,9 +19,29 @@ class Game {
     this.addObstacles();
     this.parseKeyDown = this.parseKeyDown.bind(this);
     this.togglePause = this.togglePause.bind(this);
+    this.pauseSound = new Audio('../assets/sounds/LTTP_Menu_Cursor.wav');
+    this.overworldMusic = new Audio('../assets/sounds/overworld_theme.mp3');
+    this.kakarikoMusic = new Audio('../assets/sounds/kakariko_village.mp3');
+    this.selectMusic = new Audio('../assets/sounds/select_screen.mp3');
+    this.song = this.kakarikoMusic;
+    this.music = this.music.bind(this);
+    this.stopMusic = this.stopMusic.bind(this);
+    this.music(this.kakarikoMusic);
+  }
+
+  music(song) {
+    this.song.pause();
+    this.song.currentTime = 0;
+    this.song = song;
+    this.song.play();
+  }
+
+  stopMusic() {
+    this.song.pause();
   }
 
   addMoblins() {
+    this.music(this.overworldMusic);
     SPAWN_POS.forEach(pos => {
       this.add(new Moblin({ game: this, link: this.link, pos }));
     });
@@ -29,12 +50,16 @@ class Game {
   parseKeyDown(e) {
     e.preventDefault();
     if (e.keyCode === 13) {
-      if (!this.spawnEnemies) this.addMoblins();
-      const enterEl = document.getElementById('enter');
-      enterEl.style.visibility = 'hidden';
-      this.spawnEnemies = true;
+      if (!this.spawnEnemies) {
+        this.addMoblins();
+        const enterEl = document.getElementById('enter');
+        enterEl.style.opacity = 0;
+        const controlsEl = document.getElementById('controls');
+        controlsEl.style.opacity = 0;
+        this.spawnEnemies = true;
+      }
     } else if (e.keyCode === 80) {
-      this.togglePause();
+      if (!this.gameover) this.togglePause();
     }
   }
 
@@ -42,6 +67,7 @@ class Game {
     const pauseEl = document.getElementById('pause');
     this.paused = !this.paused;
     if (this.paused) {
+      this.pauseSound.play();
       pauseEl.style.visibility = 'visible';
     } else {
       pauseEl.style.visibility = 'hidden';
@@ -49,12 +75,10 @@ class Game {
   }
 
   add(object) {
-    if (object instanceof Moblin) {
-      this.enemies.push(object);
-    } else if (object instanceof Obstacle) {
+    if (object instanceof Obstacle) {
       this.obstacles.push(object);
     } else {
-      throw new Error("unknown type of object");
+      this.enemies.push(object);
     }
   }
 
@@ -108,13 +132,14 @@ class Game {
   draw(ctx) {
     if (!this.paused) {
       ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
-  
+
       this.allObjects().forEach((object) => {
         object.draw(ctx);
       });
 
       if (this.link.life === 0) {
         this.gameover = true;
+        this.music(this.selectMusic);
       }
     }
 
@@ -141,15 +166,15 @@ class Game {
   addEnemyToRandomSpawn() {
     const idx = Math.floor(Math.random() * 4);
     const pos = SPAWN_POS[idx];
-    this.add(new Moblin({ game: this, link: this.link, pos }));
+    if (Math.random() > 0.9) {
+      this.add(new Lynel({ game: this, link: this.link, pos }));
+    } else {
+      this.add(new Moblin({ game: this, link: this.link, pos }));
+    }
   }
 
   remove(object) {
-    if (object instanceof Moblin) {
-      this.enemies.splice(this.enemies.indexOf(object), 1);
-    } else {
-      throw new Error("unknown type of object");
-    }
+    this.enemies.splice(this.enemies.indexOf(object), 1);
   }
 
   step(delta) {

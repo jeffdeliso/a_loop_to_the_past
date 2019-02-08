@@ -43,6 +43,10 @@ class Link extends MovingObject {
     this.linkSprite.src = "../assets/sprites/link.png";
     this.linkSprite2 = new Image();
     this.linkSprite2.src = "../assets/sprites/link.gif";
+    this.swordSound = new Audio('../assets/sounds/LTTP_Sword.wav');
+    this.hurtSound = new Audio('../assets/sounds/LTTP_Link_Hurt.wav');
+    this.deathSound = new Audio('../assets/sounds/LTTP_Link_Dying.wav');
+
     this.scale = 2;
     this.frameIndex = 0;
     this.tickCount = 0;
@@ -92,10 +96,10 @@ class Link extends MovingObject {
       vel = [this.vect[0] * delta, this.vect[1] * delta];
     } else {
       if (!this.sword) {
-        if (this.up) dy = -1;
-        if (this.left) dx = -1;
-        if (this.down) dy = 1;
-        if (this.right) dx = 1;
+        if (this.up) dy += -1;
+        if (this.left) dx += -1;
+        if (this.down) dy += 1;
+        if (this.right) dx += 1;
       }
 
       const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
@@ -148,6 +152,7 @@ class Link extends MovingObject {
 
   swingSword() {
     if (!this.sword && this.canSwing) {
+      this.swordSound.play();
       this.sword = true;
       this.canSwing = false;
       this.frameIndex = 0;
@@ -177,13 +182,14 @@ class Link extends MovingObject {
 
   hitByEnemy(vect) {
     if (!this.invisible) {
+      this.hurtSound.play();
       this.vect = vect;
       this.hit = true;
       this.invisible = true;
       this.invisibleFrameCount = 1;
       this.life -= 1;
       setTimeout(this.toggleHit, 300);
-      setTimeout(this.toggleInvinsible, 1000);
+      setTimeout(this.toggleInvinsible, 2000);
     }
   }
 
@@ -216,6 +222,7 @@ class Link extends MovingObject {
     //   this.walking = true;
     // }
     if (this.life === 0) {
+      this.deathSound.play();
       ctx.drawImage(this.linkSprite, 89, 214, 24, 15, this.pos[0], this.pos[1], 48, 30);
     } else {
       if (!(this.invisible && this.invisibleFrameCount % 2 === 0)) {

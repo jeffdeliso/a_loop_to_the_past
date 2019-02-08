@@ -6,6 +6,7 @@ class GameView {
     this.game = game;
     this.link = this.game.link;
     this.animate = this.animate.bind(this);
+    this.restartSound = new Audio('../assets/sounds/LTTP_Secret.wav');
   }
 
   bindKeyHandlers() {
@@ -43,11 +44,15 @@ class GameView {
   }
 
   newGame(btn, parent) {
+    this.restartSound.play();
     parent.removeChild(btn);
     parent.style.visibility = 'hidden';
     parent.style.opacity = 0;
     const enterEl = document.getElementById('enter');
-    enterEl.style.visibility = 'visible';
+    enterEl.style.opacity = 1;
+    const controlsEl = document.getElementById('controls');
+    controlsEl.style.opacity = 1;
+    this.game.stopMusic();
     this.game = new Game();
     this.link = this.game.link;
     this.start();

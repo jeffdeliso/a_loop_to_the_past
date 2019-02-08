@@ -8,18 +8,72 @@
   src: url('../fonts/ReturnofGanon.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: legend;
+  src: url('../fonts/CharlemagneBold.otf') format('opentype');
+}
+
 body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   background-image: url('../backgrounds/zelda-tree.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;   
   z-index: -1;
+}
+
+h1 {
+  font-family: hylian;
+  font-size: 50px;
+  margin-bottom: 20px;
+  color: #d5a13f;
+}
+
+.vertical-centering {
+  height: 50px;
+  margin-top: 20px;
+}
+
+.horizontal-centering {
+  width: 75px;
+}
+
+section {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+}
+
+.github {
+  height: 75px;
+  width: 75px;
+  background-image: url('../images/github.png');
+  z-index: 2;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  margin-bottom: 75px; 
+}
+
+.linkedin {
+  height: 75px;
+  width: 75px;
+  background-image: url('../images/linkedin.svg');
+  z-index: 2;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;   
 }
 
 #game-container {
@@ -98,5 +152,28 @@ body {
   bottom: 20px;
   right: 20px;
   color: #fff;
+  animation: blinker 1s linear infinite;
+  text-transform: uppercase;
+  transition: opacity .5s ease-in-out;
 }
 
+#controls {
+  position: absolute;
+  font-family: menu;
+  font-size: 24px;
+  height: auto;
+  width: auto;
+  top: 20px;
+  left: 20px;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: legend;
+  line-height: 30px;
+  transition: opacity .5s ease-in-out;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
