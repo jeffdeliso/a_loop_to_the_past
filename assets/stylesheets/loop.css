@@ -55,25 +55,26 @@ aside {
   flex-direction: column;
 }
 
-.github {
-  height: 75px;
-  width: 75px;
-  background-image: url('../images/github.png');
+aside a {
   z-index: 2;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  height: 75px;
+  width: 75px;
   margin-bottom: 75px; 
 }
 
+.github {
+  background-image: url('../images/github.png');
+}
+
 .linkedin {
-  height: 75px;
-  width: 75px;
-  background-image: url('../images/linkedin.svg');
-  z-index: 2;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;   
+  background-image: url('../images/linkedin.svg');  
+}
+
+.personal {
+  background-image: url('../images/personal.png');  
 }
 
 #game-container {

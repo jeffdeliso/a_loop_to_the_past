@@ -2,6 +2,7 @@ import Link from "./link";
 import Obstacle from "./obstacle";
 import Moblin from "./moblin";
 import Lynel from "./lynel";
+import BlueKnight from "./blue_knight";
 
 const SPAWN_POS = [
   [340, 650],
@@ -40,18 +41,23 @@ class Game {
     this.song.pause();
   }
 
-  addMoblins() {
+  addEnemies() {
     this.music(this.overworldMusic);
     SPAWN_POS.forEach(pos => {
-      this.add(new Moblin({ game: this, link: this.link, pos }));
+      const enemyIdx = Math.random();
+      if (enemyIdx > 0.5) {
+        this.add(new Moblin({ game: this, link: this.link, pos }));
+      } else {
+        this.add(new BlueKnight({ game: this, link: this.link, pos }));
+      }
     });
   }
-
+  
   parseKeyDown(e) {
     e.preventDefault();
     if (e.keyCode === 13) {
       if (!this.spawnEnemies) {
-        this.addMoblins();
+        this.addEnemies();
         const enterEl = document.getElementById('enter');
         enterEl.style.opacity = 0;
         const controlsEl = document.getElementById('controls');
@@ -166,10 +172,14 @@ class Game {
   addEnemyToRandomSpawn() {
     const idx = Math.floor(Math.random() * 4);
     const pos = SPAWN_POS[idx];
-    if (Math.random() > 0.9) {
+    const enemyIdx = Math.random();
+
+    if (enemyIdx > 0.8) {
       this.add(new Lynel({ game: this, link: this.link, pos }));
-    } else {
+    } else if (enemyIdx > 0.4)  {
       this.add(new Moblin({ game: this, link: this.link, pos }));
+    } else {
+      this.add(new BlueKnight({ game: this, link: this.link, pos }));
     }
   }
 
