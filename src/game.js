@@ -3,6 +3,7 @@ import Obstacle from "./obstacle";
 import Moblin from "./moblin";
 import Lynel from "./lynel";
 import BlueKnight from "./blue_knight";
+import Heart from "./heart";
 
 const SPAWN_POS = [
   [340, 650],
@@ -14,21 +15,23 @@ const SPAWN_POS = [
 class Game {
   constructor(options) {
     this.pauseSound = new Audio('../assets/sounds/LTTP_Menu_Cursor.wav');
+    this.heartSound = new Audio('../assets/sounds/LTTP_RefillHealth.wav');
     this.overworldMusic = new Audio('../assets/sounds/overworld_theme.mp3');
     this.kakarikoMusic = new Audio('../assets/sounds/kakariko_village.mp3');
     this.selectMusic = new Audio('../assets/sounds/select_screen.mp3');
     this.muteButton = document.getElementById('mute');
     this.soundButton = document.getElementById('sound');
     this.killCount = document.getElementById('kill-count');
-    
+
     this.link = new Link({ game: this });
     this.obstacles = [];
     this.enemies = [];
+    this.items = [];
     this.song = this.kakarikoMusic;
     this.muted = options.muted;
     this.spawnEnemies = false;
     this.count = 0;
-    
+
     this.parseKeyDown = this.parseKeyDown.bind(this);
     this.togglePause = this.togglePause.bind(this);
     this.muteGame = this.muteGame.bind(this);
@@ -38,7 +41,7 @@ class Game {
     this.updateKillCount = this.updateKillCount.bind(this);
     this.muteButton.onclick = this.muteGame;
     this.soundButton.onclick = this.unmuteGame;
-    
+
     this.addObstacles();
     this.music(this.kakarikoMusic);
     this.updateKillCount();
@@ -91,7 +94,11 @@ class Game {
       }
     });
   }
-  
+
+  addHeart(pos) {
+    this.items.push(new Heart({ pos, game: this }));
+  }
+
   parseKeyDown(e) {
     e.preventDefault();
     if (e.keyCode === 13) {
@@ -128,7 +135,7 @@ class Game {
   }
 
   allObjects() {
-    return [this.link].concat(this.enemies);
+    return [this.link].concat(this.enemies).concat(this.items);
   }
 
   allMovingObjects() {
@@ -219,7 +226,7 @@ class Game {
 
     if (enemyIdx > 0.8) {
       this.add(new Lynel({ game: this, link: this.link, pos }));
-    } else if (enemyIdx > 0.4)  {
+    } else if (enemyIdx > 0.4) {
       this.add(new Moblin({ game: this, link: this.link, pos }));
     } else {
       this.add(new BlueKnight({ game: this, link: this.link, pos }));
@@ -227,9 +234,27 @@ class Game {
   }
 
   remove(object) {
+    const pos = object.pos;
+    if (Math.random() < object.dropChance) this.addHeart(pos);
+
     this.enemies.splice(this.enemies.indexOf(object), 1);
     this.count += 1;
     this.updateKillCount();
+  }
+
+  removeItem(object) {
+    this.items.splice(this.items.indexOf(object), 1);
+  }
+
+  linkCollidedWithItem() {
+    for (let i = 0; i < this.items.length; i++) {
+      const heart = this.items[i];
+      if (heart.isCollidedWith(this.link)) {
+        this.heartSound.play();
+        this.link.life += 1;
+        this.removeItem(heart);
+      }
+    }
   }
 
   step(delta) {
@@ -238,6 +263,7 @@ class Game {
       this.moveObjects(delta);
       this.checkEnemyWillCollideWithSword();
       this.checkEnemyCollidedWithLink();
+      this.linkCollidedWithItem();
     }
   }
 

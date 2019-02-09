@@ -35,6 +35,7 @@ class BlueKnight extends Enemy {
     this.box = [44, 56];
     this.life = 5;
     this.delta = 0.75;
+    this.dropChance = 0.3;
 
     this.draw = this.draw.bind(this);
     this.update = this.update.bind(this);

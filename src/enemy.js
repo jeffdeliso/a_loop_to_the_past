@@ -25,6 +25,7 @@ class Enemy extends MovingObject {
     this.delta = 1;
     this.angle1 = true;
     this.angle2 = true;
+    this.dropChance = 0.2;
 
     this.move = this.move.bind(this);
     this.toggleHit = this.toggleHit.bind(this);

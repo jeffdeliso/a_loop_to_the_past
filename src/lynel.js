@@ -27,11 +27,12 @@ class Lynel extends Enemy {
     this.lynelSprite.src = "../assets/sprites/enemies.png";
     this.lynelSprite2 = new Image();
     this.lynelSprite2.src = "../assets/sprites/enemies2.png";
-    
+
     this.frameLen = 3;
     this.box = [44, 52];
     this.life = 4;
     this.delta = 1.5;
+    this.dropChance = 1;
 
     this.draw = this.draw.bind(this);
     this.update = this.update.bind(this);
@@ -51,12 +52,6 @@ class Lynel extends Enemy {
   }
 
   draw(ctx) {
-    // if (!this.down && !this.left && !this.right && !this.up) {
-    //   this.walking = false;
-    // } else {
-    //   if (!this.walking) this.frameIndex = 0;
-    //   this.walking = true;
-    // }
     if (this.life === 0) {
       this.drawDeath(ctx);
     } else {
