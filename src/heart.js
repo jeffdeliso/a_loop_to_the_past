@@ -10,7 +10,7 @@ class Heart extends Entity {
   }
 
   draw(ctx) {
-    ctx.drawImage(this.heartSprite, 153, 30, 14, 13, this.pos[0], this.pos[1], 14, 13);
+    ctx.drawImage(this.heartSprite, 153, 30, 14, 13, this.pos[0], this.pos[1], 21, 19.5);
   }
 }
 

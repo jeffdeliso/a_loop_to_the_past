@@ -39,6 +39,7 @@ class Game {
     this.stopMusic = this.stopMusic.bind(this);
     this.music = this.music.bind(this);
     this.updateKillCount = this.updateKillCount.bind(this);
+
     this.muteButton.onclick = this.muteGame;
     this.soundButton.onclick = this.unmuteGame;
 
@@ -47,8 +48,20 @@ class Game {
     this.updateKillCount();
   }
 
-  updateKillCount() {
-    this.killCount.innerHTML = `${this.count}`;
+  parseKeyDown(e) {
+    e.preventDefault();
+    if (e.keyCode === 13) {
+      if (!this.spawnEnemies) {
+        this.addEnemies();
+        const enterEl = document.getElementById('enter');
+        enterEl.style.opacity = 0;
+        const controlsEl = document.getElementById('controls');
+        controlsEl.style.opacity = 0;
+        this.spawnEnemies = true;
+      }
+    } else if (e.keyCode === 80) {
+      if (!this.gameover) this.togglePause();
+    }
   }
 
   muteGame() {
@@ -83,6 +96,48 @@ class Game {
     this.song.pause();
   }
 
+  togglePause() {
+    const pauseEl = document.getElementById('pause');
+    this.paused = !this.paused;
+    if (this.paused) {
+      this.pauseSound.play();
+      pauseEl.style.visibility = 'visible';
+    } else {
+      pauseEl.style.visibility = 'hidden';
+    }
+  }
+
+
+  allObjects() {
+    return [this.link].concat(this.enemies).concat(this.items);
+  }
+
+  allMovingObjects() {
+    return [this.link].concat(this.enemies);
+  }
+
+  add(object) {
+    if (object instanceof Obstacle) {
+      this.obstacles.push(object);
+    } else {
+      this.enemies.push(object);
+    }
+  }
+
+  addEnemyToRandomSpawn() {
+    const idx = Math.floor(Math.random() * 4);
+    const pos = SPAWN_POS[idx];
+    const enemyIdx = Math.random();
+
+    if (enemyIdx > 0.8) {
+      this.add(new Lynel({ game: this, link: this.link, pos }));
+    } else if (enemyIdx > 0.4) {
+      this.add(new Moblin({ game: this, link: this.link, pos }));
+    } else {
+      this.add(new BlueKnight({ game: this, link: this.link, pos }));
+    }
+  }
+
   addEnemies() {
     this.music(this.overworldMusic);
     SPAWN_POS.forEach(pos => {
@@ -99,51 +154,30 @@ class Game {
     this.items.push(new Heart({ pos, game: this }));
   }
 
-  parseKeyDown(e) {
-    e.preventDefault();
-    if (e.keyCode === 13) {
-      if (!this.spawnEnemies) {
-        this.addEnemies();
-        const enterEl = document.getElementById('enter');
-        enterEl.style.opacity = 0;
-        const controlsEl = document.getElementById('controls');
-        controlsEl.style.opacity = 0;
-        this.spawnEnemies = true;
-      }
-    } else if (e.keyCode === 80) {
-      if (!this.gameover) this.togglePause();
-    }
+  remove(object) {
+    const pos = object.pos;
+    if (Math.random() < object.dropChance) this.addHeart(pos);
+
+    this.enemies.splice(this.enemies.indexOf(object), 1);
+    this.count += 1;
+    this.updateKillCount();
   }
 
-  togglePause() {
-    const pauseEl = document.getElementById('pause');
-    this.paused = !this.paused;
-    if (this.paused) {
-      this.pauseSound.play();
-      pauseEl.style.visibility = 'visible';
-    } else {
-      pauseEl.style.visibility = 'hidden';
-    }
+  updateKillCount() {
+    this.killCount.innerHTML = `${this.count}`;
   }
 
-  add(object) {
-    if (object instanceof Obstacle) {
-      this.obstacles.push(object);
-    } else {
-      this.enemies.push(object);
-    }
+  removeItem(object) {
+    this.items.splice(this.items.indexOf(object), 1);
   }
 
-  allObjects() {
-    return [this.link].concat(this.enemies).concat(this.items);
+  isOutOfBounds(pos, box) {
+    return ((pos[0] < 0) || (pos[1] < 0) ||
+      (pos[0] > Game.DIM_X - box[0]) || (pos[1] > Game.DIM_Y - box[1])) || this.willCollideWithObstacle(pos, box);
   }
 
-  allMovingObjects() {
-    return [this.link].concat(this.enemies);
-  }
-
-  allEnemiesAndObstacles() {
-    return [].concat(this.enemies).concat(this.obstacles);
+  enemyIsOutOfBounds(pos, enemy) {
+    return this.willCollideWithObstacle(pos, enemy.box) || this.enemyWillCollideWithEnemy(pos, enemy);
   }
 
   enemyWillCollideWithEnemy(pos, enemy) {
@@ -151,6 +185,37 @@ class Game {
       const otherEnemy = this.enemies[i];
       if (enemy === otherEnemy) continue;
       if (otherEnemy.willCollideWith(pos, enemy.box)) return true;
+    }
+    return false;
+  }
+
+  willCollideWithObstacle(pos, box) {
+    for (let i = 0; i < this.obstacles.length; i++) {
+      const obstacle = this.obstacles[i];
+      if (obstacle.willCollideWith(pos, box)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  linkCollidedWithItem() {
+    for (let i = 0; i < this.items.length; i++) {
+      const heart = this.items[i];
+      if (heart.isCollidedWith(this.link)) {
+        this.heartSound.play();
+        this.link.life += 1;
+        this.removeItem(heart);
+      }
+    }
+  }
+
+  checkEnemyCollidedWithLink() {
+    for (let i = 0; i < this.enemies.length; i++) {
+      const enemy = this.enemies[i];
+      if (enemy.isCollidedWith(this.link)) {
+        this.link.hitByEnemy(enemy.vect);
+      }
     }
     return false;
   }
@@ -165,24 +230,20 @@ class Game {
     return false;
   }
 
-  checkEnemyCollidedWithLink() {
-    for (let i = 0; i < this.enemies.length; i++) {
-      const enemy = this.enemies[i];
-      if (enemy.isCollidedWith(this.link)) {
-        this.link.hitByEnemy(enemy.vect);
-      }
-    }
-    return false;
+  moveObjects(delta) {
+    this.allMovingObjects().forEach((object) => {
+      object.move(delta);
+    });
   }
 
-  willCollideWithObstacle(pos, box) {
-    for (let i = 0; i < this.obstacles.length; i++) {
-      const obstacle = this.obstacles[i];
-      if (obstacle.willCollideWith(pos, box)) {
-        return true;
-      }
+  step(delta) {
+    if (!this.paused) {
+      if (this.spawnEnemies && this.enemies.length < 4) this.addEnemyToRandomSpawn();
+      this.moveObjects(delta);
+      this.checkEnemyWillCollideWithSword();
+      this.checkEnemyCollidedWithLink();
+      this.linkCollidedWithItem();
     }
-    return false;
   }
 
   draw(ctx) {
@@ -202,69 +263,6 @@ class Game {
     // this.obstacles.forEach((object) => {
     //   object.draw(ctx);
     // });
-  }
-
-  isOutOfBounds(pos, box) {
-    return ((pos[0] < 0) || (pos[1] < 0) ||
-      (pos[0] > Game.DIM_X - box[0]) || (pos[1] > Game.DIM_Y - box[1])) || this.willCollideWithObstacle(pos, box);
-  }
-
-  enemyIsOutOfBounds(pos, enemy) {
-    return this.willCollideWithObstacle(pos, enemy.box) || this.enemyWillCollideWithEnemy(pos, enemy);
-  }
-
-  moveObjects(delta) {
-    this.allMovingObjects().forEach((object) => {
-      object.move(delta);
-    });
-  }
-
-  addEnemyToRandomSpawn() {
-    const idx = Math.floor(Math.random() * 4);
-    const pos = SPAWN_POS[idx];
-    const enemyIdx = Math.random();
-
-    if (enemyIdx > 0.8) {
-      this.add(new Lynel({ game: this, link: this.link, pos }));
-    } else if (enemyIdx > 0.4) {
-      this.add(new Moblin({ game: this, link: this.link, pos }));
-    } else {
-      this.add(new BlueKnight({ game: this, link: this.link, pos }));
-    }
-  }
-
-  remove(object) {
-    const pos = object.pos;
-    if (Math.random() < object.dropChance) this.addHeart(pos);
-
-    this.enemies.splice(this.enemies.indexOf(object), 1);
-    this.count += 1;
-    this.updateKillCount();
-  }
-
-  removeItem(object) {
-    this.items.splice(this.items.indexOf(object), 1);
-  }
-
-  linkCollidedWithItem() {
-    for (let i = 0; i < this.items.length; i++) {
-      const heart = this.items[i];
-      if (heart.isCollidedWith(this.link)) {
-        this.heartSound.play();
-        this.link.life += 1;
-        this.removeItem(heart);
-      }
-    }
-  }
-
-  step(delta) {
-    if (!this.paused) {
-      if (this.spawnEnemies && this.enemies.length < 4) this.addEnemyToRandomSpawn();
-      this.moveObjects(delta);
-      this.checkEnemyWillCollideWithSword();
-      this.checkEnemyCollidedWithLink();
-      this.linkCollidedWithItem();
-    }
   }
 
   addObstacles() {

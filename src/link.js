@@ -136,19 +136,6 @@ class Link extends MovingObject {
     }
   }
 
-  update() {
-    this.tickCount += 1;
-    if (this.tickCount > this.ticksPerFrame) {
-      this.tickCount = 0;
-      if (this.invisible) this.invisibleFrameCount += 1;
-      if (this.frameIndex < this.frameLen - 1) {
-        this.frameIndex += 1;
-      } else {
-        this.frameIndex = 0;
-        if (this.sword) this.toggleSword();
-      }
-    }
-  }
 
   swingSword() {
     if (!this.sword && this.canSwing) {
@@ -201,18 +188,6 @@ class Link extends MovingObject {
     this.invisible = !this.invisible;
   }
 
-  drawLife(ctx) {
-    let spriteX;
-    for (let i = 1; i <= 3; i++) {
-      if (i > this.life) {
-        spriteX = 456;
-      } else {
-        spriteX = 440;
-      }
-      ctx.drawImage(this.linkSprite2, spriteX, 147, 7, 7, 900 + i * 35, 10, 28, 28);
-      
-    }
-  }
 
   draw(ctx) {
     if (this.life === 0) {
@@ -221,107 +196,145 @@ class Link extends MovingObject {
     } else {
       if (!(this.invisible && this.invisibleFrameCount % 2 === 0)) {
         if (this.sword) {
-          if (this.walkDir === 'down') {
-            this.frameLen = SWORD_DOWN.length;
-            ctx.drawImage(this.linkSprite,
-              SWORD_DOWN[this.frameIndex][0],
-              SWORD_DOWN[this.frameIndex][1],
-              SWORD_DOWN[this.frameIndex][2],
-              SWORD_DOWN[this.frameIndex][3],
-              this.pos[0],
-              this.pos[1],
-              SWORD_DOWN[this.frameIndex][2] * this.scale,
-              SWORD_DOWN[this.frameIndex][3] * this.scale
-            );
-          } else if (this.walkDir === 'up') {
-            this.frameLen = SWORD_UP.length;
-            ctx.drawImage(this.linkSprite,
-              SWORD_UP[this.frameIndex][0],
-              SWORD_UP[this.frameIndex][1],
-              SWORD_UP[this.frameIndex][2],
-              SWORD_UP[this.frameIndex][3],
-              this.pos[0] - SWORD_UP[this.frameIndex][2] * this.scale + 40,
-              this.pos[1] - SWORD_UP[this.frameIndex][3] * this.scale + 42,
-              SWORD_UP[this.frameIndex][2] * this.scale,
-              SWORD_UP[this.frameIndex][3] * this.scale
-            );
-          } else if (this.walkDir === 'left') {
-            this.frameLen = SWORD_LEFT.length;
-            ctx.drawImage(this.linkSprite,
-              SWORD_LEFT[this.frameIndex][0],
-              SWORD_LEFT[this.frameIndex][1],
-              SWORD_LEFT[this.frameIndex][2],
-              SWORD_LEFT[this.frameIndex][3],
-              this.pos[0] - SWORD_LEFT[this.frameIndex][2] * this.scale + 32,
-              this.pos[1],
-              SWORD_LEFT[this.frameIndex][2] * this.scale,
-              SWORD_LEFT[this.frameIndex][3] * this.scale
-            );
-          } else if (this.walkDir === 'right') {
-            this.frameLen = SWORD_LEFT.length;
-            ctx.drawImage(this.linkSprite,
-              SWORD_RIGHT[this.frameIndex][0],
-              SWORD_RIGHT[this.frameIndex][1],
-              SWORD_RIGHT[this.frameIndex][2],
-              SWORD_RIGHT[this.frameIndex][3],
-              this.pos[0],
-              this.pos[1],
-              SWORD_RIGHT[this.frameIndex][2] * this.scale,
-              SWORD_RIGHT[this.frameIndex][3] * this.scale
-            );
-          }
+          this.drawSwingSword(ctx);
         } else {
-          if (this.down && !this.left && !this.right && !this.up) {
-            if (this.walkDir !== 'down') this.frameIndex = 0;
-            this.walkDir = 'down';
-            this.frameLen = WALK_DOWN.length;
-          } else if (!this.down && this.left && !this.right && !this.up) {
-            if (this.walkDir !== 'left') this.frameIndex = 0;
-            this.walkDir = 'left';
-            this.frameLen = WALK_SIDE.length;
-          } else if (!this.down && !this.left && this.right && !this.up) {
-            if (this.walkDir !== 'right') this.frameIndex = 0;
-            this.walkDir = 'right';
-            this.frameLen = WALK_SIDE.length;
-          } else if (!this.down && !this.left && !this.right && this.up) {
-            if (this.walkDir !== 'up') this.frameIndex = 0;
-            this.walkDir = 'up';
-            this.frameLen = WALK_UP.length;
-          }
-  
+          this.setWalkDir();
           if (this.walking) {
-            if (this.walkDir === 'down') {
-              ctx.drawImage(this.linkSprite, WALK_DOWN[this.frameIndex], 30, 16, 24, this.pos[0], this.pos[1], 32, 48);
-            } else if (this.walkDir === 'up') {
-              ctx.drawImage(this.linkSprite, WALK_UP[this.frameIndex], 120, 17, 24, this.pos[0], this.pos[1], 34, 48);
-            } else if (this.walkDir === 'right') {
-              ctx.drawImage(this.linkSprite, WALK_SIDE[this.frameIndex], 120, 19, 24, this.pos[0], this.pos[1], 38, 48);
-            } else if (this.walkDir === 'left') {
-              ctx.drawImage(this.linkSprite, WALK_SIDE[this.frameIndex], 30, 19, 24, this.pos[0], this.pos[1], 38, 48);
-            }
+            this.drawLinkWalking(ctx);
           } else {
-            if (this.walkDir === 'down') {
-              ctx.drawImage(this.linkSprite, 33, 1, 16, 22, this.pos[0], this.pos[1], 32, 44);
-            } else if (this.walkDir === 'up') {
-              ctx.drawImage(this.linkSprite, 63, 1, 16, 22, this.pos[0], this.pos[1], 32, 44);
-            } else if (this.walkDir === 'right') {
-              ctx.drawImage(this.linkSprite, 331, 120, 19, 23, this.pos[0], this.pos[1], 38, 46);
-            } else if (this.walkDir === 'left') {
-              ctx.drawImage(this.linkSprite, 151, 0, 19, 23, this.pos[0], this.pos[1], 38, 46);
-            }
+            this.drawLinkStanding(ctx);
           }
         }
       }
     }
-
-
-    
 
     // if (this.hurtBox) this.hurtBox.draw(ctx);
     this.drawLife(ctx);
     this.update();
   }
 
+  drawLinkWalking(ctx) {
+    if (this.walkDir === 'down') {
+      ctx.drawImage(this.linkSprite, WALK_DOWN[this.frameIndex], 30, 16, 24, this.pos[0], this.pos[1], 32, 48);
+    } else if (this.walkDir === 'up') {
+      ctx.drawImage(this.linkSprite, WALK_UP[this.frameIndex], 120, 17, 24, this.pos[0], this.pos[1], 34, 48);
+    } else if (this.walkDir === 'right') {
+      ctx.drawImage(this.linkSprite, WALK_SIDE[this.frameIndex], 120, 19, 24, this.pos[0], this.pos[1], 38, 48);
+    } else if (this.walkDir === 'left') {
+      ctx.drawImage(this.linkSprite, WALK_SIDE[this.frameIndex], 30, 19, 24, this.pos[0], this.pos[1], 38, 48);
+    }
+  }
+
+  drawLinkStanding(ctx) {
+    if (this.walkDir === 'down') {
+      ctx.drawImage(this.linkSprite, 33, 1, 16, 22, this.pos[0], this.pos[1], 32, 44);
+    } else if (this.walkDir === 'up') {
+      ctx.drawImage(this.linkSprite, 63, 1, 16, 22, this.pos[0], this.pos[1], 32, 44);
+    } else if (this.walkDir === 'right') {
+      ctx.drawImage(this.linkSprite, 331, 120, 19, 23, this.pos[0], this.pos[1], 38, 46);
+    } else if (this.walkDir === 'left') {
+      ctx.drawImage(this.linkSprite, 151, 0, 19, 23, this.pos[0], this.pos[1], 38, 46);
+    }
+  }
+
+  drawSwingSword(ctx) {
+    if (this.walkDir === 'down') {
+      this.frameLen = SWORD_DOWN.length;
+      ctx.drawImage(this.linkSprite,
+        SWORD_DOWN[this.frameIndex][0],
+        SWORD_DOWN[this.frameIndex][1],
+        SWORD_DOWN[this.frameIndex][2],
+        SWORD_DOWN[this.frameIndex][3],
+        this.pos[0],
+        this.pos[1],
+        SWORD_DOWN[this.frameIndex][2] * this.scale,
+        SWORD_DOWN[this.frameIndex][3] * this.scale
+      );
+    } else if (this.walkDir === 'up') {
+      this.frameLen = SWORD_UP.length;
+      ctx.drawImage(this.linkSprite,
+        SWORD_UP[this.frameIndex][0],
+        SWORD_UP[this.frameIndex][1],
+        SWORD_UP[this.frameIndex][2],
+        SWORD_UP[this.frameIndex][3],
+        this.pos[0] - SWORD_UP[this.frameIndex][2] * this.scale + 40,
+        this.pos[1] - SWORD_UP[this.frameIndex][3] * this.scale + 42,
+        SWORD_UP[this.frameIndex][2] * this.scale,
+        SWORD_UP[this.frameIndex][3] * this.scale
+      );
+    } else if (this.walkDir === 'left') {
+      this.frameLen = SWORD_LEFT.length;
+      ctx.drawImage(this.linkSprite,
+        SWORD_LEFT[this.frameIndex][0],
+        SWORD_LEFT[this.frameIndex][1],
+        SWORD_LEFT[this.frameIndex][2],
+        SWORD_LEFT[this.frameIndex][3],
+        this.pos[0] - SWORD_LEFT[this.frameIndex][2] * this.scale + 32,
+        this.pos[1],
+        SWORD_LEFT[this.frameIndex][2] * this.scale,
+        SWORD_LEFT[this.frameIndex][3] * this.scale
+      );
+    } else if (this.walkDir === 'right') {
+      this.frameLen = SWORD_LEFT.length;
+      ctx.drawImage(this.linkSprite,
+        SWORD_RIGHT[this.frameIndex][0],
+        SWORD_RIGHT[this.frameIndex][1],
+        SWORD_RIGHT[this.frameIndex][2],
+        SWORD_RIGHT[this.frameIndex][3],
+        this.pos[0],
+        this.pos[1],
+        SWORD_RIGHT[this.frameIndex][2] * this.scale,
+        SWORD_RIGHT[this.frameIndex][3] * this.scale
+      );
+    }
+  }
+
+  drawLife(ctx) {
+    let spriteX;
+    for (let i = 1; i <= 3; i++) {
+      if (i > this.life) {
+        spriteX = 456;
+      } else {
+        spriteX = 440;
+      }
+
+      ctx.drawImage(this.linkSprite2, spriteX, 147, 7, 7, 900 + i * 35, 10, 28, 28);
+    }
+  }
+
+  setWalkDir() {
+    if (this.down && !this.left && !this.right && !this.up) {
+      if (this.walkDir !== 'down') this.frameIndex = 0;
+      this.walkDir = 'down';
+      this.frameLen = WALK_DOWN.length;
+    } else if (!this.down && this.left && !this.right && !this.up) {
+      if (this.walkDir !== 'left') this.frameIndex = 0;
+      this.walkDir = 'left';
+      this.frameLen = WALK_SIDE.length;
+    } else if (!this.down && !this.left && this.right && !this.up) {
+      if (this.walkDir !== 'right') this.frameIndex = 0;
+      this.walkDir = 'right';
+      this.frameLen = WALK_SIDE.length;
+    } else if (!this.down && !this.left && !this.right && this.up) {
+      if (this.walkDir !== 'up') this.frameIndex = 0;
+      this.walkDir = 'up';
+      this.frameLen = WALK_UP.length;
+    }
+  }
+
+  update() {
+    this.tickCount += 1;
+    if (this.tickCount > this.ticksPerFrame) {
+      this.tickCount = 0;
+      if (this.invisible) this.invisibleFrameCount += 1;
+      if (this.frameIndex < this.frameLen - 1) {
+        this.frameIndex += 1;
+      } else {
+        this.frameIndex = 0;
+        if (this.sword) this.toggleSword();
+      }
+    }
+  }
 }
 
 const NORMAL_FRAME_TIME_DELTA = 1000 / 60;

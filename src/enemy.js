@@ -146,7 +146,6 @@ class Enemy extends MovingObject {
       vel = [0, 0];
     } else if (!this.hit) {
       const linkVect = this.vectorTowardsLink(this.link);
-      // const angle = this.angleToPos(this.link.pos);
       const angle = this.findMoveAngle();
       this.vect = [Math.cos(angle), Math.sin(angle)];
 
