@@ -27,9 +27,9 @@ class BlueKnight extends Enemy {
   constructor(options) {
     super(options);
     this.blueSprite = new Image();
-    this.blueSprite.src = "../assets/sprites/enemies.png";
+    this.blueSprite.src = "./assets/sprites/enemies.png";
     this.blueSprite2 = new Image();
-    this.blueSprite2.src = "../assets/sprites/enemies2.png";
+    this.blueSprite2.src = "./assets/sprites/enemies2.png";
 
     this.frameLen = 4;
     this.box = [44, 56];

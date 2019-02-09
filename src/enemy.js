@@ -1,4 +1,4 @@
-import MovingObject from "./moving_object";
+import Entity from "./entity";
 
 const DEATH = [
   [83, 8, 16, 15],
@@ -7,14 +7,14 @@ const DEATH = [
   [157, 5, 24, 22]
 ];
 
-class Enemy extends MovingObject {
+class Enemy extends Entity {
   constructor(options) {
     super(options);
     this.link = options.link;
     this.deathSprite = new Image();
-    this.deathSprite.src = "../assets/sprites/death-effects.png";
-    this.hitSound = new Audio('../assets/sounds/LTTP_Enemy_Hit.wav');
-    this.deathSound = new Audio('../assets/sounds/LTTP_Enemy_Kill.wav');
+    this.deathSprite.src = "./assets/sprites/death-effects.png";
+    this.hitSound = new Audio('./assets/sounds/LTTP_Enemy_Hit.wav');
+    this.deathSound = new Audio('./assets/sounds/LTTP_Enemy_Kill.wav');
 
     this.scale = 2;
     this.frameIndex = 0;

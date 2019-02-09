@@ -14,11 +14,11 @@ const SPAWN_POS = [
 
 class Game {
   constructor(options) {
-    this.pauseSound = new Audio('../assets/sounds/LTTP_Menu_Cursor.wav');
-    this.heartSound = new Audio('../assets/sounds/LTTP_RefillHealth.wav');
-    this.overworldMusic = new Audio('../assets/sounds/overworld_theme.mp3');
-    this.kakarikoMusic = new Audio('../assets/sounds/kakariko_village.mp3');
-    this.selectMusic = new Audio('../assets/sounds/select_screen.mp3');
+    this.pauseSound = new Audio('./assets/sounds/LTTP_Menu_Cursor.wav');
+    this.heartSound = new Audio('./assets/sounds/LTTP_RefillHealth.wav');
+    this.overworldMusic = new Audio('./assets/sounds/overworld_theme.mp3');
+    this.kakarikoMusic = new Audio('./assets/sounds/kakariko_village.mp3');
+    this.selectMusic = new Audio('./assets/sounds/select_screen.mp3');
     this.muteButton = document.getElementById('mute');
     this.soundButton = document.getElementById('sound');
     this.killCount = document.getElementById('kill-count');

@@ -24,9 +24,9 @@ class Lynel extends Enemy {
   constructor(options) {
     super(options);
     this.lynelSprite = new Image();
-    this.lynelSprite.src = "../assets/sprites/enemies.png";
+    this.lynelSprite.src = "./assets/sprites/enemies.png";
     this.lynelSprite2 = new Image();
-    this.lynelSprite2.src = "../assets/sprites/enemies2.png";
+    this.lynelSprite2.src = "./assets/sprites/enemies2.png";
 
     this.frameLen = 3;
     this.box = [44, 52];

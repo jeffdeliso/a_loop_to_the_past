@@ -4,7 +4,7 @@ class Heart extends Entity {
   constructor(options) {
     super(options);
     this.heartSprite = new Image();
-    this.heartSprite.src = "../assets/sprites/items-objects.gif";
+    this.heartSprite.src = "./assets/sprites/items-objects.gif";
     this.box = [14, 13];
     this.draw = this.draw.bind(this);
   }

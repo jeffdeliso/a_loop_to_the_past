@@ -29,7 +29,7 @@ class Moblin extends Enemy {
   constructor(options) {
     super(options);
     this.moblinSprite = new Image();
-    this.moblinSprite.src = "../assets/sprites/enemies.png";
+    this.moblinSprite.src = "./assets/sprites/enemies.png";
 
     this.frameLen = 4;
     this.box = [28, 48];

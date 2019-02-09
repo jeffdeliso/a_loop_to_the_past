@@ -6,7 +6,7 @@ class GameView {
     this.game = game;
     this.link = this.game.link;
     this.animate = this.animate.bind(this);
-    this.restartSound = new Audio('../assets/sounds/LTTP_Secret.wav');
+    this.restartSound = new Audio('./assets/sounds/LTTP_Secret.wav');
   }
 
   bindKeyHandlers() {

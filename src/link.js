@@ -1,5 +1,5 @@
-import MovingObject from "./moving_object";
 import Sword from "./sword";
+import Entity from "./entity";
 
 const WALK_DOWN = [3, 33, 63, 93, 123, 153, 183, 213];
 const WALK_UP = [2, 32, 62, 92, 122, 152, 182, 212];
@@ -13,7 +13,7 @@ const SWORD_UP = [
 ];
 const SWORD_DOWN = [
   [1, 90, 20, 23],
-  [30, 90, 22, 24],
+  [30, 90, 22, 24]
   [61, 86, 20, 31],
   [91, 86, 20, 31],
   [115, 87, 28, 29],
@@ -36,16 +36,16 @@ const SWORD_RIGHT = [
   [393, 181, 16, 22]
 ];
 
-class Link extends MovingObject {
+class Link extends Entity {
   constructor(options) {
     super(options);
     this.linkSprite = new Image();
-    this.linkSprite.src = "../assets/sprites/link.png";
+    this.linkSprite.src = "./assets/sprites/link.png";
     this.linkSprite2 = new Image();
-    this.linkSprite2.src = "../assets/sprites/link.gif";
-    this.swordSound = new Audio('../assets/sounds/LTTP_Sword.wav');
-    this.hurtSound = new Audio('../assets/sounds/LTTP_Link_Hurt.wav');
-    this.deathSound = new Audio('../assets/sounds/LTTP_Link_Dying.wav');
+    this.linkSprite2.src = "./assets/sprites/link.gif";
+    this.swordSound = new Audio('./assets/sounds/LTTP_Sword.wav');
+    this.hurtSound = new Audio('./assets/sounds/LTTP_Link_Hurt.wav');
+    this.deathSound = new Audio('./assets/sounds/LTTP_Link_Dying.wav');
 
     this.scale = 2;
     this.frameIndex = 0;
