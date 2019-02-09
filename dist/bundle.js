@@ -882,7 +882,7 @@ function () {
 
         if (heart.isCollidedWith(this.link)) {
           this.heartSound.play();
-          this.link.life += 1;
+          if (this.link.life < 3) this.link.life += 1;
           this.removeItem(heart);
         }
       }
@@ -936,6 +936,8 @@ function () {
     value: function draw(ctx) {
       if (!this.paused) {
         ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
+        ctx.fillStyle = "#489847";
+        ctx.fillRect(158, 90, 162, 202);
         this.allObjects().forEach(function (object) {
           object.draw(ctx);
         });

@@ -207,7 +207,7 @@ class Game {
       const heart = this.items[i];
       if (heart.isCollidedWith(this.link)) {
         this.heartSound.play();
-        this.link.life += 1;
+        if (this.link.life < 3) this.link.life += 1;
         this.removeItem(heart);
       }
     }
@@ -252,7 +252,8 @@ class Game {
   draw(ctx) {
     if (!this.paused) {
       ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
-
+      ctx.fillStyle = "#489847";
+      ctx.fillRect(158, 90, 162, 202);
       this.allObjects().forEach((object) => {
         object.draw(ctx);
       });

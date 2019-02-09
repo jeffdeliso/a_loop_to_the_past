@@ -111,7 +111,7 @@ aside a:hover {
   height: 600px;
   width: 1050px;
   z-index: 10;
-  transition: opacity 2s ease-in-out;
+  transition: opacity 3s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;
