@@ -125,8 +125,10 @@ class Game {
   }
 
   addEnemyToRandomSpawn() {
-    const idx = Math.floor(Math.random() * 4);
-    const pos = SPAWN_POS[idx];
+    let pos = SPAWN_POS[Math.floor(Math.random() * 4)];
+    while (this.enemyWillCollideWithEnemy(pos, {box: [50, 50]})) {
+      pos = SPAWN_POS[Math.floor(Math.random() * 4)];
+    }
     const enemyIdx = Math.random();
 
     if (enemyIdx > 0.8) {

@@ -753,8 +753,14 @@ function () {
   }, {
     key: "addEnemyToRandomSpawn",
     value: function addEnemyToRandomSpawn() {
-      var idx = Math.floor(Math.random() * 4);
-      var pos = SPAWN_POS[idx];
+      var pos = SPAWN_POS[Math.floor(Math.random() * 4)];
+
+      while (this.enemyWillCollideWithEnemy(pos, {
+        box: [50, 50]
+      })) {
+        pos = SPAWN_POS[Math.floor(Math.random() * 4)];
+      }
+
       var enemyIdx = Math.random();
 
       if (enemyIdx > 0.8) {
