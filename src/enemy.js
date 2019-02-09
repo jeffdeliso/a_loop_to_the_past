@@ -44,29 +44,28 @@ class Enemy extends MovingObject {
     let angleToLink2 = angleToLink;
     let dist = this.distanceToObject(this.link);
 
-    if (dist > 200) {
-      dist = 200;
+    if (dist > 150) {
+      dist = 150;
     }
 
-
+    let timeOut;
     while (true) {
       if (this.link.walking) {
+        if (timeOut) clearTimeout(timeOut);
         this.angle1 = true;
         this.angle2 = true;
       }
       
       if (this.angle1 && !this.checkObstacles(angleToLink1, dist)) {
       // if (!this.checkObstacles(angleToLink1, dist)) {
-        // if (!this.first) angleToLink1 += 0.1;
         this.angle2 = false;
-        setTimeout(() => this.angle2 = true, 5000);
+        timeOut = setTimeout(() => this.angle2 = true, 5000);
         return angleToLink1;
       }
-      // if (this.angle2 && !this.checkObstacles(angleToLink2, dist)) {
-      if (!this.checkObstacles(angleToLink2, dist)) {
-        // if (!this.first) angleToLink2 += 0.1;
+      if (this.angle2 && !this.checkObstacles(angleToLink2, dist)) {
+      // if (!this.checkObstacles(angleToLink2, dist)) {
         this.angle1 = false;
-        setTimeout(() => this.angle1 = true, 5000);
+        timeOut = setTimeout(() => this.angle1 = true, 5000);
         return angleToLink2;
       }
       if (angleToLink1 > Math.PI + angleToLink) {
@@ -88,15 +87,6 @@ class Enemy extends MovingObject {
     }
     return false;
   }
-
-  // checkLinkBehindObstacle(obj, angle) {
-  //   const angleRange = this.angleRangeToObject(obj);
-  //   if (angle > angleRange[0] && angle < angleRange[1]) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   objectBetweenSelfAndLink(obj, angle, dist) {
     const borders = [
@@ -130,24 +120,24 @@ class Enemy extends MovingObject {
   intersects(a, b, c, d, p, q, r, s) {
     let det, gamma, lambda;
     det = (c - a) * (s - q) - (r - p) * (d - b);
+
     if (det === 0) {
       return false;
     } else {
       lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
       gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+
       return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
     }
   }
 
   findNewPoint(x, y, angle, distance) {
     let result = {};
-
     result.x = Math.round(Math.cos(angle) * distance + x);
     result.y = Math.round(Math.sin(angle) * distance + y);
 
     return result;
   }
-
 
   move(timeDelta) {
     let vel;
@@ -198,7 +188,6 @@ class Enemy extends MovingObject {
       const delta = 4;
       vel = [this.hitVect[0] * delta, this.hitVect[1] * delta];
     }
-
 
     const velocityScale = timeDelta / NORMAL_FRAME_TIME_DELTA,
       offsetX = vel[0] * velocityScale,

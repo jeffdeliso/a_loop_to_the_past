@@ -25,11 +25,11 @@ class GameView {
   animate(time) {
     if (!this.game.gameover) {
       const timeDelta = time - this.lastTime;
-  
+
       this.game.step(timeDelta);
       this.game.draw(this.ctx);
       this.lastTime = time;
-  
+
       requestAnimationFrame(this.animate);
     } else {
       const btn = document.createElement("BUTTON");
@@ -53,7 +53,7 @@ class GameView {
     const controlsEl = document.getElementById('controls');
     controlsEl.style.opacity = 1;
     this.game.stopMusic();
-    this.game = new Game();
+    this.game = new Game({ muted: this.game.muted });
     this.link = this.game.link;
     this.start();
   }

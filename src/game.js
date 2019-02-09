@@ -12,45 +12,59 @@ const SPAWN_POS = [
 ];
 
 class Game {
-  constructor() {
-    this.link = new Link({ game: this });
-    this.spawnEnemies = false;
-    this.obstacles = [];
-    this.enemies = [];
-    this.addObstacles();
-    this.parseKeyDown = this.parseKeyDown.bind(this);
-    this.togglePause = this.togglePause.bind(this);
-    this.muteGame = this.muteGame.bind(this);
-    this.unmuteGame = this.unmuteGame.bind(this);
+  constructor(options) {
     this.pauseSound = new Audio('../assets/sounds/LTTP_Menu_Cursor.wav');
     this.overworldMusic = new Audio('../assets/sounds/overworld_theme.mp3');
     this.kakarikoMusic = new Audio('../assets/sounds/kakariko_village.mp3');
     this.selectMusic = new Audio('../assets/sounds/select_screen.mp3');
-    this.song = this.kakarikoMusic;
-    this.muted = true;
-    this.music = this.music.bind(this);
-    // this.stopMusic = this.stopMusic.bind(this);
-    this.music(this.kakarikoMusic);
-
     this.muteButton = document.getElementById('mute');
     this.soundButton = document.getElementById('sound');
+    this.killCount = document.getElementById('kill-count');
+    
+    this.link = new Link({ game: this });
+    this.obstacles = [];
+    this.enemies = [];
+    this.song = this.kakarikoMusic;
+    this.muted = options.muted;
+    this.spawnEnemies = false;
+    this.count = 0;
+    
+    this.parseKeyDown = this.parseKeyDown.bind(this);
+    this.togglePause = this.togglePause.bind(this);
+    this.muteGame = this.muteGame.bind(this);
+    this.unmuteGame = this.unmuteGame.bind(this);
+    this.stopMusic = this.stopMusic.bind(this);
+    this.music = this.music.bind(this);
+    this.updateKillCount = this.updateKillCount.bind(this);
     this.muteButton.onclick = this.muteGame;
     this.soundButton.onclick = this.unmuteGame;
+    
+    this.addObstacles();
+    this.music(this.kakarikoMusic);
+    this.updateKillCount();
+  }
+
+  updateKillCount() {
+    this.killCount.innerHTML = `${this.count}`;
   }
 
   muteGame() {
-    this.soundButton.classList.toggle("selected");
-    this.muteButton.classList.toggle("selected");
-    this.song.pause();
-    this.song.currentTime = 0;
-    this.muted = true;
+    if (!this.muted) {
+      this.soundButton.classList.toggle("selected");
+      this.muteButton.classList.toggle("selected");
+      this.song.pause();
+      this.song.currentTime = 0;
+      this.muted = true;
+    }
   }
 
   unmuteGame() {
-    this.soundButton.classList.toggle("selected");
-    this.muteButton.classList.toggle("selected");
-    this.muted = false;
-    this.song.play();
+    if (this.muted) {
+      this.soundButton.classList.toggle("selected");
+      this.muteButton.classList.toggle("selected");
+      this.muted = false;
+      this.song.play();
+    }
   }
 
   music(song) {
@@ -62,9 +76,9 @@ class Game {
     }
   }
 
-  // stopMusic() {
-  //   this.song.pause();
-  // }
+  stopMusic() {
+    this.song.pause();
+  }
 
   addEnemies() {
     this.music(this.overworldMusic);
@@ -214,6 +228,8 @@ class Game {
 
   remove(object) {
     this.enemies.splice(this.enemies.indexOf(object), 1);
+    this.count += 1;
+    this.updateKillCount();
   }
 
   step(delta) {

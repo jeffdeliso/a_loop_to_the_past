@@ -35,6 +35,16 @@ h1 {
   color: #d5a13f;
 }
 
+#kill-count {
+  font-family: hylian;
+  font-size: 60px;
+  justify-self: start;
+  text-align: center;
+  margin-bottom: 340px;
+  color: #fff;
+  user-select: none;
+}
+
 .vertical-centering {
   height: 50px;
   margin-top: 20px;
@@ -197,10 +207,6 @@ button {
 #sound {
   margin-bottom: 50px;
 }
-
-
-
-
 
 @keyframes blinker {
   50% {

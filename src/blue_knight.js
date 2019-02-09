@@ -23,7 +23,6 @@ const BLUE_RIGHT = [
   [279, 240, 29, 27]
 ];
 
-
 class BlueKnight extends Enemy {
   constructor(options) {
     super(options);
@@ -31,10 +30,11 @@ class BlueKnight extends Enemy {
     this.blueSprite.src = "../assets/sprites/enemies.png";
     this.blueSprite2 = new Image();
     this.blueSprite2.src = "../assets/sprites/enemies2.png";
+
     this.frameLen = 4;
     this.box = [44, 56];
     this.life = 5;
-    this.delta = 0.5;
+    this.delta = 0.75;
 
     this.draw = this.draw.bind(this);
     this.update = this.update.bind(this);
@@ -54,12 +54,6 @@ class BlueKnight extends Enemy {
   }
 
   draw(ctx) {
-    // if (!this.down && !this.left && !this.right && !this.up) {
-    //   this.walking = false;
-    // } else {
-    //   if (!this.walking) this.frameIndex = 0;
-    //   this.walking = true;
-    // }
     if (this.life === 0) {
       this.drawDeath(ctx);
     } else {

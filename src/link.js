@@ -215,12 +215,6 @@ class Link extends MovingObject {
   }
 
   draw(ctx) {
-    // if (!this.down && !this.left && !this.right && !this.up) {
-    //   this.walking = false;
-    // } else {
-    //   if (!this.walking) this.frameIndex = 0;
-    //   this.walking = true;
-    // }
     if (this.life === 0) {
       this.deathSound.play();
       ctx.drawImage(this.linkSprite, 89, 214, 24, 15, this.pos[0], this.pos[1], 48, 30);

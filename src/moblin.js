@@ -25,15 +25,15 @@ const MOBLIN_RIGHT = [
   [165, 122, 14, 24]
 ];
 
-
 class Moblin extends Enemy {
   constructor(options) {
     super(options);
     this.moblinSprite = new Image();
     this.moblinSprite.src = "../assets/sprites/enemies.png";
+
     this.frameLen = 4;
     this.box = [28, 48];
-    this.delta = 0.75;
+    this.delta = 1;
 
     this.draw = this.draw.bind(this);
     this.update = this.update.bind(this);
@@ -53,12 +53,6 @@ class Moblin extends Enemy {
   }
 
   draw(ctx) {
-    // if (!this.down && !this.left && !this.right && !this.up) {
-    //   this.walking = false;
-    // } else {
-    //   if (!this.walking) this.frameIndex = 0;
-    //   this.walking = true;
-    // }
     if (this.life === 0) {
       this.drawDeath(ctx);
     } else {
