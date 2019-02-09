@@ -39,6 +39,7 @@ h1 {
 	-webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
+  user-select: none;
 }
 
 #kill-count {
