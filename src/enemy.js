@@ -136,54 +136,22 @@ class Enemy extends MovingObject {
     let result = {};
     result.x = Math.round(Math.cos(angle) * distance + x);
     result.y = Math.round(Math.sin(angle) * distance + y);
-
+    
     return result;
   }
-
+  
   move(timeDelta) {
+    this.toggleMoveThrough();
     let vel;
     if (this.life === 0) {
       vel = [0, 0];
-    } else if (!this.hit) {
-      const linkVect = this.vectorTowardsLink(this.link);
+    } else if (!this.moveThrough) {
       const angle = this.findMoveAngle();
       this.vect = [Math.cos(angle), Math.sin(angle)];
 
       vel = [this.vect[0] * this.delta, this.vect[1] * this.delta];
-
-      if (linkVect[0] > 0 && linkVect[1] > 0) {
-        if (linkVect[0] > linkVect[1]) {
-          if (this.walkDir !== 'right') this.frameIndex = 0;
-          this.walkDir = 'right';
-        } else {
-          if (this.walkDir !== 'down') this.frameIndex = 0;
-          this.walkDir = 'down';
-        }
-      } else if (linkVect[0] > 0 && linkVect[1] < 0) {
-        if (linkVect[0] > Math.abs(linkVect[1])) {
-          if (this.walkDir !== 'right') this.frameIndex = 0;
-          this.walkDir = 'right';
-        } else {
-          if (this.walkDir !== 'up') this.frameIndex = 0;
-          this.walkDir = 'up';
-        }
-      } else if (linkVect[0] < 0 && linkVect[1] > 0) {
-        if (Math.abs(linkVect[0]) > linkVect[1]) {
-          if (this.walkDir !== 'left') this.frameIndex = 0;
-          this.walkDir = 'left';
-        } else {
-          if (this.walkDir !== 'down') this.frameIndex = 0;
-          this.walkDir = 'down';
-        }
-      } else if (linkVect[0] < 0 && linkVect[1] < 0) {
-        if (Math.abs(linkVect[0]) > Math.abs(linkVect[1])) {
-          if (this.walkDir !== 'left') this.frameIndex = 0;
-          this.walkDir = 'left';
-        } else {
-          if (this.walkDir !== 'up') this.frameIndex = 0;
-          this.walkDir = 'up';
-        }
-      }
+      this.setWalkDir();
+  
     } else {
       const delta = 4;
       vel = [this.hitVect[0] * delta, this.hitVect[1] * delta];
@@ -210,11 +178,56 @@ class Enemy extends MovingObject {
     }
   }
 
+  toggleMoveThrough() {
+    if (!this.hit && this.moveThrough && !this.game.enemyWillCollideWithEnemy(this.pos, this)) {
+      this.moveThrough = false;
+    }
+  }
+
+  setWalkDir() {
+    const linkVect = this.vectorTowardsLink(this.link);
+
+    if (linkVect[0] > 0 && linkVect[1] > 0) {
+      if (linkVect[0] > linkVect[1]) {
+        if (this.walkDir !== 'right') this.frameIndex = 0;
+        this.walkDir = 'right';
+      } else {
+        if (this.walkDir !== 'down') this.frameIndex = 0;
+        this.walkDir = 'down';
+      }
+    } else if (linkVect[0] > 0 && linkVect[1] < 0) {
+      if (linkVect[0] > Math.abs(linkVect[1])) {
+        if (this.walkDir !== 'right') this.frameIndex = 0;
+        this.walkDir = 'right';
+      } else {
+        if (this.walkDir !== 'up') this.frameIndex = 0;
+        this.walkDir = 'up';
+      }
+    } else if (linkVect[0] < 0 && linkVect[1] > 0) {
+      if (Math.abs(linkVect[0]) > linkVect[1]) {
+        if (this.walkDir !== 'left') this.frameIndex = 0;
+        this.walkDir = 'left';
+      } else {
+        if (this.walkDir !== 'down') this.frameIndex = 0;
+        this.walkDir = 'down';
+      }
+    } else if (linkVect[0] < 0 && linkVect[1] < 0) {
+      if (Math.abs(linkVect[0]) > Math.abs(linkVect[1])) {
+        if (this.walkDir !== 'left') this.frameIndex = 0;
+        this.walkDir = 'left';
+      } else {
+        if (this.walkDir !== 'up') this.frameIndex = 0;
+        this.walkDir = 'up';
+      }
+    }
+  }
+
   hitByLink() {
     if (!this.hit) {
       this.hitSound.play();
       this.hitVect = [this.vect[0] * -1, this.vect[1] * -1];
       this.hit = true;
+      this.moveThrough = true;
       setTimeout(this.toggleHit, 300);
     }
   }

@@ -177,7 +177,7 @@ class Game {
   }
 
   enemyIsOutOfBounds(pos, enemy) {
-    return this.willCollideWithObstacle(pos, enemy.box) || this.enemyWillCollideWithEnemy(pos, enemy);
+    return this.willCollideWithObstacle(pos, enemy.box) || (this.enemyWillCollideWithEnemy(pos, enemy) && !enemy.moveThrough);
   }
 
   enemyWillCollideWithEnemy(pos, enemy) {

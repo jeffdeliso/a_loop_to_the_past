@@ -33,7 +33,7 @@ class BlueKnight extends Enemy {
 
     this.frameLen = 4;
     this.box = [44, 56];
-    this.life = 5;
+    this.life = 4;
     this.delta = 0.75;
     this.dropChance = 0.3;
 

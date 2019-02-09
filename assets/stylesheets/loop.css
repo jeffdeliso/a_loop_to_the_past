@@ -33,6 +33,12 @@ h1 {
   font-size: 50px;
   margin-bottom: 20px;
   color: #d5a13f;
+  background: url('../backgrounds/gold-texture-wallpaper_53876-47133.jpg') no-repeat center center;
+	background-size: cover;
+	text-align: center;
+	-webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 #kill-count {
@@ -75,6 +81,7 @@ aside a {
   display: flex;
   justify-content: center;
   color: black;
+  color: #202225;
   transition: all 0.2s ease-in-out;
 }
 
