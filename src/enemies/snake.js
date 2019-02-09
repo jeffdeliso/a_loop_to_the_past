@@ -68,7 +68,7 @@ class Snake extends Enemy {
           SNAKE_UP[this.frameIndex][2],
           SNAKE_UP[this.frameIndex][3],
           this.pos[0],
-          this.pos[1] - SNAKE_UP[this.frameIndex][3] * this.scale + 74,
+          this.pos[1],
           SNAKE_UP[this.frameIndex][2] * this.scale,
           SNAKE_UP[this.frameIndex][3] * this.scale
         );
@@ -79,7 +79,7 @@ class Snake extends Enemy {
           SNAKE_LEFT[this.frameIndex][1],
           SNAKE_LEFT[this.frameIndex][2],
           SNAKE_LEFT[this.frameIndex][3],
-          this.pos[0] - SNAKE_LEFT[this.frameIndex][2] * this.scale + 66,
+          this.pos[0],
           this.pos[1],
           SNAKE_LEFT[this.frameIndex][2] * this.scale,
           SNAKE_LEFT[this.frameIndex][3] * this.scale

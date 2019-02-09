@@ -1,4 +1,4 @@
-import Entity from "./entity";
+import Entity from "../entity";
 
 const DEATH = [
   [83, 8, 16, 15],

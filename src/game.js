@@ -1,10 +1,11 @@
 import Link from "./link";
 import Obstacle from "./obstacle";
-import Moblin from "./moblin";
-import Lynel from "./lynel";
-import BlueKnight from "./blue_knight";
+import Moblin from "./enemies/moblin";
+import Lynel from "./enemies/lynel";
+import BlueKnight from "./enemies/blue_knight";
 import Heart from "./heart";
-import Snake from "./snake";
+import Snake from "./enemies/snake";
+import Mummy from "./enemies/mummy";
 
 const SPAWN_POS = [
   [340, 650],
@@ -137,8 +138,10 @@ class Game {
       this.add(new Lynel({ game: this, link: this.link, pos }));
     } else if (enemyIdx > 0.7) {
       this.add(new Snake({ game: this, link: this.link, pos }));
-    } else if (enemyIdx > 0.3) {
+    } else if (enemyIdx > 0.4) {
       this.add(new Moblin({ game: this, link: this.link, pos }));
+    } else if (enemyIdx > 0.2) {
+      this.add(new Mummy({ game: this, link: this.link, pos }));
     } else {
       this.add(new BlueKnight({ game: this, link: this.link, pos }));
     }
@@ -244,7 +247,6 @@ class Game {
   }
 
   step(delta) {
-    debugger
     if (!this.paused) {
       if (this.spawnEnemies && this.enemies.length < (4 + Math.floor(this.count / 10))) this.addEnemyToRandomSpawn();
       this.moveObjects(delta);

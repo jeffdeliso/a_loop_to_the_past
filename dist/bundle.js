@@ -86,16 +86,16 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/blue_knight.js":
-/*!****************************!*\
-  !*** ./src/blue_knight.js ***!
-  \****************************/
+/***/ "./src/enemies/blue_knight.js":
+/*!************************************!*\
+  !*** ./src/enemies/blue_knight.js ***!
+  \************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemy.js");
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemies/enemy.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -193,16 +193,16 @@ function (_Enemy) {
 
 /***/ }),
 
-/***/ "./src/enemy.js":
-/*!**********************!*\
-  !*** ./src/enemy.js ***!
-  \**********************/
+/***/ "./src/enemies/enemy.js":
+/*!******************************!*\
+  !*** ./src/enemies/enemy.js ***!
+  \******************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./entity */ "./src/entity.js");
+/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../entity */ "./src/entity.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -502,6 +502,418 @@ var NORMAL_FRAME_TIME_DELTA = 1000 / 60;
 
 /***/ }),
 
+/***/ "./src/enemies/lynel.js":
+/*!******************************!*\
+  !*** ./src/enemies/lynel.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemies/enemy.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+var LYNEL_DOWN = [[241, 321, 22, 26], [241, 361, 22, 26], [241, 401, 22, 26]];
+var LYNEL_UP = [[321, 318, 22, 31], [321, 358, 22, 31]];
+var LYNEL_LEFT = [[280, 320, 24, 27], [280, 361, 24, 26], [281, 400, 23, 27]];
+var LYNEL_RIGHT = [[41, 320, 24, 27], [41, 361, 24, 26], [41, 400, 23, 27]];
+
+var Lynel =
+/*#__PURE__*/
+function (_Enemy) {
+  _inherits(Lynel, _Enemy);
+
+  function Lynel(options) {
+    var _this;
+
+    _classCallCheck(this, Lynel);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Lynel).call(this, options));
+    _this.lynelSprite = new Image();
+    _this.lynelSprite.src = "./assets/sprites/enemies.png";
+    _this.lynelSprite2 = new Image();
+    _this.lynelSprite2.src = "./assets/sprites/enemies2.png";
+    _this.frameLen = 3;
+    _this.box = [44, 52];
+    _this.life = 4;
+    _this.delta = 1.5;
+    _this.dropChance = 1;
+    _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.update = _this.update.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(Lynel, [{
+    key: "update",
+    value: function update() {
+      this.tickCount += 1;
+
+      if (this.tickCount > this.ticksPerFrame) {
+        this.tickCount = 0;
+
+        if (this.frameIndex < this.frameLen - 1) {
+          this.frameIndex += 1;
+        } else {
+          if (this.life === 0) this.remove();
+          this.frameIndex = 0;
+        }
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      if (this.life === 0) {
+        this.drawDeath(ctx);
+      } else {
+        if (this.walkDir === 'down') {
+          this.frameLen = LYNEL_DOWN.length;
+          ctx.drawImage(this.lynelSprite, LYNEL_DOWN[this.frameIndex][0], LYNEL_DOWN[this.frameIndex][1], LYNEL_DOWN[this.frameIndex][2], LYNEL_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], LYNEL_DOWN[this.frameIndex][2] * this.scale, LYNEL_DOWN[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'up') {
+          this.frameLen = LYNEL_UP.length;
+          ctx.drawImage(this.lynelSprite, LYNEL_UP[this.frameIndex][0], LYNEL_UP[this.frameIndex][1], LYNEL_UP[this.frameIndex][2], LYNEL_UP[this.frameIndex][3], this.pos[0], this.pos[1] - LYNEL_UP[this.frameIndex][3] * this.scale + 48, LYNEL_UP[this.frameIndex][2] * this.scale, LYNEL_UP[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'left') {
+          this.frameLen = LYNEL_LEFT.length;
+          ctx.drawImage(this.lynelSprite, LYNEL_LEFT[this.frameIndex][0], LYNEL_LEFT[this.frameIndex][1], LYNEL_LEFT[this.frameIndex][2], LYNEL_LEFT[this.frameIndex][3], this.pos[0] - LYNEL_LEFT[this.frameIndex][2] * this.scale + 28, this.pos[1], LYNEL_LEFT[this.frameIndex][2] * this.scale, LYNEL_LEFT[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'right') {
+          this.frameLen = LYNEL_RIGHT.length;
+          ctx.drawImage(this.lynelSprite2, LYNEL_RIGHT[this.frameIndex][0], LYNEL_RIGHT[this.frameIndex][1], LYNEL_RIGHT[this.frameIndex][2], LYNEL_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], LYNEL_RIGHT[this.frameIndex][2] * this.scale, LYNEL_RIGHT[this.frameIndex][3] * this.scale);
+        }
+      }
+
+      this.update();
+    }
+  }]);
+
+  return Lynel;
+}(_enemy__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Lynel);
+
+/***/ }),
+
+/***/ "./src/enemies/moblin.js":
+/*!*******************************!*\
+  !*** ./src/enemies/moblin.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemies/enemy.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+var MOBLIN_DOWN = [[124, 0, 16, 28], [124, 38, 16, 32], [123, 81, 16, 28], [124, 121, 16, 26]];
+var MOBLIN_UP = [[203, 1, 18, 25], [203, 41, 18, 25], [203, 80, 18, 28], [204, 121, 16, 25]];
+var MOBLIN_LEFT = [[225, 15, 19, 25], [222, 56, 24, 24], [226, 95, 17, 25], [227, 136, 14, 24]];
+var MOBLIN_RIGHT = [[162, 1, 19, 25], [160, 42, 24, 24], [163, 81, 17, 25], [165, 122, 14, 24]];
+
+var Moblin =
+/*#__PURE__*/
+function (_Enemy) {
+  _inherits(Moblin, _Enemy);
+
+  function Moblin(options) {
+    var _this;
+
+    _classCallCheck(this, Moblin);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Moblin).call(this, options));
+    _this.moblinSprite = new Image();
+    _this.moblinSprite.src = "./assets/sprites/enemies.png";
+    _this.frameLen = 4;
+    _this.box = [28, 48];
+    _this.delta = 1;
+    _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.update = _this.update.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(Moblin, [{
+    key: "update",
+    value: function update() {
+      this.tickCount += 1;
+
+      if (this.tickCount > this.ticksPerFrame) {
+        this.tickCount = 0;
+
+        if (this.frameIndex < this.frameLen - 1) {
+          this.frameIndex += 1;
+        } else {
+          if (this.life === 0) this.remove();
+          this.frameIndex = 0;
+        }
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      if (this.life === 0) {
+        this.drawDeath(ctx);
+      } else {
+        if (this.walkDir === 'down') {
+          ctx.drawImage(this.moblinSprite, MOBLIN_DOWN[this.frameIndex][0], MOBLIN_DOWN[this.frameIndex][1], MOBLIN_DOWN[this.frameIndex][2], MOBLIN_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], MOBLIN_DOWN[this.frameIndex][2] * this.scale, MOBLIN_DOWN[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'up') {
+          ctx.drawImage(this.moblinSprite, MOBLIN_UP[this.frameIndex][0], MOBLIN_UP[this.frameIndex][1], MOBLIN_UP[this.frameIndex][2], MOBLIN_UP[this.frameIndex][3], this.pos[0], this.pos[1] - MOBLIN_UP[this.frameIndex][3] * this.scale + 48, MOBLIN_UP[this.frameIndex][2] * this.scale, MOBLIN_UP[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'left') {
+          ctx.drawImage(this.moblinSprite, MOBLIN_LEFT[this.frameIndex][0], MOBLIN_LEFT[this.frameIndex][1], MOBLIN_LEFT[this.frameIndex][2], MOBLIN_LEFT[this.frameIndex][3], this.pos[0] - MOBLIN_LEFT[this.frameIndex][2] * this.scale + 28, this.pos[1], MOBLIN_LEFT[this.frameIndex][2] * this.scale, MOBLIN_LEFT[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'right') {
+          ctx.drawImage(this.moblinSprite, MOBLIN_RIGHT[this.frameIndex][0], MOBLIN_RIGHT[this.frameIndex][1], MOBLIN_RIGHT[this.frameIndex][2], MOBLIN_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], MOBLIN_RIGHT[this.frameIndex][2] * this.scale, MOBLIN_RIGHT[this.frameIndex][3] * this.scale);
+        }
+      }
+
+      this.update();
+    }
+  }]);
+
+  return Moblin;
+}(_enemy__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Moblin);
+
+/***/ }),
+
+/***/ "./src/enemies/mummy.js":
+/*!******************************!*\
+  !*** ./src/enemies/mummy.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemies/enemy.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+var MUMMY_DOWN = [[124, 681, 16, 26], [124, 721, 16, 25]];
+var MUMMY_UP = [[204, 681, 16, 26], [204, 721, 16, 25]];
+var MUMMY_LEFT = [[164, 681, 15, 25], [165, 721, 14, 26]];
+var MUMMY_RIGHT = [[166, 681, 15, 25], [166, 721, 14, 26]];
+
+var Mummy =
+/*#__PURE__*/
+function (_Enemy) {
+  _inherits(Mummy, _Enemy);
+
+  function Mummy(options) {
+    var _this;
+
+    _classCallCheck(this, Mummy);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Mummy).call(this, options));
+    _this.frameLen = 2;
+    _this.box = [24, 32];
+    _this.life = 2;
+    _this.delta = 0.6;
+    _this.dropChance = 0.1;
+    _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.update = _this.update.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(Mummy, [{
+    key: "update",
+    value: function update() {
+      this.tickCount += 1;
+
+      if (this.tickCount > this.ticksPerFrame) {
+        this.tickCount = 0;
+
+        if (this.frameIndex < this.frameLen - 1) {
+          this.frameIndex += 1;
+        } else {
+          if (this.life === 0) this.remove();
+          this.frameIndex = 0;
+        }
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      if (this.life === 0) {
+        this.drawDeath(ctx);
+      } else {
+        if (this.walkDir === 'down') {
+          this.frameLen = MUMMY_DOWN.length;
+          ctx.drawImage(this.enemySprite, MUMMY_DOWN[this.frameIndex][0], MUMMY_DOWN[this.frameIndex][1], MUMMY_DOWN[this.frameIndex][2], MUMMY_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], MUMMY_DOWN[this.frameIndex][2] * this.scale, MUMMY_DOWN[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'up') {
+          this.frameLen = MUMMY_UP.length;
+          ctx.drawImage(this.enemySprite, MUMMY_UP[this.frameIndex][0], MUMMY_UP[this.frameIndex][1], MUMMY_UP[this.frameIndex][2], MUMMY_UP[this.frameIndex][3], this.pos[0], this.pos[1], MUMMY_UP[this.frameIndex][2] * this.scale, MUMMY_UP[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'left') {
+          this.frameLen = MUMMY_LEFT.length;
+          ctx.drawImage(this.enemySprite, MUMMY_LEFT[this.frameIndex][0], MUMMY_LEFT[this.frameIndex][1], MUMMY_LEFT[this.frameIndex][2], MUMMY_LEFT[this.frameIndex][3], this.pos[0], this.pos[1], MUMMY_LEFT[this.frameIndex][2] * this.scale, MUMMY_LEFT[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'right') {
+          this.frameLen = MUMMY_RIGHT.length;
+          ctx.drawImage(this.enemySprite2, MUMMY_RIGHT[this.frameIndex][0], MUMMY_RIGHT[this.frameIndex][1], MUMMY_RIGHT[this.frameIndex][2], MUMMY_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], MUMMY_RIGHT[this.frameIndex][2] * this.scale, MUMMY_RIGHT[this.frameIndex][3] * this.scale);
+        }
+      }
+
+      this.update();
+    }
+  }]);
+
+  return Mummy;
+}(_enemy__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Mummy);
+
+/***/ }),
+
+/***/ "./src/enemies/snake.js":
+/*!******************************!*\
+  !*** ./src/enemies/snake.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemies/enemy.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+var SNAKE_DOWN = [[5, 766, 13, 16], [5, 806, 13, 16]];
+var SNAKE_UP = [[86, 766, 12, 16], [86, 806, 12, 16]];
+var SNAKE_LEFT = [[44, 766, 16, 16], [44, 806, 16, 16]];
+var SNAKE_RIGHT = [[285, 766, 16, 16], [285, 806, 16, 16]];
+
+var Snake =
+/*#__PURE__*/
+function (_Enemy) {
+  _inherits(Snake, _Enemy);
+
+  function Snake(options) {
+    var _this;
+
+    _classCallCheck(this, Snake);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Snake).call(this, options));
+    _this.frameLen = 2;
+    _this.box = [24, 32];
+    _this.life = 1;
+    _this.delta = 3;
+    _this.dropChance = 0.2;
+    _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.update = _this.update.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(Snake, [{
+    key: "update",
+    value: function update() {
+      this.tickCount += 1;
+
+      if (this.tickCount > this.ticksPerFrame) {
+        this.tickCount = 0;
+
+        if (this.frameIndex < this.frameLen - 1) {
+          this.frameIndex += 1;
+        } else {
+          if (this.life === 0) this.remove();
+          this.frameIndex = 0;
+        }
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      if (this.life === 0) {
+        this.drawDeath(ctx);
+      } else {
+        if (this.walkDir === 'down') {
+          this.frameLen = SNAKE_DOWN.length;
+          ctx.drawImage(this.enemySprite, SNAKE_DOWN[this.frameIndex][0], SNAKE_DOWN[this.frameIndex][1], SNAKE_DOWN[this.frameIndex][2], SNAKE_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], SNAKE_DOWN[this.frameIndex][2] * this.scale, SNAKE_DOWN[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'up') {
+          this.frameLen = SNAKE_UP.length;
+          ctx.drawImage(this.enemySprite, SNAKE_UP[this.frameIndex][0], SNAKE_UP[this.frameIndex][1], SNAKE_UP[this.frameIndex][2], SNAKE_UP[this.frameIndex][3], this.pos[0], this.pos[1], SNAKE_UP[this.frameIndex][2] * this.scale, SNAKE_UP[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'left') {
+          this.frameLen = SNAKE_LEFT.length;
+          ctx.drawImage(this.enemySprite, SNAKE_LEFT[this.frameIndex][0], SNAKE_LEFT[this.frameIndex][1], SNAKE_LEFT[this.frameIndex][2], SNAKE_LEFT[this.frameIndex][3], this.pos[0], this.pos[1], SNAKE_LEFT[this.frameIndex][2] * this.scale, SNAKE_LEFT[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'right') {
+          this.frameLen = SNAKE_RIGHT.length;
+          ctx.drawImage(this.enemySprite2, SNAKE_RIGHT[this.frameIndex][0], SNAKE_RIGHT[this.frameIndex][1], SNAKE_RIGHT[this.frameIndex][2], SNAKE_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], SNAKE_RIGHT[this.frameIndex][2] * this.scale, SNAKE_RIGHT[this.frameIndex][3] * this.scale);
+        }
+      }
+
+      this.update();
+    }
+  }]);
+
+  return Snake;
+}(_enemy__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Snake);
+
+/***/ }),
+
 /***/ "./src/entity.js":
 /*!***********************!*\
   !*** ./src/entity.js ***!
@@ -611,16 +1023,18 @@ function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _link__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./link */ "./src/link.js");
 /* harmony import */ var _obstacle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./obstacle */ "./src/obstacle.js");
-/* harmony import */ var _moblin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./moblin */ "./src/moblin.js");
-/* harmony import */ var _lynel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./lynel */ "./src/lynel.js");
-/* harmony import */ var _blue_knight__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./blue_knight */ "./src/blue_knight.js");
+/* harmony import */ var _enemies_moblin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./enemies/moblin */ "./src/enemies/moblin.js");
+/* harmony import */ var _enemies_lynel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./enemies/lynel */ "./src/enemies/lynel.js");
+/* harmony import */ var _enemies_blue_knight__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./enemies/blue_knight */ "./src/enemies/blue_knight.js");
 /* harmony import */ var _heart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./heart */ "./src/heart.js");
-/* harmony import */ var _snake__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./snake */ "./src/snake.js");
+/* harmony import */ var _enemies_snake__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./enemies/snake */ "./src/enemies/snake.js");
+/* harmony import */ var _enemies_mummy__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./enemies/mummy */ "./src/enemies/mummy.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -776,25 +1190,31 @@ function () {
       var enemyIdx = Math.random();
 
       if (enemyIdx > 0.8) {
-        this.add(new _lynel__WEBPACK_IMPORTED_MODULE_3__["default"]({
+        this.add(new _enemies_lynel__WEBPACK_IMPORTED_MODULE_3__["default"]({
           game: this,
           link: this.link,
           pos: pos
         }));
       } else if (enemyIdx > 0.7) {
-        this.add(new _snake__WEBPACK_IMPORTED_MODULE_6__["default"]({
+        this.add(new _enemies_snake__WEBPACK_IMPORTED_MODULE_6__["default"]({
           game: this,
           link: this.link,
           pos: pos
         }));
-      } else if (enemyIdx > 0.3) {
-        this.add(new _moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
+      } else if (enemyIdx > 0.4) {
+        this.add(new _enemies_moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
+          game: this,
+          link: this.link,
+          pos: pos
+        }));
+      } else if (enemyIdx > 0.2) {
+        this.add(new _enemies_mummy__WEBPACK_IMPORTED_MODULE_7__["default"]({
           game: this,
           link: this.link,
           pos: pos
         }));
       } else {
-        this.add(new _blue_knight__WEBPACK_IMPORTED_MODULE_4__["default"]({
+        this.add(new _enemies_blue_knight__WEBPACK_IMPORTED_MODULE_4__["default"]({
           game: this,
           link: this.link,
           pos: pos
@@ -811,13 +1231,13 @@ function () {
         var enemyIdx = Math.random();
 
         if (enemyIdx > 0.5) {
-          _this2.add(new _moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
+          _this2.add(new _enemies_moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
             game: _this2,
             link: _this2.link,
             pos: pos
           }));
         } else {
-          _this2.add(new _blue_knight__WEBPACK_IMPORTED_MODULE_4__["default"]({
+          _this2.add(new _enemies_blue_knight__WEBPACK_IMPORTED_MODULE_4__["default"]({
             game: _this2,
             link: _this2.link,
             pos: pos
@@ -936,8 +1356,6 @@ function () {
   }, {
     key: "step",
     value: function step(delta) {
-      debugger;
-
       if (!this.paused) {
         if (this.spawnEnemies && this.enemies.length < 4 + Math.floor(this.count / 10)) this.addEnemyToRandomSpawn();
         this.moveObjects(delta);
@@ -1757,212 +2175,6 @@ var NORMAL_FRAME_TIME_DELTA = 1000 / 60;
 
 /***/ }),
 
-/***/ "./src/lynel.js":
-/*!**********************!*\
-  !*** ./src/lynel.js ***!
-  \**********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemy.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-
-var LYNEL_DOWN = [[241, 321, 22, 26], [241, 361, 22, 26], [241, 401, 22, 26]];
-var LYNEL_UP = [[321, 318, 22, 31], [321, 358, 22, 31]];
-var LYNEL_LEFT = [[280, 320, 24, 27], [280, 361, 24, 26], [281, 400, 23, 27]];
-var LYNEL_RIGHT = [[41, 320, 24, 27], [41, 361, 24, 26], [41, 400, 23, 27]];
-
-var Lynel =
-/*#__PURE__*/
-function (_Enemy) {
-  _inherits(Lynel, _Enemy);
-
-  function Lynel(options) {
-    var _this;
-
-    _classCallCheck(this, Lynel);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Lynel).call(this, options));
-    _this.lynelSprite = new Image();
-    _this.lynelSprite.src = "./assets/sprites/enemies.png";
-    _this.lynelSprite2 = new Image();
-    _this.lynelSprite2.src = "./assets/sprites/enemies2.png";
-    _this.frameLen = 3;
-    _this.box = [44, 52];
-    _this.life = 4;
-    _this.delta = 1.5;
-    _this.dropChance = 1;
-    _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.update = _this.update.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
-  }
-
-  _createClass(Lynel, [{
-    key: "update",
-    value: function update() {
-      this.tickCount += 1;
-
-      if (this.tickCount > this.ticksPerFrame) {
-        this.tickCount = 0;
-
-        if (this.frameIndex < this.frameLen - 1) {
-          this.frameIndex += 1;
-        } else {
-          if (this.life === 0) this.remove();
-          this.frameIndex = 0;
-        }
-      }
-    }
-  }, {
-    key: "draw",
-    value: function draw(ctx) {
-      if (this.life === 0) {
-        this.drawDeath(ctx);
-      } else {
-        if (this.walkDir === 'down') {
-          this.frameLen = LYNEL_DOWN.length;
-          ctx.drawImage(this.lynelSprite, LYNEL_DOWN[this.frameIndex][0], LYNEL_DOWN[this.frameIndex][1], LYNEL_DOWN[this.frameIndex][2], LYNEL_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], LYNEL_DOWN[this.frameIndex][2] * this.scale, LYNEL_DOWN[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'up') {
-          this.frameLen = LYNEL_UP.length;
-          ctx.drawImage(this.lynelSprite, LYNEL_UP[this.frameIndex][0], LYNEL_UP[this.frameIndex][1], LYNEL_UP[this.frameIndex][2], LYNEL_UP[this.frameIndex][3], this.pos[0], this.pos[1] - LYNEL_UP[this.frameIndex][3] * this.scale + 48, LYNEL_UP[this.frameIndex][2] * this.scale, LYNEL_UP[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'left') {
-          this.frameLen = LYNEL_LEFT.length;
-          ctx.drawImage(this.lynelSprite, LYNEL_LEFT[this.frameIndex][0], LYNEL_LEFT[this.frameIndex][1], LYNEL_LEFT[this.frameIndex][2], LYNEL_LEFT[this.frameIndex][3], this.pos[0] - LYNEL_LEFT[this.frameIndex][2] * this.scale + 28, this.pos[1], LYNEL_LEFT[this.frameIndex][2] * this.scale, LYNEL_LEFT[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'right') {
-          this.frameLen = LYNEL_RIGHT.length;
-          ctx.drawImage(this.lynelSprite2, LYNEL_RIGHT[this.frameIndex][0], LYNEL_RIGHT[this.frameIndex][1], LYNEL_RIGHT[this.frameIndex][2], LYNEL_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], LYNEL_RIGHT[this.frameIndex][2] * this.scale, LYNEL_RIGHT[this.frameIndex][3] * this.scale);
-        }
-      }
-
-      this.update();
-    }
-  }]);
-
-  return Lynel;
-}(_enemy__WEBPACK_IMPORTED_MODULE_0__["default"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (Lynel);
-
-/***/ }),
-
-/***/ "./src/moblin.js":
-/*!***********************!*\
-  !*** ./src/moblin.js ***!
-  \***********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemy.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-
-var MOBLIN_DOWN = [[124, 0, 16, 28], [124, 38, 16, 32], [123, 81, 16, 28], [124, 121, 16, 26]];
-var MOBLIN_UP = [[203, 1, 18, 25], [203, 41, 18, 25], [203, 80, 18, 28], [204, 121, 16, 25]];
-var MOBLIN_LEFT = [[225, 15, 19, 25], [222, 56, 24, 24], [226, 95, 17, 25], [227, 136, 14, 24]];
-var MOBLIN_RIGHT = [[162, 1, 19, 25], [160, 42, 24, 24], [163, 81, 17, 25], [165, 122, 14, 24]];
-
-var Moblin =
-/*#__PURE__*/
-function (_Enemy) {
-  _inherits(Moblin, _Enemy);
-
-  function Moblin(options) {
-    var _this;
-
-    _classCallCheck(this, Moblin);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Moblin).call(this, options));
-    _this.moblinSprite = new Image();
-    _this.moblinSprite.src = "./assets/sprites/enemies.png";
-    _this.frameLen = 4;
-    _this.box = [28, 48];
-    _this.delta = 1;
-    _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.update = _this.update.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
-  }
-
-  _createClass(Moblin, [{
-    key: "update",
-    value: function update() {
-      this.tickCount += 1;
-
-      if (this.tickCount > this.ticksPerFrame) {
-        this.tickCount = 0;
-
-        if (this.frameIndex < this.frameLen - 1) {
-          this.frameIndex += 1;
-        } else {
-          if (this.life === 0) this.remove();
-          this.frameIndex = 0;
-        }
-      }
-    }
-  }, {
-    key: "draw",
-    value: function draw(ctx) {
-      if (this.life === 0) {
-        this.drawDeath(ctx);
-      } else {
-        if (this.walkDir === 'down') {
-          ctx.drawImage(this.moblinSprite, MOBLIN_DOWN[this.frameIndex][0], MOBLIN_DOWN[this.frameIndex][1], MOBLIN_DOWN[this.frameIndex][2], MOBLIN_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], MOBLIN_DOWN[this.frameIndex][2] * this.scale, MOBLIN_DOWN[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'up') {
-          ctx.drawImage(this.moblinSprite, MOBLIN_UP[this.frameIndex][0], MOBLIN_UP[this.frameIndex][1], MOBLIN_UP[this.frameIndex][2], MOBLIN_UP[this.frameIndex][3], this.pos[0], this.pos[1] - MOBLIN_UP[this.frameIndex][3] * this.scale + 48, MOBLIN_UP[this.frameIndex][2] * this.scale, MOBLIN_UP[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'left') {
-          ctx.drawImage(this.moblinSprite, MOBLIN_LEFT[this.frameIndex][0], MOBLIN_LEFT[this.frameIndex][1], MOBLIN_LEFT[this.frameIndex][2], MOBLIN_LEFT[this.frameIndex][3], this.pos[0] - MOBLIN_LEFT[this.frameIndex][2] * this.scale + 28, this.pos[1], MOBLIN_LEFT[this.frameIndex][2] * this.scale, MOBLIN_LEFT[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'right') {
-          ctx.drawImage(this.moblinSprite, MOBLIN_RIGHT[this.frameIndex][0], MOBLIN_RIGHT[this.frameIndex][1], MOBLIN_RIGHT[this.frameIndex][2], MOBLIN_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], MOBLIN_RIGHT[this.frameIndex][2] * this.scale, MOBLIN_RIGHT[this.frameIndex][3] * this.scale);
-        }
-      }
-
-      this.update();
-    }
-  }]);
-
-  return Moblin;
-}(_enemy__WEBPACK_IMPORTED_MODULE_0__["default"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (Moblin);
-
-/***/ }),
-
 /***/ "./src/obstacle.js":
 /*!*************************!*\
   !*** ./src/obstacle.js ***!
@@ -2004,109 +2216,6 @@ function (_Entity) {
 }(_entity__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (Obstacle);
-
-/***/ }),
-
-/***/ "./src/snake.js":
-/*!**********************!*\
-  !*** ./src/snake.js ***!
-  \**********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemy.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-
-var SNAKE_DOWN = [[5, 766, 13, 16], [5, 806, 13, 16]];
-var SNAKE_UP = [[86, 766, 12, 16], [86, 806, 12, 16]];
-var SNAKE_LEFT = [[44, 766, 16, 16], [44, 806, 16, 16]];
-var SNAKE_RIGHT = [[285, 766, 16, 16], [285, 806, 16, 16]];
-
-var Snake =
-/*#__PURE__*/
-function (_Enemy) {
-  _inherits(Snake, _Enemy);
-
-  function Snake(options) {
-    var _this;
-
-    _classCallCheck(this, Snake);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Snake).call(this, options));
-    _this.frameLen = 2;
-    _this.box = [24, 32];
-    _this.life = 1;
-    _this.delta = 3;
-    _this.dropChance = 0.2;
-    _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.update = _this.update.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
-  }
-
-  _createClass(Snake, [{
-    key: "update",
-    value: function update() {
-      this.tickCount += 1;
-
-      if (this.tickCount > this.ticksPerFrame) {
-        this.tickCount = 0;
-
-        if (this.frameIndex < this.frameLen - 1) {
-          this.frameIndex += 1;
-        } else {
-          if (this.life === 0) this.remove();
-          this.frameIndex = 0;
-        }
-      }
-    }
-  }, {
-    key: "draw",
-    value: function draw(ctx) {
-      if (this.life === 0) {
-        this.drawDeath(ctx);
-      } else {
-        if (this.walkDir === 'down') {
-          this.frameLen = SNAKE_DOWN.length;
-          ctx.drawImage(this.enemySprite, SNAKE_DOWN[this.frameIndex][0], SNAKE_DOWN[this.frameIndex][1], SNAKE_DOWN[this.frameIndex][2], SNAKE_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], SNAKE_DOWN[this.frameIndex][2] * this.scale, SNAKE_DOWN[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'up') {
-          this.frameLen = SNAKE_UP.length;
-          ctx.drawImage(this.enemySprite, SNAKE_UP[this.frameIndex][0], SNAKE_UP[this.frameIndex][1], SNAKE_UP[this.frameIndex][2], SNAKE_UP[this.frameIndex][3], this.pos[0], this.pos[1] - SNAKE_UP[this.frameIndex][3] * this.scale + 74, SNAKE_UP[this.frameIndex][2] * this.scale, SNAKE_UP[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'left') {
-          this.frameLen = SNAKE_LEFT.length;
-          ctx.drawImage(this.enemySprite, SNAKE_LEFT[this.frameIndex][0], SNAKE_LEFT[this.frameIndex][1], SNAKE_LEFT[this.frameIndex][2], SNAKE_LEFT[this.frameIndex][3], this.pos[0] - SNAKE_LEFT[this.frameIndex][2] * this.scale + 66, this.pos[1], SNAKE_LEFT[this.frameIndex][2] * this.scale, SNAKE_LEFT[this.frameIndex][3] * this.scale);
-        } else if (this.walkDir === 'right') {
-          this.frameLen = SNAKE_RIGHT.length;
-          ctx.drawImage(this.enemySprite2, SNAKE_RIGHT[this.frameIndex][0], SNAKE_RIGHT[this.frameIndex][1], SNAKE_RIGHT[this.frameIndex][2], SNAKE_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], SNAKE_RIGHT[this.frameIndex][2] * this.scale, SNAKE_RIGHT[this.frameIndex][3] * this.scale);
-        }
-      }
-
-      this.update();
-    }
-  }]);
-
-  return Snake;
-}(_enemy__WEBPACK_IMPORTED_MODULE_0__["default"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (Snake);
 
 /***/ }),
 
