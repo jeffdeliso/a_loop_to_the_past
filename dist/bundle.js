@@ -705,9 +705,15 @@ function () {
   }, {
     key: "music",
     value: function music(song) {
+      var _this = this;
+
       this.song.pause();
       this.song.currentTime = 0;
       this.song = song;
+
+      this.song.onended = function () {
+        return _this.song.play();
+      };
 
       if (!this.muted) {
         this.song.play();
@@ -786,22 +792,22 @@ function () {
   }, {
     key: "addEnemies",
     value: function addEnemies() {
-      var _this = this;
+      var _this2 = this;
 
       this.music(this.overworldMusic);
       SPAWN_POS.forEach(function (pos) {
         var enemyIdx = Math.random();
 
         if (enemyIdx > 0.5) {
-          _this.add(new _moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
-            game: _this,
-            link: _this.link,
+          _this2.add(new _moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
+            game: _this2,
+            link: _this2.link,
             pos: pos
           }));
         } else {
-          _this.add(new _blue_knight__WEBPACK_IMPORTED_MODULE_4__["default"]({
-            game: _this,
-            link: _this.link,
+          _this2.add(new _blue_knight__WEBPACK_IMPORTED_MODULE_4__["default"]({
+            game: _this2,
+            link: _this2.link,
             pos: pos
           }));
         }

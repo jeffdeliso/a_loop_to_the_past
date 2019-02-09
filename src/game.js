@@ -87,6 +87,7 @@ class Game {
     this.song.pause();
     this.song.currentTime = 0;
     this.song = song;
+    this.song.onended = () => this.song.play();
     if (!this.muted) {
       this.song.play();
     }
