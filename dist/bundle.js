@@ -244,6 +244,10 @@ function (_Entity) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Enemy).call(this, options));
     _this.link = options.link;
+    _this.enemySprite = new Image();
+    _this.enemySprite.src = "./assets/sprites/enemies.png";
+    _this.enemySprite2 = new Image();
+    _this.enemySprite2.src = "./assets/sprites/enemies2.png";
     _this.deathSprite = new Image();
     _this.deathSprite.src = "./assets/sprites/death-effects.png";
     _this.hitSound = new Audio('./assets/sounds/LTTP_Enemy_Hit.wav');
@@ -611,11 +615,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lynel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./lynel */ "./src/lynel.js");
 /* harmony import */ var _blue_knight__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./blue_knight */ "./src/blue_knight.js");
 /* harmony import */ var _heart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./heart */ "./src/heart.js");
+/* harmony import */ var _snake__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./snake */ "./src/snake.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -775,7 +781,13 @@ function () {
           link: this.link,
           pos: pos
         }));
-      } else if (enemyIdx > 0.4) {
+      } else if (enemyIdx > 0.7) {
+        this.add(new _snake__WEBPACK_IMPORTED_MODULE_6__["default"]({
+          game: this,
+          link: this.link,
+          pos: pos
+        }));
+      } else if (enemyIdx > 0.3) {
         this.add(new _moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
           game: this,
           link: this.link,
@@ -838,6 +850,7 @@ function () {
   }, {
     key: "removeItem",
     value: function removeItem(object) {
+      object.removeTimeouts();
       this.items.splice(this.items.indexOf(object), 1);
     }
   }, {
@@ -923,8 +936,10 @@ function () {
   }, {
     key: "step",
     value: function step(delta) {
+      debugger;
+
       if (!this.paused) {
-        if (this.spawnEnemies && this.enemies.length < 4) this.addEnemyToRandomSpawn();
+        if (this.spawnEnemies && this.enemies.length < 4 + Math.floor(this.count / 10)) this.addEnemyToRandomSpawn();
         this.moveObjects(delta);
         this.checkEnemyWillCollideWithSword();
         this.checkEnemyCollidedWithLink();
@@ -1310,13 +1325,50 @@ function (_Entity) {
     _this.heartSprite.src = "./assets/sprites/items-objects.gif";
     _this.box = [14, 13];
     _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.startFlash = _this.startFlash.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.removeTimeouts = _this.removeTimeouts.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.tickCount = 0;
+    _this.ticksPerFrame = 4;
+    _this.flashCount = false;
+    _this.flashTimeout = setTimeout(_this.startFlash, 10000);
     return _this;
   }
 
   _createClass(Heart, [{
+    key: "startFlash",
+    value: function startFlash() {
+      var _this2 = this;
+
+      this.flash = true;
+      this.removeTimout = setTimeout(function () {
+        return _this2.game.removeItem(_this2);
+      }, 5000);
+    }
+  }, {
+    key: "removeTimeouts",
+    value: function removeTimeouts() {
+      clearTimeout(this.flashTimeout);
+      clearTimeout(this.removeTimout);
+    }
+  }, {
     key: "draw",
     value: function draw(ctx) {
-      ctx.drawImage(this.heartSprite, 153, 30, 14, 13, this.pos[0], this.pos[1], 21, 19.5);
+      if (this.flash && this.flashCount) {
+        this.update();
+      } else {
+        ctx.drawImage(this.heartSprite, 153, 30, 14, 13, this.pos[0], this.pos[1], 21, 19.5);
+        this.update();
+      }
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.tickCount += 1;
+
+      if (this.tickCount > this.ticksPerFrame) {
+        this.tickCount = 0;
+        this.flashCount = !this.flashCount;
+      }
     }
   }]);
 
@@ -1952,6 +2004,109 @@ function (_Entity) {
 }(_entity__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (Obstacle);
+
+/***/ }),
+
+/***/ "./src/snake.js":
+/*!**********************!*\
+  !*** ./src/snake.js ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./src/enemy.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+var SNAKE_DOWN = [[5, 766, 13, 16], [5, 806, 13, 16]];
+var SNAKE_UP = [[86, 766, 12, 16], [86, 806, 12, 16]];
+var SNAKE_LEFT = [[44, 766, 16, 16], [44, 806, 16, 16]];
+var SNAKE_RIGHT = [[285, 766, 16, 16], [285, 806, 16, 16]];
+
+var Snake =
+/*#__PURE__*/
+function (_Enemy) {
+  _inherits(Snake, _Enemy);
+
+  function Snake(options) {
+    var _this;
+
+    _classCallCheck(this, Snake);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Snake).call(this, options));
+    _this.frameLen = 2;
+    _this.box = [24, 32];
+    _this.life = 1;
+    _this.delta = 3;
+    _this.dropChance = 0.2;
+    _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.update = _this.update.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(Snake, [{
+    key: "update",
+    value: function update() {
+      this.tickCount += 1;
+
+      if (this.tickCount > this.ticksPerFrame) {
+        this.tickCount = 0;
+
+        if (this.frameIndex < this.frameLen - 1) {
+          this.frameIndex += 1;
+        } else {
+          if (this.life === 0) this.remove();
+          this.frameIndex = 0;
+        }
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      if (this.life === 0) {
+        this.drawDeath(ctx);
+      } else {
+        if (this.walkDir === 'down') {
+          this.frameLen = SNAKE_DOWN.length;
+          ctx.drawImage(this.enemySprite, SNAKE_DOWN[this.frameIndex][0], SNAKE_DOWN[this.frameIndex][1], SNAKE_DOWN[this.frameIndex][2], SNAKE_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], SNAKE_DOWN[this.frameIndex][2] * this.scale, SNAKE_DOWN[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'up') {
+          this.frameLen = SNAKE_UP.length;
+          ctx.drawImage(this.enemySprite, SNAKE_UP[this.frameIndex][0], SNAKE_UP[this.frameIndex][1], SNAKE_UP[this.frameIndex][2], SNAKE_UP[this.frameIndex][3], this.pos[0], this.pos[1] - SNAKE_UP[this.frameIndex][3] * this.scale + 74, SNAKE_UP[this.frameIndex][2] * this.scale, SNAKE_UP[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'left') {
+          this.frameLen = SNAKE_LEFT.length;
+          ctx.drawImage(this.enemySprite, SNAKE_LEFT[this.frameIndex][0], SNAKE_LEFT[this.frameIndex][1], SNAKE_LEFT[this.frameIndex][2], SNAKE_LEFT[this.frameIndex][3], this.pos[0] - SNAKE_LEFT[this.frameIndex][2] * this.scale + 66, this.pos[1], SNAKE_LEFT[this.frameIndex][2] * this.scale, SNAKE_LEFT[this.frameIndex][3] * this.scale);
+        } else if (this.walkDir === 'right') {
+          this.frameLen = SNAKE_RIGHT.length;
+          ctx.drawImage(this.enemySprite2, SNAKE_RIGHT[this.frameIndex][0], SNAKE_RIGHT[this.frameIndex][1], SNAKE_RIGHT[this.frameIndex][2], SNAKE_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], SNAKE_RIGHT[this.frameIndex][2] * this.scale, SNAKE_RIGHT[this.frameIndex][3] * this.scale);
+        }
+      }
+
+      this.update();
+    }
+  }]);
+
+  return Snake;
+}(_enemy__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (Snake);
 
 /***/ }),
 

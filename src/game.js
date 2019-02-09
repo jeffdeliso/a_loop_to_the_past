@@ -4,6 +4,7 @@ import Moblin from "./moblin";
 import Lynel from "./lynel";
 import BlueKnight from "./blue_knight";
 import Heart from "./heart";
+import Snake from "./snake";
 
 const SPAWN_POS = [
   [340, 650],
@@ -134,7 +135,9 @@ class Game {
 
     if (enemyIdx > 0.8) {
       this.add(new Lynel({ game: this, link: this.link, pos }));
-    } else if (enemyIdx > 0.4) {
+    } else if (enemyIdx > 0.7) {
+      this.add(new Snake({ game: this, link: this.link, pos }));
+    } else if (enemyIdx > 0.3) {
       this.add(new Moblin({ game: this, link: this.link, pos }));
     } else {
       this.add(new BlueKnight({ game: this, link: this.link, pos }));
@@ -171,6 +174,7 @@ class Game {
   }
 
   removeItem(object) {
+    object.removeTimeouts();
     this.items.splice(this.items.indexOf(object), 1);
   }
 
@@ -240,8 +244,9 @@ class Game {
   }
 
   step(delta) {
+    debugger
     if (!this.paused) {
-      if (this.spawnEnemies && this.enemies.length < 4) this.addEnemyToRandomSpawn();
+      if (this.spawnEnemies && this.enemies.length < (4 + Math.floor(this.count / 10))) this.addEnemyToRandomSpawn();
       this.moveObjects(delta);
       this.checkEnemyWillCollideWithSword();
       this.checkEnemyCollidedWithLink();
