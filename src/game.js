@@ -20,26 +20,51 @@ class Game {
     this.addObstacles();
     this.parseKeyDown = this.parseKeyDown.bind(this);
     this.togglePause = this.togglePause.bind(this);
+    this.muteGame = this.muteGame.bind(this);
+    this.unmuteGame = this.unmuteGame.bind(this);
     this.pauseSound = new Audio('../assets/sounds/LTTP_Menu_Cursor.wav');
     this.overworldMusic = new Audio('../assets/sounds/overworld_theme.mp3');
     this.kakarikoMusic = new Audio('../assets/sounds/kakariko_village.mp3');
     this.selectMusic = new Audio('../assets/sounds/select_screen.mp3');
     this.song = this.kakarikoMusic;
+    this.muted = true;
     this.music = this.music.bind(this);
-    this.stopMusic = this.stopMusic.bind(this);
+    // this.stopMusic = this.stopMusic.bind(this);
     this.music(this.kakarikoMusic);
+
+    this.muteButton = document.getElementById('mute');
+    this.soundButton = document.getElementById('sound');
+    this.muteButton.onclick = this.muteGame;
+    this.soundButton.onclick = this.unmuteGame;
+  }
+
+  muteGame() {
+    this.soundButton.classList.toggle("selected");
+    this.muteButton.classList.toggle("selected");
+    this.song.pause();
+    this.song.currentTime = 0;
+    this.muted = true;
+  }
+
+  unmuteGame() {
+    this.soundButton.classList.toggle("selected");
+    this.muteButton.classList.toggle("selected");
+    this.muted = false;
+    this.song.play();
   }
 
   music(song) {
     this.song.pause();
     this.song.currentTime = 0;
     this.song = song;
-    this.song.play();
+    if (!this.muted) {
+      this.song.play();
+    }
   }
 
-  stopMusic() {
-    this.song.pause();
-  }
+  // stopMusic() {
+  //   this.song.pause();
+  // }
 
   addEnemies() {
     this.music(this.overworldMusic);

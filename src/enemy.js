@@ -39,15 +39,13 @@ class Enemy extends MovingObject {
   }
 
   findMoveAngle() {
-
     const angleToLink = this.angleToPos(this.link.pos);
     let angleToLink1 = angleToLink;
     let angleToLink2 = angleToLink;
     let dist = this.distanceToObject(this.link);
-    let first = true;
 
-    if (dist > 400) {
-      dist = 400;
+    if (dist > 200) {
+      dist = 200;
     }
 
 
@@ -56,13 +54,16 @@ class Enemy extends MovingObject {
         this.angle1 = true;
         this.angle2 = true;
       }
+      
       if (this.angle1 && !this.checkObstacles(angleToLink1, dist)) {
+      // if (!this.checkObstacles(angleToLink1, dist)) {
         // if (!this.first) angleToLink1 += 0.1;
         this.angle2 = false;
         setTimeout(() => this.angle2 = true, 5000);
         return angleToLink1;
       }
-      if (this.angle2 && !this.checkObstacles(angleToLink2, dist)) {
+      // if (this.angle2 && !this.checkObstacles(angleToLink2, dist)) {
+      if (!this.checkObstacles(angleToLink2, dist)) {
         // if (!this.first) angleToLink2 += 0.1;
         this.angle1 = false;
         setTimeout(() => this.angle1 = true, 5000);
@@ -72,7 +73,6 @@ class Enemy extends MovingObject {
         return angleToLink;
       }
 
-      first = false;
       angleToLink1 += 0.1;
       angleToLink2 -= 0.1;
     }
@@ -89,14 +89,14 @@ class Enemy extends MovingObject {
     return false;
   }
 
-  checkLinkBehindObstacle(obj, angle) {
-    const angleRange = this.angleRangeToObject(obj);
-    if (angle > angleRange[0] && angle < angleRange[1]) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // checkLinkBehindObstacle(obj, angle) {
+  //   const angleRange = this.angleRangeToObject(obj);
+  //   if (angle > angleRange[0] && angle < angleRange[1]) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   objectBetweenSelfAndLink(obj, angle, dist) {
     const borders = [
@@ -111,7 +111,7 @@ class Enemy extends MovingObject {
       [this.x(), this.y() + this.height()],
       [this.x() + this.width(), this.y()],
       [this.x() + this.width(), this.y() + this.height()]
-    ]
+    ];
     
     for (let i = 0; i < borders.length; i++) {
       for (let j = 0; j < corners.length; j++) {

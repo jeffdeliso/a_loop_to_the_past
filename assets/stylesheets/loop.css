@@ -42,6 +42,10 @@ h1 {
 
 .horizontal-centering {
   width: 80px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  color: black;
 }
 
 section {
@@ -89,7 +93,7 @@ aside a:hover {
   height: 600px;
   width: 1050px;
   z-index: 10;
-  transition: opacity .5s ease-in-out;
+  transition: opacity 2s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -112,8 +116,6 @@ aside a:hover {
   color: #fff;
   font-size: 30px;
   font-family: menu;
-  background: transparent;
-  border: none;
   cursor: pointer;
   text-transform: uppercase;
   margin-top: 10px;
@@ -164,6 +166,41 @@ aside a:hover {
   line-height: 30px;
   transition: opacity .5s ease-in-out;
 }
+
+button {
+  background: transparent;
+  border: none;
+}
+
+.horizontal-centering button {
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.horizontal-centering button:hover {
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.selected {
+  color: #fff;
+  transform: scale(1.05);
+}
+
+#mute {
+  margin-bottom: 20px;
+}
+
+#sound {
+  margin-bottom: 50px;
+}
+
+
+
+
 
 @keyframes blinker {
   50% {
