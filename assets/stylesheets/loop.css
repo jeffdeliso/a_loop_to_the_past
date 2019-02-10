@@ -40,6 +40,7 @@ h1 {
   -webkit-background-clip: text;
   background-clip: text;
   user-select: none;
+  
 }
 
 #kill-count {
@@ -50,6 +51,7 @@ h1 {
   margin-bottom: 340px;
   color: #fff;
   user-select: none;
+  text-shadow: 1px 1px #000000;
 }
 
 .vertical-centering {
@@ -82,7 +84,7 @@ aside a {
   display: flex;
   justify-content: center;
   color: black;
-  color: #202225;
+  /* color: #202225; */
   transition: all 0.2s ease-in-out;
 }
 
@@ -120,6 +122,7 @@ aside a:hover {
   color: #bb0200;
   font-size: 50px;
   flex-direction: column;
+  text-shadow: 1px 1px #000000;
 }
 
 #game {
@@ -153,6 +156,7 @@ aside a:hover {
   visibility: hidden;
   font-family: hylian;
   color: #fff;
+  text-shadow: 1px 1px #000000;
   font-size: 50px;
 }
 

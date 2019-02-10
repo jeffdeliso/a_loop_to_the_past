@@ -1948,9 +1948,8 @@ function (_Entity) {
           this.chargingSpin = false;
           this.swordChargeSound.pause();
           this.swordChargeSound.currentTime = 0;
+          this.canSwing = true;
         }
-
-        this.canSwing = true;
       }
 
       if (e.keyCode === 87 || e.keyCode === 38) this.up = false;
@@ -2089,6 +2088,7 @@ function (_Entity) {
       this.spinning = false;
       this.ticksPerFrame = 6;
       this.hurtBox = null;
+      this.canSwing = true;
     }
   }, {
     key: "playChargeSound",

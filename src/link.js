@@ -141,8 +141,8 @@ class Link extends Entity {
         this.chargingSpin = false;
         this.swordChargeSound.pause();
         this.swordChargeSound.currentTime = 0;
+        this.canSwing = true;
       }
-      this.canSwing = true;
     }
 
     if (e.keyCode === 87 || e.keyCode === 38) this.up = false;
@@ -258,6 +258,7 @@ class Link extends Entity {
     this.spinning = false;
     this.ticksPerFrame = 6;
     this.hurtBox = null;
+    this.canSwing = true;
   }
 
   playChargeSound() {
