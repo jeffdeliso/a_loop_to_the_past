@@ -172,6 +172,7 @@ aside a:hover {
   animation: blinker 1s linear infinite;
   text-transform: uppercase;
   transition: opacity .5s ease-in-out;
+  user-select: none;
 }
 
 #controls {
@@ -188,6 +189,7 @@ aside a:hover {
   line-height: 40px;
   transition: opacity .5s ease-in-out;
   text-shadow: 2px 2px #000000;
+  user-select: none;
 }
 
 button {
