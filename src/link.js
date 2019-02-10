@@ -135,8 +135,8 @@ class Link extends Entity {
         this.spinCharged = false;
         this.hurtBox = () => new Sword({ pos: [this.x() - 25, this.y() - 25], box: [85, 85] });
       } else {
-        clearTimeout(this.spinTimout);
-        clearTimeout(this.soundTimout);
+        window.clearTimeout(this.spinTimout);
+        window.clearTimeout(this.soundTimout);
         this.cancelSpin = true;
         this.chargingSpin = false;
         this.swordChargeSound.pause();
@@ -177,6 +177,7 @@ class Link extends Entity {
 
       const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
       const vect = [dx / len || 0, dy / len || 0];
+
       let delta;
       if (this.chargingSpin || this.spinCharged) {
         delta = 0.5;
@@ -273,7 +274,7 @@ class Link extends Entity {
   }
 
   hitByEnemy(vect) {
-    if (!this.invisible) {
+    if (!this.invisible && !this.spinning) {
       this.hurtSound.play();
       this.vect = vect;
       this.hit = true;

@@ -149,7 +149,7 @@ class Enemy extends Entity {
     let vel;
     if (this.life === 0) {
       vel = [0, 0];
-    } else if (!this.moveThrough) {
+    } else if (!this.hit) {
       const angle = this.findMoveAngle();
       this.vect = [Math.cos(angle), Math.sin(angle)];
 

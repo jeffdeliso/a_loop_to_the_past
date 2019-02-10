@@ -41,6 +41,7 @@ class Game {
     this.stopMusic = this.stopMusic.bind(this);
     this.music = this.music.bind(this);
     this.updateKillCount = this.updateKillCount.bind(this);
+    // this.fadeVolIn = this.fadeVolIn.bind(this);
 
     this.muteButton.onclick = this.muteGame;
     this.soundButton.onclick = this.unmuteGame;
@@ -66,6 +67,13 @@ class Game {
     }
   }
 
+// fadeVolIn(newPercent) {
+//   if (newPercent < 1) {
+//     this.song.volume = newPercent;
+//     setTimeout(() => this.fadeVolIn(newPercent + 0.1), 100);
+//   }
+// }
+
   muteGame() {
     if (!this.muted) {
       this.soundButton.classList.toggle("selected");
@@ -89,6 +97,8 @@ class Game {
     this.song.pause();
     this.song.currentTime = 0;
     this.song = song;
+    // this.song.volume = 0;
+    // this.fadeVolIn(0);
     this.song.onended = () => this.song.play();
     if (!this.muted) {
       this.song.play();
@@ -193,7 +203,7 @@ class Game {
   enemyWillCollideWithEnemy(pos, enemy) {
     for (let i = 0; i < this.enemies.length; i++) {
       const otherEnemy = this.enemies[i];
-      if (enemy === otherEnemy) continue;
+      if (enemy === otherEnemy || otherEnemy.moveThrough) continue;
       if (otherEnemy.willCollideWith(pos, enemy.box)) return true;
     }
     return false;

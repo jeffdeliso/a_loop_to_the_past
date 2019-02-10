@@ -388,7 +388,7 @@ function (_Entity) {
 
       if (this.life === 0) {
         vel = [0, 0];
-      } else if (!this.moveThrough) {
+      } else if (!this.hit) {
         var angle = this.findMoveAngle();
         this.vect = [Math.cos(angle), Math.sin(angle)];
         vel = [this.vect[0] * this.delta, this.vect[1] * this.delta];
@@ -1075,7 +1075,8 @@ function () {
     this.unmuteGame = this.unmuteGame.bind(this);
     this.stopMusic = this.stopMusic.bind(this);
     this.music = this.music.bind(this);
-    this.updateKillCount = this.updateKillCount.bind(this);
+    this.updateKillCount = this.updateKillCount.bind(this); // this.fadeVolIn = this.fadeVolIn.bind(this);
+
     this.muteButton.onclick = this.muteGame;
     this.soundButton.onclick = this.unmuteGame;
     this.addObstacles();
@@ -1100,7 +1101,13 @@ function () {
       } else if (e.keyCode === 80) {
         if (!this.gameover) this.togglePause();
       }
-    }
+    } // fadeVolIn(newPercent) {
+    //   if (newPercent < 1) {
+    //     this.song.volume = newPercent;
+    //     setTimeout(() => this.fadeVolIn(newPercent + 0.1), 100);
+    //   }
+    // }
+
   }, {
     key: "muteGame",
     value: function muteGame() {
@@ -1129,7 +1136,8 @@ function () {
 
       this.song.pause();
       this.song.currentTime = 0;
-      this.song = song;
+      this.song = song; // this.song.volume = 0;
+      // this.fadeVolIn(0);
 
       this.song.onended = function () {
         return _this.song.play();
@@ -1288,7 +1296,7 @@ function () {
     value: function enemyWillCollideWithEnemy(pos, enemy) {
       for (var i = 0; i < this.enemies.length; i++) {
         var otherEnemy = this.enemies[i];
-        if (enemy === otherEnemy) continue;
+        if (enemy === otherEnemy || otherEnemy.moveThrough) continue;
         if (otherEnemy.willCollideWith(pos, enemy.box)) return true;
       }
 
@@ -1934,8 +1942,8 @@ function (_Entity) {
             });
           };
         } else {
-          clearTimeout(this.spinTimout);
-          clearTimeout(this.soundTimout);
+          window.clearTimeout(this.spinTimout);
+          window.clearTimeout(this.soundTimout);
           this.cancelSpin = true;
           this.chargingSpin = false;
           this.swordChargeSound.pause();
@@ -2100,7 +2108,7 @@ function (_Entity) {
   }, {
     key: "hitByEnemy",
     value: function hitByEnemy(vect) {
-      if (!this.invisible) {
+      if (!this.invisible && !this.spinning) {
         this.hurtSound.play();
         this.vect = vect;
         this.hit = true;
