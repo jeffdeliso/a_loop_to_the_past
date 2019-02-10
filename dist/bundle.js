@@ -1971,7 +1971,7 @@ function (_Entity) {
         var delta = 4;
         vel = [this.vect[0] * delta, this.vect[1] * delta];
       } else {
-        if (!this.sword && !this.chargingSpin && !this.spinCharged) {
+        if (!this.sword) {
           if (this.up) dy += -1;
           if (this.left) dx += -1;
           if (this.down) dy += 1;
@@ -1980,7 +1980,15 @@ function (_Entity) {
 
         var len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
         var vect = [dx / len || 0, dy / len || 0];
-        var _delta = 2;
+
+        var _delta;
+
+        if (this.chargingSpin || this.spinCharged) {
+          _delta = 0.5;
+        } else {
+          _delta = 2;
+        }
+
         vel = [vect[0] * _delta, vect[1] * _delta];
 
         if (vel[0] === 0 && vel[1] === 0) {
@@ -2059,8 +2067,8 @@ function (_Entity) {
       } else {
         this.chargingSpin = true;
         this.cancelSpin = false;
-        this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 500);
-        this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 800);
+        this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 250);
+        this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 500);
       }
 
       this.ticksPerFrame = 6;

@@ -168,7 +168,7 @@ class Link extends Entity {
       const delta = 4;
       vel = [this.vect[0] * delta, this.vect[1] * delta];
     } else {
-      if (!this.sword && !this.chargingSpin && !this.spinCharged) {
+      if (!this.sword) {
         if (this.up) dy += -1;
         if (this.left) dx += -1;
         if (this.down) dy += 1;
@@ -177,7 +177,13 @@ class Link extends Entity {
 
       const len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
       const vect = [dx / len || 0, dy / len || 0];
-      const delta = 2;
+      let delta;
+      if (this.chargingSpin || this.spinCharged) {
+        delta = 0.5;
+      } else {
+        delta = 2;
+      }
+
       vel = [vect[0] * delta, vect[1] * delta];
 
       if (vel[0] === 0 && vel[1] === 0) {
@@ -235,13 +241,12 @@ class Link extends Entity {
 
   toggleSword() {
     if (this.canSwing) {
-
       this.frameLen = WALK_SIDE.length;
     } else {
       this.chargingSpin = true;
       this.cancelSpin = false;
-      this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 500);
-      this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 800);
+      this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 250);
+      this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 500);
     }
     this.ticksPerFrame = 6;
     this.sword = !this.sword;
