@@ -754,7 +754,7 @@ function (_Enemy) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Mummy).call(this, options));
     _this.frameLen = 2;
-    _this.box = [24, 32];
+    _this.box = [30, 50];
     _this.life = 2;
     _this.delta = 0.6;
     _this.dropChance = 0.1;
@@ -1861,6 +1861,10 @@ var SWORD_UP = [[0, 181, 22, 22], [30, 177, 22, 30], [61, 174, 20, 35], [89, 177
 var SWORD_DOWN = [[1, 90, 20, 23], [30, 90, 22, 24], [61, 86, 20, 31], [91, 86, 20, 31], [115, 87, 28, 29], [145, 88, 32, 27]];
 var SWORD_LEFT = [[242, 90, 18, 23], [268, 90, 26, 24], [295, 91, 31, 21], [327, 91, 28, 21], [359, 86, 23, 31], [393, 91, 16, 22]];
 var SWORD_RIGHT = [[242, 180, 18, 23], [268, 180, 26, 24], [295, 181, 31, 21], [327, 181, 28, 21], [359, 176, 23, 31], [393, 181, 16, 22]];
+var SPIN_DOWN = [[504, 139, 20, 26, 0, 4], [532, 126, 15, 36, 0, 14], [576, 138, 20, 26, 0, 4], [604, 142, 28, 22, 0, 0], [638, 142, 28, 22, 0, 0], [673, 141, 17, 31, 0, 0], [695, 142, 28, 22, 12, 0], [729, 142, 28, 22, 12, 0], [764, 136, 28, 22, 0, 6], [791, 138, 20, 26, 0, 4], [818, 142, 16, 22, 0, 0]];
+var SPIN_UP = [[487, 60, 20, 27, 3, 0], [516, 61, 15, 35, -1, 0], [595, 60, 20, 27, 3, 0], [620, 60, 28, 22, 11, 0], [657, 54, 16, 28, 0, 6], [681, 60, 28, 22, 0, 0], [720, 60, 16, 31, 0, 0], [746, 61, 17, 31, 0, 0], [767, 61, 20, 27, 3, 0], [797, 61, 17, 22, 0, 0]];
+var SPIN_LEFT = [[500, 19, 23, 23, 0, 0], [536, 19, 31, 23, 0, 0], [664, 19, 23, 23, 0, 0], [697, 19, 16, 31, 0, 0], [718, 19, 28, 23, 12, 0], [750, 19, 28, 23, 12, 0], [789, 13, 17, 29, 0, 6], [815, 19, 28, 23, 0, 0], [845, 19, 28, 23, 0, 0], [879, 19, 23, 23, 0, 0]];
+var SPIN_RIGHT = [[379, 19, 23, 23, 7, 0], [335, 19, 31, 23, 15, 0], [215, 19, 23, 23, 6, 0], [189, 19, 16, 31, 0, 0], [156, 19, 28, 23, 0, 0], [124, 19, 28, 23, 0, 0], [96, 13, 17, 29, 0, 6], [59, 19, 28, 23, 12, 0], [29, 19, 28, 23, 12, 0], [0, 19, 23, 23, 7, 0]];
 
 var Link =
 /*#__PURE__*/
@@ -1877,9 +1881,13 @@ function (_Entity) {
     _this.linkSprite.src = "./assets/sprites/link.png";
     _this.linkSprite2 = new Image();
     _this.linkSprite2.src = "./assets/sprites/link.gif";
+    _this.linkSprite3 = new Image();
+    _this.linkSprite3.src = "./assets/sprites/link2.gif";
     _this.swordSound = new Audio('./assets/sounds/LTTP_Sword.wav');
     _this.hurtSound = new Audio('./assets/sounds/LTTP_Link_Hurt.wav');
     _this.deathSound = new Audio('./assets/sounds/LTTP_Link_Dying.wav');
+    _this.swordChargeSound = new Audio('./assets/sounds/LTTP_Sword_Charge.wav');
+    _this.swordSpinSound = new Audio('./assets/sounds/LTTP_Sword_Spin.wav');
     _this.scale = 2;
     _this.frameIndex = 0;
     _this.tickCount = 0;
@@ -1906,7 +1914,26 @@ function (_Entity) {
     key: "parseKeyUp",
     value: function parseKeyUp(e) {
       e.preventDefault();
-      if (e.keyCode === 32) this.canSwing = true;
+
+      if (e.keyCode === 32) {
+        if (this.spinCharged) {
+          this.frameIndex = 2;
+          this.ticksPerFrame = 2;
+          this.spinning = true;
+          this.swordSpinSound.play();
+          this.spinCharged = false;
+        } else {
+          clearTimeout(this.spinTimout);
+          clearTimeout(this.soundTimout);
+          this.cancelSpin = true;
+          this.chargingSpin = false;
+          this.swordChargeSound.pause();
+          this.swordChargeSound.currentTime = 0;
+        }
+
+        this.canSwing = true;
+      }
+
       if (e.keyCode === 87 || e.keyCode === 38) this.up = false;
       if (e.keyCode === 65 || e.keyCode === 37) this.left = false;
       if (e.keyCode === 83 || e.keyCode === 40) this.down = false;
@@ -1933,7 +1960,7 @@ function (_Entity) {
         var delta = 4;
         vel = [this.vect[0] * delta, this.vect[1] * delta];
       } else {
-        if (!this.sword) {
+        if (!this.sword && !this.chargingSpin && !this.spinCharged) {
           if (this.up) dy += -1;
           if (this.left) dx += -1;
           if (this.down) dy += 1;
@@ -2014,10 +2041,38 @@ function (_Entity) {
   }, {
     key: "toggleSword",
     value: function toggleSword() {
+      if (this.canSwing) {
+        this.frameLen = WALK_SIDE.length;
+      } else {
+        this.chargingSpin = true;
+        this.cancelSpin = false;
+        this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 700);
+        this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 1000);
+      }
+
       this.ticksPerFrame = 6;
       this.sword = !this.sword;
-      this.frameLen = WALK_SIDE.length;
       this.hurtBox = null;
+    }
+  }, {
+    key: "toggleSpin",
+    value: function toggleSpin() {
+      this.ticksPerFrame = 6;
+    }
+  }, {
+    key: "playChargeSound",
+    value: function playChargeSound() {
+      if (!this.cancelSpin) {
+        this.swordChargeSound.play();
+      }
+    }
+  }, {
+    key: "finishChargeing",
+    value: function finishChargeing() {
+      if (!this.cancelSpin) {
+        this.spinCharged = true;
+        this.chargingSpin = false;
+      }
     }
   }, {
     key: "hitByEnemy",
@@ -2053,6 +2108,12 @@ function (_Entity) {
         if (!(this.invisible && this.invisibleFrameCount % 2 === 0)) {
           if (this.sword) {
             this.drawSwingSword(ctx);
+          } else if (this.chargingSpin) {
+            this.drawSpinCharging(ctx);
+          } else if (this.spinCharged) {
+            this.drawSpinCharged(ctx);
+          } else if (this.spinning) {
+            this.drawSpin(ctx);
           } else {
             this.setWalkDir();
 
@@ -2113,6 +2174,57 @@ function (_Entity) {
       }
     }
   }, {
+    key: "drawSpinCharging",
+    value: function drawSpinCharging(ctx) {
+      if (this.walkDir === 'down') {
+        this.frameLen = SPIN_DOWN.length;
+        ctx.drawImage(this.linkSprite2, SPIN_DOWN[0][0], SPIN_DOWN[0][1], SPIN_DOWN[0][2], SPIN_DOWN[0][3], this.pos[0] - SPIN_DOWN[0][4] * this.scale, this.pos[1] - SPIN_DOWN[0][5] * this.scale, SPIN_DOWN[0][2] * this.scale, SPIN_DOWN[0][3] * this.scale);
+      } else if (this.walkDir === 'up') {
+        this.frameLen = SPIN_UP.length;
+        ctx.drawImage(this.linkSprite2, SPIN_UP[0][0], SPIN_UP[0][1], SPIN_UP[0][2], SPIN_UP[0][3], this.pos[0] - SPIN_UP[0][4] * this.scale, this.pos[1] - SPIN_UP[0][5] * this.scale, SPIN_UP[0][2] * this.scale, SPIN_UP[0][3] * this.scale);
+      } else if (this.walkDir === 'left') {
+        this.frameLen = SPIN_LEFT.length;
+        ctx.drawImage(this.linkSprite2, SPIN_LEFT[0][0], SPIN_LEFT[0][1], SPIN_LEFT[0][2], SPIN_LEFT[0][3], this.pos[0] - SPIN_LEFT[0][4] * this.scale, this.pos[1] - SPIN_LEFT[0][5] * this.scale, SPIN_LEFT[0][2] * this.scale, SPIN_LEFT[0][3] * this.scale);
+      } else if (this.walkDir === 'right') {
+        this.frameLen = SPIN_RIGHT.length;
+        ctx.drawImage(this.linkSprite3, SPIN_RIGHT[0][0], SPIN_RIGHT[0][1], SPIN_RIGHT[0][2], SPIN_RIGHT[0][3], this.pos[0] - SPIN_RIGHT[0][4] * this.scale, this.pos[1] - SPIN_RIGHT[0][5] * this.scale, SPIN_RIGHT[0][2] * this.scale, SPIN_RIGHT[0][3] * this.scale);
+      }
+    }
+  }, {
+    key: "drawSpinCharged",
+    value: function drawSpinCharged(ctx) {
+      if (this.walkDir === 'down') {
+        this.frameLen = SPIN_DOWN.length;
+        ctx.drawImage(this.linkSprite2, SPIN_DOWN[1][0], SPIN_DOWN[1][1], SPIN_DOWN[1][2], SPIN_DOWN[1][3], this.pos[0] - SPIN_DOWN[1][4] * this.scale, this.pos[1] - SPIN_DOWN[1][5] * this.scale, SPIN_DOWN[1][2] * this.scale, SPIN_DOWN[1][3] * this.scale);
+      } else if (this.walkDir === 'up') {
+        this.frameLen = SPIN_UP.length;
+        ctx.drawImage(this.linkSprite2, SPIN_UP[1][0], SPIN_UP[1][1], SPIN_UP[1][2], SPIN_UP[1][3], this.pos[0] - SPIN_UP[1][4] * this.scale, this.pos[1] - SPIN_UP[1][5] * this.scale, SPIN_UP[1][2] * this.scale, SPIN_UP[1][3] * this.scale);
+      } else if (this.walkDir === 'left') {
+        this.frameLen = SPIN_LEFT.length;
+        ctx.drawImage(this.linkSprite2, SPIN_LEFT[1][0], SPIN_LEFT[1][1], SPIN_LEFT[1][2], SPIN_LEFT[1][3], this.pos[0] - SPIN_LEFT[1][4] * this.scale, this.pos[1] - SPIN_LEFT[1][5] * this.scale, SPIN_LEFT[1][2] * this.scale, SPIN_LEFT[1][3] * this.scale);
+      } else if (this.walkDir === 'right') {
+        this.frameLen = SPIN_RIGHT.length;
+        ctx.drawImage(this.linkSprite3, SPIN_RIGHT[1][0], SPIN_RIGHT[1][1], SPIN_RIGHT[1][2], SPIN_RIGHT[1][3], this.pos[0] - SPIN_RIGHT[1][4] * this.scale, this.pos[1] - SPIN_RIGHT[1][5] * this.scale, SPIN_RIGHT[1][2] * this.scale, SPIN_RIGHT[1][3] * this.scale);
+      }
+    }
+  }, {
+    key: "drawSpin",
+    value: function drawSpin(ctx) {
+      if (this.walkDir === 'down') {
+        this.frameLen = SPIN_DOWN.length;
+        ctx.drawImage(this.linkSprite2, SPIN_DOWN[this.frameIndex][0], SPIN_DOWN[this.frameIndex][1], SPIN_DOWN[this.frameIndex][2], SPIN_DOWN[this.frameIndex][3], this.pos[0] - SPIN_DOWN[this.frameIndex][4] * this.scale, this.pos[1] - SPIN_DOWN[this.frameIndex][5] * this.scale, SPIN_DOWN[this.frameIndex][2] * this.scale, SPIN_DOWN[this.frameIndex][3] * this.scale);
+      } else if (this.walkDir === 'up') {
+        this.frameLen = SPIN_UP.length;
+        ctx.drawImage(this.linkSprite2, SPIN_UP[this.frameIndex][0], SPIN_UP[this.frameIndex][1], SPIN_UP[this.frameIndex][2], SPIN_UP[this.frameIndex][3], this.pos[0] - SPIN_UP[this.frameIndex][4] * this.scale, this.pos[1] - SPIN_UP[this.frameIndex][5] * this.scale, SPIN_UP[this.frameIndex][2] * this.scale, SPIN_UP[this.frameIndex][3] * this.scale);
+      } else if (this.walkDir === 'left') {
+        this.frameLen = SPIN_LEFT.length;
+        ctx.drawImage(this.linkSprite2, SPIN_LEFT[this.frameIndex][0], SPIN_LEFT[this.frameIndex][1], SPIN_LEFT[this.frameIndex][2], SPIN_LEFT[this.frameIndex][3], this.pos[0] - SPIN_LEFT[this.frameIndex][4] * this.scale, this.pos[1] - SPIN_LEFT[this.frameIndex][5] * this.scale, SPIN_LEFT[this.frameIndex][2] * this.scale, SPIN_LEFT[this.frameIndex][3] * this.scale);
+      } else if (this.walkDir === 'right') {
+        this.frameLen = SPIN_RIGHT.length;
+        ctx.drawImage(this.linkSprite3, SPIN_RIGHT[this.frameIndex][0], SPIN_RIGHT[this.frameIndex][1], SPIN_RIGHT[this.frameIndex][2], SPIN_RIGHT[this.frameIndex][3], this.pos[0] - SPIN_RIGHT[this.frameIndex][4] * this.scale, this.pos[1] - SPIN_RIGHT[this.frameIndex][5] * this.scale, SPIN_RIGHT[this.frameIndex][2] * this.scale, SPIN_RIGHT[this.frameIndex][3] * this.scale);
+      }
+    }
+  }, {
     key: "drawLife",
     value: function drawLife(ctx) {
       var spriteX;
@@ -2130,7 +2242,7 @@ function (_Entity) {
   }, {
     key: "setWalkDir",
     value: function setWalkDir() {
-      if (this.down && !this.left && !this.right && !this.up) {
+      if (this.down && !this.left && !this.right && !this.RIGHT) {
         if (this.walkDir !== 'down') this.frameIndex = 0;
         this.walkDir = 'down';
         this.frameLen = WALK_DOWN.length;
@@ -2162,6 +2274,11 @@ function (_Entity) {
         } else {
           this.frameIndex = 0;
           if (this.sword) this.toggleSword();
+
+          if (this.spinning) {
+            this.spinning = false;
+            this.ticksPerFrame = 6;
+          }
         }
       }
     }

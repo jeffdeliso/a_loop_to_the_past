@@ -22,7 +22,7 @@ class Mummy extends Enemy {
     super(options);
 
     this.frameLen = 2;
-    this.box = [24, 32];
+    this.box = [30, 50];
     this.life = 2;
     this.delta = 0.6;
     this.dropChance = 0.1;
