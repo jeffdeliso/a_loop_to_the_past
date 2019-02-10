@@ -181,8 +181,9 @@ aside a:hover {
   color: #fff;
   text-transform: uppercase;
   font-family: legend;
-  line-height: 30px;
+  line-height: 40px;
   transition: opacity .5s ease-in-out;
+  text-shadow: 2px 2px #000000;
 }
 
 button {
