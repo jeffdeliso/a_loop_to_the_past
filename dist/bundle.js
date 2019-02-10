@@ -1339,7 +1339,7 @@ function () {
       for (var i = 0; i < this.enemies.length; i++) {
         var enemy = this.enemies[i];
 
-        if (this.link.hurtBox && enemy.isCollidedWith(this.link.hurtBox)) {
+        if (this.link.hurtBox && enemy.isCollidedWith(this.link.hurtBox())) {
           enemy.hitByLink();
         }
       }
@@ -1861,7 +1861,7 @@ var SWORD_UP = [[0, 181, 22, 22], [30, 177, 22, 30], [61, 174, 20, 35], [89, 177
 var SWORD_DOWN = [[1, 90, 20, 23], [30, 90, 22, 24], [61, 86, 20, 31], [91, 86, 20, 31], [115, 87, 28, 29], [145, 88, 32, 27]];
 var SWORD_LEFT = [[242, 90, 18, 23], [268, 90, 26, 24], [295, 91, 31, 21], [327, 91, 28, 21], [359, 86, 23, 31], [393, 91, 16, 22]];
 var SWORD_RIGHT = [[242, 180, 18, 23], [268, 180, 26, 24], [295, 181, 31, 21], [327, 181, 28, 21], [359, 176, 23, 31], [393, 181, 16, 22]];
-var SPIN_DOWN = [[504, 139, 20, 26, 0, 4], [532, 126, 15, 36, 0, 14], [576, 138, 20, 26, 0, 4], [604, 142, 28, 22, 0, 0], [638, 142, 28, 22, 0, 0], [673, 141, 17, 31, 0, 0], [695, 142, 28, 22, 12, 0], [729, 142, 28, 22, 12, 0], [764, 136, 28, 22, 0, 6], [791, 138, 20, 26, 0, 4], [818, 142, 16, 22, 0, 0]];
+var SPIN_DOWN = [[504, 139, 20, 26, 0, 4], [532, 126, 15, 36, 0, 14], [576, 138, 20, 26, 0, 4], [604, 142, 28, 22, 0, 0], [638, 142, 28, 22, 0, 0], [673, 141, 17, 31, 0, 0], [695, 142, 28, 22, 12, 0], [729, 142, 28, 22, 12, 0], [764, 136, 16, 28, 0, 6], [791, 138, 20, 26, 0, 4], [818, 142, 16, 22, 0, 0]];
 var SPIN_UP = [[487, 60, 20, 27, 3, 0], [516, 61, 15, 35, -1, 0], [595, 60, 20, 27, 3, 0], [620, 60, 28, 22, 11, 0], [657, 54, 16, 28, 0, 6], [681, 60, 28, 22, 0, 0], [720, 60, 16, 31, 0, 0], [746, 61, 17, 31, 0, 0], [767, 61, 20, 27, 3, 0], [797, 61, 17, 22, 0, 0]];
 var SPIN_LEFT = [[500, 19, 23, 23, 0, 0], [536, 19, 31, 23, 0, 0], [664, 19, 23, 23, 0, 0], [697, 19, 16, 31, 0, 0], [718, 19, 28, 23, 12, 0], [750, 19, 28, 23, 12, 0], [789, 13, 17, 29, 0, 6], [815, 19, 28, 23, 0, 0], [845, 19, 28, 23, 0, 0], [879, 19, 23, 23, 0, 0]];
 var SPIN_RIGHT = [[379, 19, 23, 23, 7, 0], [335, 19, 31, 23, 15, 0], [215, 19, 23, 23, 6, 0], [189, 19, 16, 31, 0, 0], [156, 19, 28, 23, 0, 0], [124, 19, 28, 23, 0, 0], [96, 13, 17, 29, 0, 6], [59, 19, 28, 23, 12, 0], [29, 19, 28, 23, 12, 0], [0, 19, 23, 23, 7, 0]];
@@ -1907,12 +1907,15 @@ function (_Entity) {
     _this.toggleHit = _this.toggleHit.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.toggleInvinsible = _this.toggleInvinsible.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.createHurtBox = _this.createHurtBox.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.toggleSpin = _this.toggleSpin.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
   _createClass(Link, [{
     key: "parseKeyUp",
     value: function parseKeyUp(e) {
+      var _this2 = this;
+
       e.preventDefault();
 
       if (e.keyCode === 32) {
@@ -1921,7 +1924,15 @@ function (_Entity) {
           this.ticksPerFrame = 2;
           this.spinning = true;
           this.swordSpinSound.play();
+          this.cancelSpin = true;
           this.spinCharged = false;
+
+          this.hurtBox = function () {
+            return new _sword__WEBPACK_IMPORTED_MODULE_0__["default"]({
+              pos: [_this2.x() - 25, _this2.y() - 25],
+              box: [85, 85]
+            });
+          };
         } else {
           clearTimeout(this.spinTimout);
           clearTimeout(this.soundTimout);
@@ -2036,7 +2047,9 @@ function (_Entity) {
   }, {
     key: "createHurtBox",
     value: function createHurtBox(options) {
-      this.hurtBox = new _sword__WEBPACK_IMPORTED_MODULE_0__["default"](options);
+      this.hurtBox = function () {
+        return new _sword__WEBPACK_IMPORTED_MODULE_0__["default"](options);
+      };
     }
   }, {
     key: "toggleSword",
@@ -2046,8 +2059,8 @@ function (_Entity) {
       } else {
         this.chargingSpin = true;
         this.cancelSpin = false;
-        this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 700);
-        this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 1000);
+        this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 500);
+        this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 800);
       }
 
       this.ticksPerFrame = 6;
@@ -2057,7 +2070,9 @@ function (_Entity) {
   }, {
     key: "toggleSpin",
     value: function toggleSpin() {
+      this.spinning = false;
       this.ticksPerFrame = 6;
+      this.hurtBox = null;
     }
   }, {
     key: "playChargeSound",
@@ -2124,7 +2139,7 @@ function (_Entity) {
             }
           }
         }
-      } // if (this.hurtBox) this.hurtBox.draw(ctx);
+      } // if (this.hurtBox) this.hurtBox().draw(ctx);
 
 
       this.drawLife(ctx);
@@ -2274,11 +2289,7 @@ function (_Entity) {
         } else {
           this.frameIndex = 0;
           if (this.sword) this.toggleSword();
-
-          if (this.spinning) {
-            this.spinning = false;
-            this.ticksPerFrame = 6;
-          }
+          if (this.spinning) this.toggleSpin();
         }
       }
     }

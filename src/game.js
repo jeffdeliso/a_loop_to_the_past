@@ -233,7 +233,7 @@ class Game {
   checkEnemyWillCollideWithSword() {
     for (let i = 0; i < this.enemies.length; i++) {
       const enemy = this.enemies[i];
-      if (this.link.hurtBox && enemy.isCollidedWith(this.link.hurtBox)) {
+      if (this.link.hurtBox && enemy.isCollidedWith(this.link.hurtBox())) {
         enemy.hitByLink();
       }
     }

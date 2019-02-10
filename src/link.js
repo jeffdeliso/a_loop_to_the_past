@@ -44,7 +44,7 @@ const SPIN_DOWN = [
   [673, 141, 17, 31, 0, 0],
   [695, 142, 28, 22, 12, 0],
   [729, 142, 28, 22, 12, 0],
-  [764, 136, 28, 22, 0, 6],
+  [764, 136, 16, 28, 0, 6],
   [791, 138, 20, 26, 0, 4],
   [818, 142, 16, 22, 0, 0]
 ];
@@ -120,6 +120,7 @@ class Link extends Entity {
     this.toggleHit = this.toggleHit.bind(this);
     this.toggleInvinsible = this.toggleInvinsible.bind(this);
     this.createHurtBox = this.createHurtBox.bind(this);
+    this.toggleSpin = this.toggleSpin.bind(this);
   }
 
   parseKeyUp(e) {
@@ -130,7 +131,9 @@ class Link extends Entity {
         this.ticksPerFrame = 2;
         this.spinning = true;
         this.swordSpinSound.play();
+        this.cancelSpin = true;
         this.spinCharged = false;
+        this.hurtBox = () => new Sword({ pos: [this.x() - 25, this.y() - 25], box: [85, 85] });
       } else {
         clearTimeout(this.spinTimout);
         clearTimeout(this.soundTimout);
@@ -227,7 +230,7 @@ class Link extends Entity {
   }
 
   createHurtBox(options) {
-    this.hurtBox = new Sword(options);
+    this.hurtBox = () => new Sword(options);
   }
 
   toggleSword() {
@@ -237,8 +240,8 @@ class Link extends Entity {
     } else {
       this.chargingSpin = true;
       this.cancelSpin = false;
-      this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 700);
-      this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 1000);
+      this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 500);
+      this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 800);
     }
     this.ticksPerFrame = 6;
     this.sword = !this.sword;
@@ -246,7 +249,9 @@ class Link extends Entity {
   }
 
   toggleSpin() {
+    this.spinning = false;
     this.ticksPerFrame = 6;
+    this.hurtBox = null;
   }
 
   playChargeSound() {
@@ -259,7 +264,6 @@ class Link extends Entity {
     if (!this.cancelSpin) {
       this.spinCharged = true;
       this.chargingSpin = false;
-
     }
   }
 
@@ -310,7 +314,7 @@ class Link extends Entity {
       }
     }
 
-    // if (this.hurtBox) this.hurtBox.draw(ctx);
+    // if (this.hurtBox) this.hurtBox().draw(ctx);
     this.drawLife(ctx);
     this.update();
   }
@@ -590,10 +594,7 @@ class Link extends Entity {
       } else {
         this.frameIndex = 0;
         if (this.sword) this.toggleSword();
-        if (this.spinning) {
-          this.spinning = false;
-          this.ticksPerFrame = 6;
-        }
+        if (this.spinning) this.toggleSpin();
       }
     }
   }
