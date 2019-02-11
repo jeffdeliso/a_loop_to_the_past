@@ -5,9 +5,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --mode=development --watch",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "start": "webpack --mode=development --watch"
   },
   "keywords": [],
   "author": "",
