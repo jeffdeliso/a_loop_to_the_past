@@ -16,6 +16,12 @@ const SPAWN_POS = [
 
 class Game {
   constructor(options) {
+    this.enemySprite = new Image();
+    this.enemySprite.src = "./assets/sprites/enemies.png";
+    this.enemySprite2 = new Image();
+    this.enemySprite2.src = "./assets/sprites/enemies2.png";
+    this.deathSprite = new Image();
+    this.deathSprite.src = "./assets/sprites/death-effects.png";
     this.pauseSound = new Audio('./assets/sounds/LTTP_Menu_Cursor.wav');
     this.heartSound = new Audio('./assets/sounds/LTTP_RefillHealth.wav');
     this.overworldMusic = new Audio('./assets/sounds/overworld_theme.mp3');
