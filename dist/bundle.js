@@ -2305,9 +2305,9 @@ function (_Entity) {
         if (this.frameIndex < this.frameLen - 1) {
           this.frameIndex += 1;
         } else {
-          this.frameIndex = 0;
           if (this.sword) this.toggleSword();
           if (this.spinning) this.toggleSpin();
+          this.frameIndex = 0;
         }
       }
     }

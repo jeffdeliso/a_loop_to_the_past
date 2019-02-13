@@ -224,6 +224,7 @@ class Link extends Entity {
       this.canSwing = false;
       this.frameIndex = 0;
       this.ticksPerFrame = 2;
+
       if (this.walkDir === 'down') {
         this.createHurtBox({ pos: [this.x() - 10, this.y() + 25], box: [70, 40] });
       } else if (this.walkDir === 'up') {
@@ -601,9 +602,9 @@ class Link extends Entity {
       if (this.frameIndex < this.frameLen - 1) {
         this.frameIndex += 1;
       } else {
-        this.frameIndex = 0;
         if (this.sword) this.toggleSword();
         if (this.spinning) this.toggleSpin();
+        this.frameIndex = 0;
       }
     }
   }
