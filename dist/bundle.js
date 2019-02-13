@@ -1942,8 +1942,8 @@ function (_Entity) {
             });
           };
         } else {
-          window.clearTimeout(this.spinTimout);
-          window.clearTimeout(this.soundTimout);
+          clearTimeout(this.spinTimout);
+          clearTimeout(this.soundTimout);
           this.cancelSpin = true;
           this.chargingSpin = false;
           this.swordChargeSound.pause();
@@ -2074,6 +2074,8 @@ function (_Entity) {
       } else {
         this.chargingSpin = true;
         this.cancelSpin = false;
+        clearTimeout(this.spinTimout);
+        clearTimeout(this.soundTimout);
         this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 250);
         this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 500);
       }

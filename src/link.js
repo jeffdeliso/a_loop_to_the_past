@@ -135,8 +135,8 @@ class Link extends Entity {
         this.spinCharged = false;
         this.hurtBox = () => new Sword({ pos: [this.x() - 25, this.y() - 25], box: [85, 85] });
       } else {
-        window.clearTimeout(this.spinTimout);
-        window.clearTimeout(this.soundTimout);
+        clearTimeout(this.spinTimout);
+        clearTimeout(this.soundTimout);
         this.cancelSpin = true;
         this.chargingSpin = false;
         this.swordChargeSound.pause();
@@ -246,6 +246,8 @@ class Link extends Entity {
     } else {
       this.chargingSpin = true;
       this.cancelSpin = false;
+      clearTimeout(this.spinTimout);
+      clearTimeout(this.soundTimout);
       this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 250);
       this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 500);
     }
