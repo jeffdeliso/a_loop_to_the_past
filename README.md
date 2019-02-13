@@ -2,7 +2,7 @@
 
 [Live Site](http://www.jeffdeliso.com/a_loop_to_the_past/)
 
-![alt text](https://s3.amazonaws.com/discors-dev/loop.jpg# Features and Implementation)
+![alt text](https://s3.amazonaws.com/discors-dev/loop.jpg)
 
 ## Overview
 
