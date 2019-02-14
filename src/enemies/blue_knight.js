@@ -26,10 +26,6 @@ const BLUE_RIGHT = [
 class BlueKnight extends Enemy {
   constructor(options) {
     super(options);
-    this.blueSprite = new Image();
-    this.blueSprite.src = "./assets/sprites/enemies.png";
-    this.blueSprite2 = new Image();
-    this.blueSprite2.src = "./assets/sprites/enemies2.png";
 
     this.frameLen = 4;
     this.box = [44, 56];
@@ -60,7 +56,7 @@ class BlueKnight extends Enemy {
     } else {
       if (this.walkDir === 'down') {
         this.frameLen = BLUE_DOWN.length;
-        ctx.drawImage(this.blueSprite,
+        ctx.drawImage(this.enemySprite,
           BLUE_DOWN[this.frameIndex][0],
           BLUE_DOWN[this.frameIndex][1],
           BLUE_DOWN[this.frameIndex][2],
@@ -72,7 +68,7 @@ class BlueKnight extends Enemy {
         );
       } else if (this.walkDir === 'up') {
         this.frameLen = BLUE_UP.length;
-        ctx.drawImage(this.blueSprite,
+        ctx.drawImage(this.enemySprite,
           BLUE_UP[this.frameIndex][0],
           BLUE_UP[this.frameIndex][1],
           BLUE_UP[this.frameIndex][2],
@@ -84,7 +80,7 @@ class BlueKnight extends Enemy {
         );
       } else if (this.walkDir === 'left') {
         this.frameLen = BLUE_LEFT.length;
-        ctx.drawImage(this.blueSprite,
+        ctx.drawImage(this.enemySprite,
           BLUE_LEFT[this.frameIndex][0],
           BLUE_LEFT[this.frameIndex][1],
           BLUE_LEFT[this.frameIndex][2],
@@ -96,7 +92,7 @@ class BlueKnight extends Enemy {
         );
       } else if (this.walkDir === 'right') {
         this.frameLen = BLUE_RIGHT.length;
-        ctx.drawImage(this.blueSprite2,
+        ctx.drawImage(this.enemySprite2,
           BLUE_RIGHT[this.frameIndex][0],
           BLUE_RIGHT[this.frameIndex][1],
           BLUE_RIGHT[this.frameIndex][2],

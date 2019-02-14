@@ -23,10 +23,6 @@ const LYNEL_RIGHT = [
 class Lynel extends Enemy {
   constructor(options) {
     super(options);
-    this.lynelSprite = new Image();
-    this.lynelSprite.src = "./assets/sprites/enemies.png";
-    this.lynelSprite2 = new Image();
-    this.lynelSprite2.src = "./assets/sprites/enemies2.png";
 
     this.frameLen = 3;
     this.box = [44, 52];
@@ -57,7 +53,7 @@ class Lynel extends Enemy {
     } else {
       if (this.walkDir === 'down') {
         this.frameLen = LYNEL_DOWN.length;
-        ctx.drawImage(this.lynelSprite,
+        ctx.drawImage(this.enemySprite,
           LYNEL_DOWN[this.frameIndex][0],
           LYNEL_DOWN[this.frameIndex][1],
           LYNEL_DOWN[this.frameIndex][2],
@@ -69,7 +65,7 @@ class Lynel extends Enemy {
         );
       } else if (this.walkDir === 'up') {
         this.frameLen = LYNEL_UP.length;
-        ctx.drawImage(this.lynelSprite,
+        ctx.drawImage(this.enemySprite,
           LYNEL_UP[this.frameIndex][0],
           LYNEL_UP[this.frameIndex][1],
           LYNEL_UP[this.frameIndex][2],
@@ -81,7 +77,7 @@ class Lynel extends Enemy {
         );
       } else if (this.walkDir === 'left') {
         this.frameLen = LYNEL_LEFT.length;
-        ctx.drawImage(this.lynelSprite,
+        ctx.drawImage(this.enemySprite,
           LYNEL_LEFT[this.frameIndex][0],
           LYNEL_LEFT[this.frameIndex][1],
           LYNEL_LEFT[this.frameIndex][2],
@@ -93,7 +89,7 @@ class Lynel extends Enemy {
         );
       } else if (this.walkDir === 'right') {
         this.frameLen = LYNEL_RIGHT.length;
-        ctx.drawImage(this.lynelSprite2,
+        ctx.drawImage(this.enemySprite2,
           LYNEL_RIGHT[this.frameIndex][0],
           LYNEL_RIGHT[this.frameIndex][1],
           LYNEL_RIGHT[this.frameIndex][2],

@@ -1,5 +1,11 @@
 class Entity {
   constructor(options) {
+    this.enemySprite = new Image();
+    this.enemySprite.src = "./assets/sprites/enemies.png";
+    this.enemySprite2 = new Image();
+    this.enemySprite2.src = "./assets/sprites/enemies2.png";
+    this.deathSprite = new Image();
+    this.deathSprite.src = "./assets/sprites/death-effects.png";
     this.pos = options.pos;
     this.box = options.box;
     this.game = options.game;

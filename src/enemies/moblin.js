@@ -28,8 +28,6 @@ const MOBLIN_RIGHT = [
 class Moblin extends Enemy {
   constructor(options) {
     super(options);
-    this.moblinSprite = new Image();
-    this.moblinSprite.src = "./assets/sprites/enemies.png";
 
     this.frameLen = 4;
     this.box = [28, 48];
@@ -57,7 +55,7 @@ class Moblin extends Enemy {
       this.drawDeath(ctx);
     } else {
       if (this.walkDir === 'down') {
-        ctx.drawImage(this.moblinSprite,
+        ctx.drawImage(this.enemySprite,
           MOBLIN_DOWN[this.frameIndex][0],
           MOBLIN_DOWN[this.frameIndex][1],
           MOBLIN_DOWN[this.frameIndex][2],
@@ -68,7 +66,7 @@ class Moblin extends Enemy {
           MOBLIN_DOWN[this.frameIndex][3] * this.scale
         );
       } else if (this.walkDir === 'up') {
-        ctx.drawImage(this.moblinSprite,
+        ctx.drawImage(this.enemySprite,
           MOBLIN_UP[this.frameIndex][0],
           MOBLIN_UP[this.frameIndex][1],
           MOBLIN_UP[this.frameIndex][2],
@@ -79,7 +77,7 @@ class Moblin extends Enemy {
           MOBLIN_UP[this.frameIndex][3] * this.scale
         );
       } else if (this.walkDir === 'left') {
-        ctx.drawImage(this.moblinSprite,
+        ctx.drawImage(this.enemySprite,
           MOBLIN_LEFT[this.frameIndex][0],
           MOBLIN_LEFT[this.frameIndex][1],
           MOBLIN_LEFT[this.frameIndex][2],
@@ -90,7 +88,7 @@ class Moblin extends Enemy {
           MOBLIN_LEFT[this.frameIndex][3] * this.scale
         );
       } else if (this.walkDir === 'right') {
-        ctx.drawImage(this.moblinSprite,
+        ctx.drawImage(this.enemySprite,
           MOBLIN_RIGHT[this.frameIndex][0],
           MOBLIN_RIGHT[this.frameIndex][1],
           MOBLIN_RIGHT[this.frameIndex][2],
