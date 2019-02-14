@@ -47,9 +47,7 @@ h1 {
 #kill-count {
   font-family: hylian;
   font-size: 60px;
-  justify-self: start;
   text-align: center;
-  margin-bottom: 340px;
   color: #fff;
   user-select: none;
   text-shadow: 1px 1px #000000;
@@ -63,7 +61,7 @@ h1 {
 .horizontal-centering {
   width: 80px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   flex-direction: column;
   color: black;
 }
@@ -77,7 +75,7 @@ section {
 aside {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 aside a {
@@ -216,7 +214,7 @@ button {
 }
 
 #mute {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 #sound {
