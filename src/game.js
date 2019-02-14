@@ -6,6 +6,7 @@ import BlueKnight from "./enemies/blue_knight";
 import Heart from "./heart";
 import Snake from "./enemies/snake";
 import Mummy from "./enemies/mummy";
+import Entity from "./entity";
 
 const SPAWN_POS = [
   [340, 650],
@@ -269,6 +270,7 @@ class Game {
   draw(ctx) {
     if (!this.paused) {
       ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
+
       ctx.fillStyle = "#489847";
       ctx.fillRect(158, 90, 162, 202);
       this.allObjects().forEach((object) => {

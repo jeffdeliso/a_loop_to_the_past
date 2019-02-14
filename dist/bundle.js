@@ -131,10 +131,6 @@ function (_Enemy) {
     _classCallCheck(this, BlueKnight);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(BlueKnight).call(this, options));
-    _this.blueSprite = new Image();
-    _this.blueSprite.src = "./assets/sprites/enemies.png";
-    _this.blueSprite2 = new Image();
-    _this.blueSprite2.src = "./assets/sprites/enemies2.png";
     _this.frameLen = 4;
     _this.box = [44, 56];
     _this.life = 4;
@@ -169,16 +165,16 @@ function (_Enemy) {
       } else {
         if (this.walkDir === 'down') {
           this.frameLen = BLUE_DOWN.length;
-          ctx.drawImage(this.blueSprite, BLUE_DOWN[this.frameIndex][0], BLUE_DOWN[this.frameIndex][1], BLUE_DOWN[this.frameIndex][2], BLUE_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], BLUE_DOWN[this.frameIndex][2] * this.scale, BLUE_DOWN[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, BLUE_DOWN[this.frameIndex][0], BLUE_DOWN[this.frameIndex][1], BLUE_DOWN[this.frameIndex][2], BLUE_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], BLUE_DOWN[this.frameIndex][2] * this.scale, BLUE_DOWN[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'up') {
           this.frameLen = BLUE_UP.length;
-          ctx.drawImage(this.blueSprite, BLUE_UP[this.frameIndex][0], BLUE_UP[this.frameIndex][1], BLUE_UP[this.frameIndex][2], BLUE_UP[this.frameIndex][3], this.pos[0], this.pos[1] - BLUE_UP[this.frameIndex][3] * this.scale + 74, BLUE_UP[this.frameIndex][2] * this.scale, BLUE_UP[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, BLUE_UP[this.frameIndex][0], BLUE_UP[this.frameIndex][1], BLUE_UP[this.frameIndex][2], BLUE_UP[this.frameIndex][3], this.pos[0], this.pos[1] - BLUE_UP[this.frameIndex][3] * this.scale + 74, BLUE_UP[this.frameIndex][2] * this.scale, BLUE_UP[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'left') {
           this.frameLen = BLUE_LEFT.length;
-          ctx.drawImage(this.blueSprite, BLUE_LEFT[this.frameIndex][0], BLUE_LEFT[this.frameIndex][1], BLUE_LEFT[this.frameIndex][2], BLUE_LEFT[this.frameIndex][3], this.pos[0] - BLUE_LEFT[this.frameIndex][2] * this.scale + 66, this.pos[1], BLUE_LEFT[this.frameIndex][2] * this.scale, BLUE_LEFT[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, BLUE_LEFT[this.frameIndex][0], BLUE_LEFT[this.frameIndex][1], BLUE_LEFT[this.frameIndex][2], BLUE_LEFT[this.frameIndex][3], this.pos[0] - BLUE_LEFT[this.frameIndex][2] * this.scale + 66, this.pos[1], BLUE_LEFT[this.frameIndex][2] * this.scale, BLUE_LEFT[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'right') {
           this.frameLen = BLUE_RIGHT.length;
-          ctx.drawImage(this.blueSprite2, BLUE_RIGHT[this.frameIndex][0], BLUE_RIGHT[this.frameIndex][1], BLUE_RIGHT[this.frameIndex][2], BLUE_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], BLUE_RIGHT[this.frameIndex][2] * this.scale, BLUE_RIGHT[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite2, BLUE_RIGHT[this.frameIndex][0], BLUE_RIGHT[this.frameIndex][1], BLUE_RIGHT[this.frameIndex][2], BLUE_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], BLUE_RIGHT[this.frameIndex][2] * this.scale, BLUE_RIGHT[this.frameIndex][3] * this.scale);
         }
       }
 
@@ -244,12 +240,6 @@ function (_Entity) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Enemy).call(this, options));
     _this.link = options.link;
-    _this.enemySprite = new Image();
-    _this.enemySprite.src = "./assets/sprites/enemies.png";
-    _this.enemySprite2 = new Image();
-    _this.enemySprite2.src = "./assets/sprites/enemies2.png";
-    _this.deathSprite = new Image();
-    _this.deathSprite.src = "./assets/sprites/death-effects.png";
     _this.hitSound = new Audio('./assets/sounds/LTTP_Enemy_Hit.wav');
     _this.deathSound = new Audio('./assets/sounds/LTTP_Enemy_Kill.wav');
     _this.scale = 2;
@@ -547,10 +537,6 @@ function (_Enemy) {
     _classCallCheck(this, Lynel);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Lynel).call(this, options));
-    _this.lynelSprite = new Image();
-    _this.lynelSprite.src = "./assets/sprites/enemies.png";
-    _this.lynelSprite2 = new Image();
-    _this.lynelSprite2.src = "./assets/sprites/enemies2.png";
     _this.frameLen = 3;
     _this.box = [44, 52];
     _this.life = 4;
@@ -585,16 +571,16 @@ function (_Enemy) {
       } else {
         if (this.walkDir === 'down') {
           this.frameLen = LYNEL_DOWN.length;
-          ctx.drawImage(this.lynelSprite, LYNEL_DOWN[this.frameIndex][0], LYNEL_DOWN[this.frameIndex][1], LYNEL_DOWN[this.frameIndex][2], LYNEL_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], LYNEL_DOWN[this.frameIndex][2] * this.scale, LYNEL_DOWN[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, LYNEL_DOWN[this.frameIndex][0], LYNEL_DOWN[this.frameIndex][1], LYNEL_DOWN[this.frameIndex][2], LYNEL_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], LYNEL_DOWN[this.frameIndex][2] * this.scale, LYNEL_DOWN[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'up') {
           this.frameLen = LYNEL_UP.length;
-          ctx.drawImage(this.lynelSprite, LYNEL_UP[this.frameIndex][0], LYNEL_UP[this.frameIndex][1], LYNEL_UP[this.frameIndex][2], LYNEL_UP[this.frameIndex][3], this.pos[0], this.pos[1] - LYNEL_UP[this.frameIndex][3] * this.scale + 48, LYNEL_UP[this.frameIndex][2] * this.scale, LYNEL_UP[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, LYNEL_UP[this.frameIndex][0], LYNEL_UP[this.frameIndex][1], LYNEL_UP[this.frameIndex][2], LYNEL_UP[this.frameIndex][3], this.pos[0], this.pos[1] - LYNEL_UP[this.frameIndex][3] * this.scale + 48, LYNEL_UP[this.frameIndex][2] * this.scale, LYNEL_UP[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'left') {
           this.frameLen = LYNEL_LEFT.length;
-          ctx.drawImage(this.lynelSprite, LYNEL_LEFT[this.frameIndex][0], LYNEL_LEFT[this.frameIndex][1], LYNEL_LEFT[this.frameIndex][2], LYNEL_LEFT[this.frameIndex][3], this.pos[0] - LYNEL_LEFT[this.frameIndex][2] * this.scale + 28, this.pos[1], LYNEL_LEFT[this.frameIndex][2] * this.scale, LYNEL_LEFT[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, LYNEL_LEFT[this.frameIndex][0], LYNEL_LEFT[this.frameIndex][1], LYNEL_LEFT[this.frameIndex][2], LYNEL_LEFT[this.frameIndex][3], this.pos[0] - LYNEL_LEFT[this.frameIndex][2] * this.scale + 28, this.pos[1], LYNEL_LEFT[this.frameIndex][2] * this.scale, LYNEL_LEFT[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'right') {
           this.frameLen = LYNEL_RIGHT.length;
-          ctx.drawImage(this.lynelSprite2, LYNEL_RIGHT[this.frameIndex][0], LYNEL_RIGHT[this.frameIndex][1], LYNEL_RIGHT[this.frameIndex][2], LYNEL_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], LYNEL_RIGHT[this.frameIndex][2] * this.scale, LYNEL_RIGHT[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite2, LYNEL_RIGHT[this.frameIndex][0], LYNEL_RIGHT[this.frameIndex][1], LYNEL_RIGHT[this.frameIndex][2], LYNEL_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], LYNEL_RIGHT[this.frameIndex][2] * this.scale, LYNEL_RIGHT[this.frameIndex][3] * this.scale);
         }
       }
 
@@ -654,8 +640,6 @@ function (_Enemy) {
     _classCallCheck(this, Moblin);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Moblin).call(this, options));
-    _this.moblinSprite = new Image();
-    _this.moblinSprite.src = "./assets/sprites/enemies.png";
     _this.frameLen = 4;
     _this.box = [28, 48];
     _this.delta = 1;
@@ -687,13 +671,13 @@ function (_Enemy) {
         this.drawDeath(ctx);
       } else {
         if (this.walkDir === 'down') {
-          ctx.drawImage(this.moblinSprite, MOBLIN_DOWN[this.frameIndex][0], MOBLIN_DOWN[this.frameIndex][1], MOBLIN_DOWN[this.frameIndex][2], MOBLIN_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], MOBLIN_DOWN[this.frameIndex][2] * this.scale, MOBLIN_DOWN[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, MOBLIN_DOWN[this.frameIndex][0], MOBLIN_DOWN[this.frameIndex][1], MOBLIN_DOWN[this.frameIndex][2], MOBLIN_DOWN[this.frameIndex][3], this.pos[0], this.pos[1], MOBLIN_DOWN[this.frameIndex][2] * this.scale, MOBLIN_DOWN[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'up') {
-          ctx.drawImage(this.moblinSprite, MOBLIN_UP[this.frameIndex][0], MOBLIN_UP[this.frameIndex][1], MOBLIN_UP[this.frameIndex][2], MOBLIN_UP[this.frameIndex][3], this.pos[0], this.pos[1] - MOBLIN_UP[this.frameIndex][3] * this.scale + 48, MOBLIN_UP[this.frameIndex][2] * this.scale, MOBLIN_UP[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, MOBLIN_UP[this.frameIndex][0], MOBLIN_UP[this.frameIndex][1], MOBLIN_UP[this.frameIndex][2], MOBLIN_UP[this.frameIndex][3], this.pos[0], this.pos[1] - MOBLIN_UP[this.frameIndex][3] * this.scale + 48, MOBLIN_UP[this.frameIndex][2] * this.scale, MOBLIN_UP[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'left') {
-          ctx.drawImage(this.moblinSprite, MOBLIN_LEFT[this.frameIndex][0], MOBLIN_LEFT[this.frameIndex][1], MOBLIN_LEFT[this.frameIndex][2], MOBLIN_LEFT[this.frameIndex][3], this.pos[0] - MOBLIN_LEFT[this.frameIndex][2] * this.scale + 28, this.pos[1], MOBLIN_LEFT[this.frameIndex][2] * this.scale, MOBLIN_LEFT[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, MOBLIN_LEFT[this.frameIndex][0], MOBLIN_LEFT[this.frameIndex][1], MOBLIN_LEFT[this.frameIndex][2], MOBLIN_LEFT[this.frameIndex][3], this.pos[0] - MOBLIN_LEFT[this.frameIndex][2] * this.scale + 28, this.pos[1], MOBLIN_LEFT[this.frameIndex][2] * this.scale, MOBLIN_LEFT[this.frameIndex][3] * this.scale);
         } else if (this.walkDir === 'right') {
-          ctx.drawImage(this.moblinSprite, MOBLIN_RIGHT[this.frameIndex][0], MOBLIN_RIGHT[this.frameIndex][1], MOBLIN_RIGHT[this.frameIndex][2], MOBLIN_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], MOBLIN_RIGHT[this.frameIndex][2] * this.scale, MOBLIN_RIGHT[this.frameIndex][3] * this.scale);
+          ctx.drawImage(this.enemySprite, MOBLIN_RIGHT[this.frameIndex][0], MOBLIN_RIGHT[this.frameIndex][1], MOBLIN_RIGHT[this.frameIndex][2], MOBLIN_RIGHT[this.frameIndex][3], this.pos[0], this.pos[1], MOBLIN_RIGHT[this.frameIndex][2] * this.scale, MOBLIN_RIGHT[this.frameIndex][3] * this.scale);
         }
       }
 
@@ -935,6 +919,12 @@ function () {
   function Entity(options) {
     _classCallCheck(this, Entity);
 
+    this.enemySprite = new Image();
+    this.enemySprite.src = "./assets/sprites/enemies.png";
+    this.enemySprite2 = new Image();
+    this.enemySprite2.src = "./assets/sprites/enemies2.png";
+    this.deathSprite = new Image();
+    this.deathSprite.src = "./assets/sprites/death-effects.png";
     this.pos = options.pos;
     this.box = options.box;
     this.game = options.game;
@@ -1029,11 +1019,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _heart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./heart */ "./src/heart.js");
 /* harmony import */ var _enemies_snake__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./enemies/snake */ "./src/enemies/snake.js");
 /* harmony import */ var _enemies_mummy__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./enemies/mummy */ "./src/enemies/mummy.js");
+/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./entity */ "./src/entity.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
