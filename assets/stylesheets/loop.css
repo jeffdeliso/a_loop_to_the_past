@@ -26,7 +26,7 @@ body {
   background-repeat: no-repeat;
   background-position: center center;   
   z-index: -1;
-  background-color: #489847;
+  background-color: #202225;
 }
 
 h1 {
@@ -85,7 +85,6 @@ aside a {
   display: flex;
   justify-content: center;
   color: black;
-  /* color: #202225; */
   transition: all 0.2s ease-in-out;
 }
 
