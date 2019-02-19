@@ -1224,7 +1224,7 @@ function () {
         });
       }
 
-      enemy.delta = enemy.delta + this.count / 50;
+      enemy.delta = enemy.delta + this.count / 40;
       this.add(enemy);
     }
   }, {
@@ -1363,7 +1363,7 @@ function () {
     key: "step",
     value: function step(delta) {
       if (!this.paused) {
-        if (this.spawnEnemies && this.enemies.length < 4 + Math.floor(this.count / 10)) this.addEnemyToRandomSpawn();
+        if (this.spawnEnemies && this.enemies.length <= 10 && this.enemies.length < 4 + Math.floor(this.count / 10)) this.addEnemyToRandomSpawn();
         this.moveObjects(delta);
         this.checkEnemyWillCollideWithSword();
         this.checkEnemyCollidedWithLink();

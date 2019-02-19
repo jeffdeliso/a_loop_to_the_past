@@ -148,7 +148,7 @@ class Game {
       enemy = new BlueKnight({ game: this, link: this.link, pos })
     }
 
-    enemy.delta = enemy.delta + this.count / 50;
+    enemy.delta = enemy.delta + this.count / 40;
     this.add(enemy);
   }
 
@@ -253,7 +253,7 @@ class Game {
 
   step(delta) {
     if (!this.paused) {
-      if (this.spawnEnemies && this.enemies.length < (4 + Math.floor(this.count / 10))) this.addEnemyToRandomSpawn();
+      if (this.spawnEnemies && this.enemies.length <= 10 &&this.enemies.length < (4 + Math.floor(this.count / 10))) this.addEnemyToRandomSpawn();
       this.moveObjects(delta);
       this.checkEnemyWillCollideWithSword();
       this.checkEnemyCollidedWithLink();
@@ -275,13 +275,13 @@ class Game {
       this.allObjects().forEach((object) => {
         object.draw(ctx);
       });
-
+      
       if (this.link.life === 0) {
         this.gameover = true;
         this.music(this.selectMusic);
       }
     }
-
+    
     // this.obstacles.forEach((object) => {
     //   object.draw(ctx);
     // });
