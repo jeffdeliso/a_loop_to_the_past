@@ -247,8 +247,8 @@ class Link extends Entity {
     } else {
       this.chargingSpin = true;
       this.cancelSpin = false;
-      // clearTimeout(this.spinTimout);
-      // clearTimeout(this.soundTimout);
+      clearTimeout(this.spinTimout);
+      clearTimeout(this.soundTimout);
       this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 250);
       this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 500);
     }
@@ -411,7 +411,6 @@ class Link extends Entity {
 
   drawSpinCharging(ctx) {
     if (this.walkDir === 'down') {
-      // this.frameLen = SPIN_DOWN.length;
       ctx.drawImage(this.linkSprite2,
         SPIN_DOWN[0][0],
         SPIN_DOWN[0][1],
@@ -423,7 +422,6 @@ class Link extends Entity {
         SPIN_DOWN[0][3] * this.scale
       );
     } else if (this.walkDir === 'up') {
-      // this.frameLen = SPIN_UP.length;
       ctx.drawImage(this.linkSprite2,
         SPIN_UP[0][0],
         SPIN_UP[0][1],
@@ -435,7 +433,6 @@ class Link extends Entity {
         SPIN_UP[0][3] * this.scale
       );
     } else if (this.walkDir === 'left') {
-      // this.frameLen = SPIN_LEFT.length;
       ctx.drawImage(this.linkSprite2,
         SPIN_LEFT[0][0],
         SPIN_LEFT[0][1],
@@ -447,7 +444,6 @@ class Link extends Entity {
         SPIN_LEFT[0][3] * this.scale
       );
     } else if (this.walkDir === 'right') {
-      // this.frameLen = SPIN_RIGHT.length;
       ctx.drawImage(this.linkSprite3,
         SPIN_RIGHT[0][0],
         SPIN_RIGHT[0][1],
@@ -463,7 +459,6 @@ class Link extends Entity {
 
   drawSpinCharged(ctx) {
     if (this.walkDir === 'down') {
-      // this.frameLen = SPIN_DOWN.length;
       ctx.drawImage(this.linkSprite2,
         SPIN_DOWN[1][0],
         SPIN_DOWN[1][1],
@@ -475,7 +470,6 @@ class Link extends Entity {
         SPIN_DOWN[1][3] * this.scale
       );
     } else if (this.walkDir === 'up') {
-      // this.frameLen = SPIN_UP.length;
       ctx.drawImage(this.linkSprite2,
         SPIN_UP[1][0],
         SPIN_UP[1][1],
@@ -487,7 +481,6 @@ class Link extends Entity {
         SPIN_UP[1][3] * this.scale
       );
     } else if (this.walkDir === 'left') {
-      // this.frameLen = SPIN_LEFT.length;
       ctx.drawImage(this.linkSprite2,
         SPIN_LEFT[1][0],
         SPIN_LEFT[1][1],
@@ -499,7 +492,6 @@ class Link extends Entity {
         SPIN_LEFT[1][3] * this.scale
       );
     } else if (this.walkDir === 'right') {
-      // this.frameLen = SPIN_RIGHT.length;
       ctx.drawImage(this.linkSprite3,
         SPIN_RIGHT[1][0],
         SPIN_RIGHT[1][1],
@@ -582,19 +574,15 @@ class Link extends Entity {
     if (this.down && !this.left && !this.right && !this.RIGHT) {
       if (this.walkDir !== 'down') this.frameIndex = 0;
       this.walkDir = 'down';
-      // this.frameLen = WALK_DOWN.length;
     } else if (!this.down && this.left && !this.right && !this.up) {
       if (this.walkDir !== 'left') this.frameIndex = 0;
       this.walkDir = 'left';
-      // this.frameLen = WALK_SIDE.length;
     } else if (!this.down && !this.left && this.right && !this.up) {
       if (this.walkDir !== 'right') this.frameIndex = 0;
       this.walkDir = 'right';
-      // this.frameLen = WALK_SIDE.length;
     } else if (!this.down && !this.left && !this.right && this.up) {
       if (this.walkDir !== 'up') this.frameIndex = 0;
       this.walkDir = 'up';
-      // this.frameLen = WALK_UP.length;
     }
   }
 
