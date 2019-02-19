@@ -41,14 +41,14 @@ class Lynel extends Enemy {
       if (this.frameIndex < this.frameLen - 1) {
         this.frameIndex += 1;
       } else {
-        if (this.life === 0) this.remove();
+        if (this.life <= 0) this.remove();
         this.frameIndex = 0;
       }
     }
   }
 
   draw(ctx) {
-    if (this.life === 0) {
+    if (this.life <= 0) {
       this.drawDeath(ctx);
     } else {
       if (this.walkDir === 'down') {
