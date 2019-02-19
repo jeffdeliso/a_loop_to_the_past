@@ -294,7 +294,7 @@ function (_Entity) {
           this.angle2 = false;
           timeOut = setTimeout(function () {
             return _this2.angle2 = true;
-          }, 5000);
+          }, 4000);
           return angleToLink1;
         }
 
@@ -303,7 +303,7 @@ function (_Entity) {
           this.angle1 = false;
           timeOut = setTimeout(function () {
             return _this2.angle1 = true;
-          }, 5000);
+          }, 4000);
           return angleToLink2;
         }
 
@@ -457,20 +457,26 @@ function (_Entity) {
   }, {
     key: "hitByLink",
     value: function hitByLink() {
+      var _this3 = this;
+
       if (!this.hit) {
         this.hitSound.play();
         this.hitVect = [this.vect[0] * -1, this.vect[1] * -1];
         this.hit = true;
         this.moveThrough = true;
-        setTimeout(this.toggleHit, 300);
+        var spin = false;
+        if (this.link.spinning) spin = true;
+        setTimeout(function () {
+          return _this3.toggleHit(spin);
+        }, 300);
       }
     }
   }, {
     key: "toggleHit",
-    value: function toggleHit() {
+    value: function toggleHit(spin) {
       this.hit = !this.hit;
 
-      if (this.link.spinning) {
+      if (spin) {
         this.life -= 2;
       } else {
         this.life -= 1;

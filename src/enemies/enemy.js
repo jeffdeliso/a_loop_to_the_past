@@ -58,13 +58,13 @@ class Enemy extends Entity {
       if (this.angle1 && !this.checkObstacles(angleToLink1, dist)) {
       // if (!this.checkObstacles(angleToLink1, dist)) {
         this.angle2 = false;
-        timeOut = setTimeout(() => this.angle2 = true, 5000);
+        timeOut = setTimeout(() => this.angle2 = true, 4000);
         return angleToLink1;
       }
       if (this.angle2 && !this.checkObstacles(angleToLink2, dist)) {
       // if (!this.checkObstacles(angleToLink2, dist)) {
         this.angle1 = false;
-        timeOut = setTimeout(() => this.angle1 = true, 5000);
+        timeOut = setTimeout(() => this.angle1 = true, 4000);
         return angleToLink2;
       }
       if (angleToLink1 > Math.PI + angleToLink) {
@@ -226,13 +226,15 @@ class Enemy extends Entity {
       this.hitVect = [this.vect[0] * -1, this.vect[1] * -1];
       this.hit = true;
       this.moveThrough = true;
-      setTimeout(this.toggleHit, 300);
+      let spin = false;
+      if (this.link.spinning) spin = true;
+      setTimeout(() => this.toggleHit(spin), 300);
     }
   }
 
-  toggleHit() {
+  toggleHit(spin) {
     this.hit = !this.hit;
-    if (this.link.spinning) {
+    if (spin) {
       this.life -= 2;
     } else {
       this.life -= 1;
