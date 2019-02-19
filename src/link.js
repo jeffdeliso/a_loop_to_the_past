@@ -219,7 +219,7 @@ class Link extends Entity {
 
   swingSword() {
     if (!this.sword && this.canSwing) {
-      this.swordSound.play();
+      if (!this.game.gameover) this.swordSound.play();
       this.sword = true;
       this.canSwing = false;
       this.frameIndex = 0;
