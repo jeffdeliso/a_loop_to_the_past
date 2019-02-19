@@ -7,9 +7,11 @@ class GameView {
     this.link = this.game.link;
     this.animate = this.animate.bind(this);
     this.restartSound = new Audio('./assets/sounds/LTTP_Secret.wav');
+    this.parseKeyDown = this.parseKeyDown.bind(this);
   }
 
   bindKeyHandlers() {
+    document.addEventListener('keydown', this.parseKeyDown);
     document.addEventListener('keydown', this.link.parseKeyDown);
     document.addEventListener('keydown', this.game.parseKeyDown);
     document.addEventListener('keyup', this.link.parseKeyUp);
@@ -32,22 +34,22 @@ class GameView {
 
       requestAnimationFrame(this.animate);
     } else {
-      const btn = document.createElement("BUTTON");
+      this.btn = document.createElement("BUTTON");
       const text = document.createTextNode("restart");
-      const gameover = document.getElementById('gameover');
-      btn.appendChild(text);
-      btn.onclick = () => this.newGame(btn, gameover);
-      gameover.appendChild(btn);
-      gameover.style.visibility = 'visible';
-      gameover.style.opacity = 1;
+      this.gameover = document.getElementById('gameover');
+      this.btn.appendChild(text);
+      this.btn.onclick = () => this.newGame();
+      this.gameover.appendChild(this.btn);
+      this.gameover.style.visibility = 'visible';
+      this.gameover.style.opacity = 1;
     }
   }
 
-  newGame(btn, parent) {
+  newGame() {
     this.restartSound.play();
-    parent.removeChild(btn);
-    parent.style.visibility = 'hidden';
-    parent.style.opacity = 0;
+    this.gameover.removeChild(this.btn);
+    this.gameover.style.visibility = 'hidden';
+    this.gameover.style.opacity = 0;
     const enterEl = document.getElementById('enter');
     enterEl.style.opacity = 1;
     const controlsEl = document.getElementById('controls');
@@ -56,6 +58,13 @@ class GameView {
     this.game = new Game({ muted: this.game.muted });
     this.link = this.game.link;
     this.start();
+  }
+
+  parseKeyDown(e) {
+    // e.preventDefault();
+    if (e.keyCode === 13) {
+      if (this.game.gameover) this.newGame();
+    }
   }
 }
 

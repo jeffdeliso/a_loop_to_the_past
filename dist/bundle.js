@@ -1019,13 +1019,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _heart__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./heart */ "./src/heart.js");
 /* harmony import */ var _enemies_snake__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./enemies/snake */ "./src/enemies/snake.js");
 /* harmony import */ var _enemies_mummy__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./enemies/mummy */ "./src/enemies/mummy.js");
-/* harmony import */ var _entity__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./entity */ "./src/entity.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 
 
 
@@ -1067,8 +1065,7 @@ function () {
     this.unmuteGame = this.unmuteGame.bind(this);
     this.stopMusic = this.stopMusic.bind(this);
     this.music = this.music.bind(this);
-    this.updateKillCount = this.updateKillCount.bind(this); // this.fadeVolIn = this.fadeVolIn.bind(this);
-
+    this.updateKillCount = this.updateKillCount.bind(this);
     this.muteButton.onclick = this.muteGame;
     this.soundButton.onclick = this.unmuteGame;
     this.addObstacles();
@@ -1079,8 +1076,7 @@ function () {
   _createClass(Game, [{
     key: "parseKeyDown",
     value: function parseKeyDown(e) {
-      e.preventDefault();
-
+      // e.preventDefault();
       if (e.keyCode === 13) {
         if (!this.spawnEnemies) {
           this.addEnemies();
@@ -1093,13 +1089,7 @@ function () {
       } else if (e.keyCode === 80) {
         if (!this.gameover) this.togglePause();
       }
-    } // fadeVolIn(newPercent) {
-    //   if (newPercent < 1) {
-    //     this.song.volume = newPercent;
-    //     setTimeout(() => this.fadeVolIn(newPercent + 0.1), 100);
-    //   }
-    // }
-
+    }
   }, {
     key: "muteGame",
     value: function muteGame() {
@@ -1128,8 +1118,7 @@ function () {
 
       this.song.pause();
       this.song.currentTime = 0;
-      this.song = song; // this.song.volume = 0;
-      // this.fadeVolIn(0);
+      this.song = song;
 
       this.song.onended = function () {
         return _this.song.play();
@@ -1629,11 +1618,13 @@ function () {
     this.link = this.game.link;
     this.animate = this.animate.bind(this);
     this.restartSound = new Audio('./assets/sounds/LTTP_Secret.wav');
+    this.parseKeyDown = this.parseKeyDown.bind(this);
   }
 
   _createClass(GameView, [{
     key: "bindKeyHandlers",
     value: function bindKeyHandlers() {
+      document.addEventListener('keydown', this.parseKeyDown);
       document.addEventListener('keydown', this.link.parseKeyDown);
       document.addEventListener('keydown', this.game.parseKeyDown);
       document.addEventListener('keyup', this.link.parseKeyUp);
@@ -1657,27 +1648,27 @@ function () {
         this.lastTime = time;
         requestAnimationFrame(this.animate);
       } else {
-        var btn = document.createElement("BUTTON");
+        this.btn = document.createElement("BUTTON");
         var text = document.createTextNode("restart");
-        var gameover = document.getElementById('gameover');
-        btn.appendChild(text);
+        this.gameover = document.getElementById('gameover');
+        this.btn.appendChild(text);
 
-        btn.onclick = function () {
-          return _this.newGame(btn, gameover);
+        this.btn.onclick = function () {
+          return _this.newGame();
         };
 
-        gameover.appendChild(btn);
-        gameover.style.visibility = 'visible';
-        gameover.style.opacity = 1;
+        this.gameover.appendChild(this.btn);
+        this.gameover.style.visibility = 'visible';
+        this.gameover.style.opacity = 1;
       }
     }
   }, {
     key: "newGame",
-    value: function newGame(btn, parent) {
+    value: function newGame() {
       this.restartSound.play();
-      parent.removeChild(btn);
-      parent.style.visibility = 'hidden';
-      parent.style.opacity = 0;
+      this.gameover.removeChild(this.btn);
+      this.gameover.style.visibility = 'hidden';
+      this.gameover.style.opacity = 0;
       var enterEl = document.getElementById('enter');
       enterEl.style.opacity = 1;
       var controlsEl = document.getElementById('controls');
@@ -1688,6 +1679,14 @@ function () {
       });
       this.link = this.game.link;
       this.start();
+    }
+  }, {
+    key: "parseKeyDown",
+    value: function parseKeyDown(e) {
+      // e.preventDefault();
+      if (e.keyCode === 13) {
+        if (this.game.gameover) this.newGame();
+      }
     }
   }]);
 
@@ -1916,8 +1915,7 @@ function (_Entity) {
     value: function parseKeyUp(e) {
       var _this2 = this;
 
-      e.preventDefault();
-
+      // e.preventDefault();
       if (e.keyCode === 32) {
         if (this.spinCharged) {
           this.frameIndex = 2;
@@ -1952,7 +1950,7 @@ function (_Entity) {
   }, {
     key: "parseKeyDown",
     value: function parseKeyDown(e) {
-      e.preventDefault();
+      // e.preventDefault();
       if (e.keyCode === 32) this.swingSword();
       if (e.keyCode === 87 || e.keyCode === 38) this.up = true;
       if (e.keyCode === 65 || e.keyCode === 37) this.left = true;

@@ -6,7 +6,6 @@ import BlueKnight from "./enemies/blue_knight";
 import Heart from "./heart";
 import Snake from "./enemies/snake";
 import Mummy from "./enemies/mummy";
-import Entity from "./entity";
 
 const SPAWN_POS = [
   [340, 650],
@@ -42,7 +41,6 @@ class Game {
     this.stopMusic = this.stopMusic.bind(this);
     this.music = this.music.bind(this);
     this.updateKillCount = this.updateKillCount.bind(this);
-    // this.fadeVolIn = this.fadeVolIn.bind(this);
 
     this.muteButton.onclick = this.muteGame;
     this.soundButton.onclick = this.unmuteGame;
@@ -53,7 +51,7 @@ class Game {
   }
 
   parseKeyDown(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (e.keyCode === 13) {
       if (!this.spawnEnemies) {
         this.addEnemies();
@@ -67,13 +65,6 @@ class Game {
       if (!this.gameover) this.togglePause();
     }
   }
-
-// fadeVolIn(newPercent) {
-//   if (newPercent < 1) {
-//     this.song.volume = newPercent;
-//     setTimeout(() => this.fadeVolIn(newPercent + 0.1), 100);
-//   }
-// }
 
   muteGame() {
     if (!this.muted) {
@@ -98,8 +89,6 @@ class Game {
     this.song.pause();
     this.song.currentTime = 0;
     this.song = song;
-    // this.song.volume = 0;
-    // this.fadeVolIn(0);
     this.song.onended = () => this.song.play();
     if (!this.muted) {
       this.song.play();

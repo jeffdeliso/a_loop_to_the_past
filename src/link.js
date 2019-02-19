@@ -124,7 +124,7 @@ class Link extends Entity {
   }
 
   parseKeyUp(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (e.keyCode === 32) {
       if (this.spinCharged) {
         this.frameIndex = 2;
@@ -152,7 +152,7 @@ class Link extends Entity {
   }
 
   parseKeyDown(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (e.keyCode === 32) this.swingSword();
     if (e.keyCode === 87 || e.keyCode === 38) this.up = true;
     if (e.keyCode === 65 || e.keyCode === 37) this.left = true;
