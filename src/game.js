@@ -282,9 +282,9 @@ class Game {
       }
     }
 
-    this.obstacles.forEach((object) => {
-      object.draw(ctx);
-    });
+    // this.obstacles.forEach((object) => {
+    //   object.draw(ctx);
+    // });
   }
 
   addObstacles() {
