@@ -121,6 +121,7 @@ aside a:hover {
   font-size: 50px;
   flex-direction: column;
   text-shadow: 1px 1px #000000;
+  user-select: none;
 }
 
 #game {
@@ -129,6 +130,7 @@ aside a:hover {
   position: absolute;
   height: 600px;
   width: 1050px;
+  user-select: none;
 }
 
 #gameover button {
@@ -156,6 +158,7 @@ aside a:hover {
   color: #fff;
   text-shadow: 1px 1px #000000;
   font-size: 50px;
+  user-select: none;
 }
 
 #enter {
@@ -211,10 +214,6 @@ button {
 .selected {
   color: #fff;
   transform: scale(1.05);
-}
-
-#mute {
-  /* margin-bottom: 20px; */
 }
 
 #sound {
