@@ -21,6 +21,7 @@ class Game {
     this.overworldMusic = new Audio('./assets/sounds/overworld_theme.mp3');
     this.kakarikoMusic = new Audio('./assets/sounds/kakariko_village.mp3');
     this.selectMusic = new Audio('./assets/sounds/select_screen.mp3');
+
     this.muteButton = document.getElementById('mute');
     this.soundButton = document.getElementById('sound');
     this.killCount = document.getElementById('kill-count');
@@ -132,19 +133,23 @@ class Game {
     while (this.enemyWillCollideWithEnemy(pos, {box: [50, 50]})) {
       pos = SPAWN_POS[Math.floor(Math.random() * 4)];
     }
-    const enemyIdx = Math.random();
 
+    const enemyIdx = Math.random();
+    let enemy;
     if (enemyIdx > 0.8) {
-      this.add(new Lynel({ game: this, link: this.link, pos }));
+      enemy = new Lynel({ game: this, link: this.link, pos });
     } else if (enemyIdx > 0.7) {
-      this.add(new Snake({ game: this, link: this.link, pos }));
+      enemy = new Snake({ game: this, link: this.link, pos });
     } else if (enemyIdx > 0.4) {
-      this.add(new Moblin({ game: this, link: this.link, pos }));
+      enemy = new Moblin({ game: this, link: this.link, pos });
     } else if (enemyIdx > 0.2) {
-      this.add(new Mummy({ game: this, link: this.link, pos }));
+      enemy = new Mummy({ game: this, link: this.link, pos });
     } else {
-      this.add(new BlueKnight({ game: this, link: this.link, pos }));
+      enemy = new BlueKnight({ game: this, link: this.link, pos })
     }
+
+    enemy.delta = enemy.delta + this.count / 50;
+    this.add(enemy);
   }
 
   addEnemies() {
@@ -262,6 +267,10 @@ class Game {
 
       ctx.fillStyle = "#489847";
       ctx.fillRect(158, 90, 162, 202);
+      ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 28, 340, 32, 32);
+      ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 28, 305, 32, 32);
+      ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 1005, 340, 32, 32);
+      ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 1005, 305, 32, 32);
       this.allObjects().forEach((object) => {
         object.draw(ctx);
       });
@@ -299,10 +308,8 @@ class Game {
     this.add(new Obstacle({ pos: [460, 542], box: [106, 33] }));
     this.add(new Obstacle({ pos: [490, 528], box: [45, 14] }));
     this.add(new Obstacle({ pos: [-400, 193], box: [480, 28] }));
-    this.add(new Obstacle({ pos: [-400, 220], box: [458, 75] }));
-    this.add(new Obstacle({ pos: [-400, 295], box: [417, 190] }));
-    this.add(new Obstacle({ pos: [17, 415], box: [58, 71] }));
-    this.add(new Obstacle({ pos: [17, 385], box: [38, 30] }));
+    this.add(new Obstacle({ pos: [-400, 220], box: [458, 195] }));
+    this.add(new Obstacle({ pos: [-400, 415], box: [475, 71] }));
     this.add(new Obstacle({ pos: [688, 391], box: [116, 150] }));
     this.add(new Obstacle({ pos: [680, 410], box: [8, 92] }));
     this.add(new Obstacle({ pos: [671, 420], box: [9, 34] }));
@@ -321,13 +328,11 @@ class Game {
     this.add(new Obstacle({ pos: [890, -400], box: [160, 470] }));
     this.add(new Obstacle({ pos: [950, 70], box: [100, 115] }));
     this.add(new Obstacle({ pos: [927, 70], box: [23, 60] }));
-    this.add(new Obstacle({ pos: [1005, 185], box: [45, 119] }));
+    this.add(new Obstacle({ pos: [1005, 185], box: [45, 220] }));
     this.add(new Obstacle({ pos: [989, 185], box: [16, 51] }));
     this.add(new Obstacle({ pos: [929, 520], box: [121, 480] }));
     this.add(new Obstacle({ pos: [989, 404], box: [61, 116] }));
     this.add(new Obstacle({ pos: [953, 499], box: [36, 21] }));
-    this.add(new Obstacle({ pos: [1012, 384], box: [38, 20] }));
-    this.add(new Obstacle({ pos: [1042, 302], box: [8, 82] }));
   }
 }
 

@@ -141,7 +141,7 @@ class Enemy extends Entity {
   move(timeDelta) {
     this.toggleMoveThrough();
     let vel;
-    if (this.life === 0) {
+    if (this.life <= 0) {
       vel = [0, 0];
     } else if (!this.hit) {
       const angle = this.findMoveAngle();
@@ -232,8 +232,13 @@ class Enemy extends Entity {
 
   toggleHit() {
     this.hit = !this.hit;
-    this.life -= 1;
-    if (this.life === 0) {
+    if (this.link.spinning) {
+      this.life -= 2;
+    } else {
+      this.life -= 1;
+    }
+    
+    if (this.life <= 0) {
       this.ticksPerFrame = 2;
       this.frameIndex = 0;
     }

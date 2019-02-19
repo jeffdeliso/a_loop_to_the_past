@@ -376,7 +376,7 @@ function (_Entity) {
       this.toggleMoveThrough();
       var vel;
 
-      if (this.life === 0) {
+      if (this.life <= 0) {
         vel = [0, 0];
       } else if (!this.hit) {
         var angle = this.findMoveAngle();
@@ -469,9 +469,14 @@ function (_Entity) {
     key: "toggleHit",
     value: function toggleHit() {
       this.hit = !this.hit;
-      this.life -= 1;
 
-      if (this.life === 0) {
+      if (this.link.spinning) {
+        this.life -= 2;
+      } else {
+        this.life -= 1;
+      }
+
+      if (this.life <= 0) {
         this.ticksPerFrame = 2;
         this.frameIndex = 0;
       }
@@ -925,6 +930,8 @@ function () {
     this.enemySprite2.src = "./assets/sprites/enemies2.png";
     this.deathSprite = new Image();
     this.deathSprite.src = "./assets/sprites/death-effects.png";
+    this.itemSprite = new Image();
+    this.itemSprite.src = "./assets/sprites/items-objects.gif";
     this.pos = options.pos;
     this.box = options.box;
     this.game = options.game;
@@ -1177,38 +1184,42 @@ function () {
       }
 
       var enemyIdx = Math.random();
+      var enemy;
 
       if (enemyIdx > 0.8) {
-        this.add(new _enemies_lynel__WEBPACK_IMPORTED_MODULE_3__["default"]({
+        enemy = new _enemies_lynel__WEBPACK_IMPORTED_MODULE_3__["default"]({
           game: this,
           link: this.link,
           pos: pos
-        }));
+        });
       } else if (enemyIdx > 0.7) {
-        this.add(new _enemies_snake__WEBPACK_IMPORTED_MODULE_6__["default"]({
+        enemy = new _enemies_snake__WEBPACK_IMPORTED_MODULE_6__["default"]({
           game: this,
           link: this.link,
           pos: pos
-        }));
+        });
       } else if (enemyIdx > 0.4) {
-        this.add(new _enemies_moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
+        enemy = new _enemies_moblin__WEBPACK_IMPORTED_MODULE_2__["default"]({
           game: this,
           link: this.link,
           pos: pos
-        }));
+        });
       } else if (enemyIdx > 0.2) {
-        this.add(new _enemies_mummy__WEBPACK_IMPORTED_MODULE_7__["default"]({
+        enemy = new _enemies_mummy__WEBPACK_IMPORTED_MODULE_7__["default"]({
           game: this,
           link: this.link,
           pos: pos
-        }));
+        });
       } else {
-        this.add(new _enemies_blue_knight__WEBPACK_IMPORTED_MODULE_4__["default"]({
+        enemy = new _enemies_blue_knight__WEBPACK_IMPORTED_MODULE_4__["default"]({
           game: this,
           link: this.link,
           pos: pos
-        }));
+        });
       }
+
+      enemy.delta = enemy.delta + this.count / 50;
+      this.add(enemy);
     }
   }, {
     key: "addEnemies",
@@ -1360,6 +1371,10 @@ function () {
         ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
         ctx.fillStyle = "#489847";
         ctx.fillRect(158, 90, 162, 202);
+        ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 28, 340, 32, 32);
+        ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 28, 305, 32, 32);
+        ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 1005, 340, 32, 32);
+        ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 1005, 305, 32, 32);
         this.allObjects().forEach(function (object) {
           object.draw(ctx);
         });
@@ -1462,19 +1477,11 @@ function () {
       }));
       this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
         pos: [-400, 220],
-        box: [458, 75]
+        box: [458, 195]
       }));
       this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
-        pos: [-400, 295],
-        box: [417, 190]
-      }));
-      this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
-        pos: [17, 415],
-        box: [58, 71]
-      }));
-      this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
-        pos: [17, 385],
-        box: [38, 30]
+        pos: [-400, 415],
+        box: [475, 71]
       }));
       this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
         pos: [688, 391],
@@ -1550,7 +1557,7 @@ function () {
       }));
       this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
         pos: [1005, 185],
-        box: [45, 119]
+        box: [45, 220]
       }));
       this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
         pos: [989, 185],
@@ -1567,14 +1574,6 @@ function () {
       this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
         pos: [953, 499],
         box: [36, 21]
-      }));
-      this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
-        pos: [1012, 384],
-        box: [38, 20]
-      }));
-      this.add(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]({
-        pos: [1042, 302],
-        box: [8, 82]
       }));
     }
   }]);
@@ -1738,8 +1737,6 @@ function (_Entity) {
     _classCallCheck(this, Heart);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Heart).call(this, options));
-    _this.heartSprite = new Image();
-    _this.heartSprite.src = "./assets/sprites/items-objects.gif";
     _this.box = [14, 13];
     _this.draw = _this.draw.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.startFlash = _this.startFlash.bind(_assertThisInitialized(_assertThisInitialized(_this)));
@@ -1773,7 +1770,7 @@ function (_Entity) {
       if (this.flash && this.flashCount) {
         this.update();
       } else {
-        ctx.drawImage(this.heartSprite, 153, 30, 14, 13, this.pos[0], this.pos[1], 21, 19.5);
+        ctx.drawImage(this.itemSprite, 153, 30, 14, 13, this.pos[0], this.pos[1], 21, 19.5);
         this.update();
       }
     }

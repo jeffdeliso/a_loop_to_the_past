@@ -6,6 +6,8 @@ class Entity {
     this.enemySprite2.src = "./assets/sprites/enemies2.png";
     this.deathSprite = new Image();
     this.deathSprite.src = "./assets/sprites/death-effects.png";
+    this.itemSprite = new Image();
+    this.itemSprite.src = "./assets/sprites/items-objects.gif";
     this.pos = options.pos;
     this.box = options.box;
     this.game = options.game;
