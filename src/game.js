@@ -267,6 +267,7 @@ class Game {
 
       ctx.fillStyle = "#489847";
       ctx.fillRect(158, 90, 162, 202);
+      ctx.fillRect(158, 367, 162, 202);
       ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 28, 340, 32, 32);
       ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 28, 305, 32, 32);
       ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 1005, 340, 32, 32);
@@ -281,9 +282,9 @@ class Game {
       }
     }
 
-    // this.obstacles.forEach((object) => {
-    //   object.draw(ctx);
-    // });
+    this.obstacles.forEach((object) => {
+      object.draw(ctx);
+    });
   }
 
   addObstacles() {
@@ -296,11 +297,6 @@ class Game {
     this.add(new Obstacle({ pos: [-400, 487], box: [496, 50] }));
     this.add(new Obstacle({ pos: [96, 497], box: [18, 40] }));
     this.add(new Obstacle({ pos: [114, 511], box: [10, 26] }));
-    this.add(new Obstacle({ pos: [182, 391], box: [116, 150] }));
-    this.add(new Obstacle({ pos: [174, 410], box: [8, 92] }));
-    this.add(new Obstacle({ pos: [165, 420], box: [9, 34] }));
-    this.add(new Obstacle({ pos: [297, 420], box: [17, 38] }));
-    this.add(new Obstacle({ pos: [214, 375], box: [52, 16] }));
     this.add(new Obstacle({ pos: [415, -400], box: [115, 472] }));
     this.add(new Obstacle({ pos: [434, 575], box: [153, 425] }));
     this.add(new Obstacle({ pos: [447, 560], box: [13, 15] }));
@@ -310,11 +306,6 @@ class Game {
     this.add(new Obstacle({ pos: [-400, 193], box: [480, 28] }));
     this.add(new Obstacle({ pos: [-400, 220], box: [458, 195] }));
     this.add(new Obstacle({ pos: [-400, 415], box: [475, 71] }));
-    this.add(new Obstacle({ pos: [688, 391], box: [116, 150] }));
-    this.add(new Obstacle({ pos: [680, 410], box: [8, 92] }));
-    this.add(new Obstacle({ pos: [671, 420], box: [9, 34] }));
-    this.add(new Obstacle({ pos: [803, 420], box: [17, 38] }));
-    this.add(new Obstacle({ pos: [720, 375], box: [52, 16] }));
     this.add(new Obstacle({ pos: [688, 391], box: [116, 150] }));
     this.add(new Obstacle({ pos: [680, 410], box: [8, 92] }));
     this.add(new Obstacle({ pos: [671, 420], box: [9, 34] }));
