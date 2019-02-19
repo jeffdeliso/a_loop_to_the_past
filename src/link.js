@@ -247,8 +247,8 @@ class Link extends Entity {
     } else {
       this.chargingSpin = true;
       this.cancelSpin = false;
-      clearTimeout(this.spinTimout);
-      clearTimeout(this.soundTimout);
+      // clearTimeout(this.spinTimout);
+      // clearTimeout(this.soundTimout);
       this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 250);
       this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 500);
     }

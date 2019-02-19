@@ -148,7 +148,7 @@ class Game {
       enemy = new BlueKnight({ game: this, link: this.link, pos })
     }
 
-    enemy.delta = enemy.delta + this.count / 40;
+    enemy.delta = enemy.delta + this.count / 30;
     this.add(enemy);
   }
 
@@ -253,7 +253,7 @@ class Game {
 
   step(delta) {
     if (!this.paused) {
-      if (this.spawnEnemies && this.enemies.length <= 10 &&this.enemies.length < (4 + Math.floor(this.count / 10))) this.addEnemyToRandomSpawn();
+      if (this.spawnEnemies && this.enemies.length <= 8 &&this.enemies.length < (4 + Math.floor(this.count / 10))) this.addEnemyToRandomSpawn();
       this.moveObjects(delta);
       this.checkEnemyWillCollideWithSword();
       this.checkEnemyCollidedWithLink();
