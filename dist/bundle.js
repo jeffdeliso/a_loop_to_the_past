@@ -1384,9 +1384,9 @@ function () {
         ctx.drawImage(this.link.itemSprite, 174, 500, 16, 16, 1005, 305, 32, 32);
         this.allObjects().forEach(function (object) {
           object.draw(ctx);
-        });
+        }); // ctx.drawImage(this.link.itemSprite, 188, 550, 14, 22, 333, 340, 28, 44);
 
-        if (this.link.life === 0) {
+        if (this.link.life <= 0) {
           this.gameover = true;
           this.music(this.selectMusic);
         }

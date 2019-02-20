@@ -253,7 +253,7 @@ class Game {
 
   step(delta) {
     if (!this.paused) {
-      if (this.spawnEnemies && this.enemies.length <= 8 &&this.enemies.length < (4 + Math.floor(this.count / 10))) this.addEnemyToRandomSpawn();
+      if (this.spawnEnemies && this.enemies.length <= 8 && this.enemies.length < (4 + Math.floor(this.count / 10))) this.addEnemyToRandomSpawn();
       this.moveObjects(delta);
       this.checkEnemyWillCollideWithSword();
       this.checkEnemyCollidedWithLink();
@@ -276,7 +276,8 @@ class Game {
         object.draw(ctx);
       });
       
-      if (this.link.life === 0) {
+      // ctx.drawImage(this.link.itemSprite, 188, 550, 14, 22, 333, 340, 28, 44);
+      if (this.link.life <= 0) {
         this.gameover = true;
         this.music(this.selectMusic);
       }
