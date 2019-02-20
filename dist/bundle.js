@@ -1871,22 +1871,27 @@ function (_Entity) {
     _this.toggleInvinsible = _this.toggleInvinsible.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.createHurtBox = _this.createHurtBox.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.toggleSpin = _this.toggleSpin.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.clearTimeouts = _this.clearTimeouts.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
   _createClass(Link, [{
+    key: "clearTimeouts",
+    value: function clearTimeouts() {
+      clearTimeout(this.soundTimeout);
+      clearTimeout(this.spinTimeout);
+    }
+  }, {
     key: "parseKeyUp",
     value: function parseKeyUp(e) {
       var _this2 = this;
 
-      // e.preventDefault();
       if (e.keyCode === 32) {
         if (this.spinCharged) {
           this.frameIndex = 2;
           this.ticksPerFrame = 2;
           this.spinning = true;
           this.swordSpinSound.play();
-          this.cancelSpin = true;
           this.spinCharged = false;
 
           this.hurtBox = function () {
@@ -1896,9 +1901,7 @@ function (_Entity) {
             });
           };
         } else {
-          clearTimeout(this.spinTimout);
-          clearTimeout(this.soundTimout);
-          this.cancelSpin = true;
+          this.clearTimeouts();
           this.chargingSpin = false;
           this.swordChargeSound.pause();
           this.swordChargeSound.currentTime = 0;
@@ -1914,7 +1917,6 @@ function (_Entity) {
   }, {
     key: "parseKeyDown",
     value: function parseKeyDown(e) {
-      // e.preventDefault();
       if (e.keyCode === 32) this.swingSword();
       if (e.keyCode === 87 || e.keyCode === 38) this.up = true;
       if (e.keyCode === 65 || e.keyCode === 37) this.left = true;
@@ -2027,11 +2029,9 @@ function (_Entity) {
         this.frameLen = WALK_SIDE.length;
       } else {
         this.chargingSpin = true;
-        this.cancelSpin = false;
-        clearTimeout(this.spinTimout);
-        clearTimeout(this.soundTimout);
-        this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 250);
-        this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 500);
+        this.clearTimeouts();
+        this.soundTimeout = window.setTimeout(this.playChargeSound.bind(this), 250);
+        this.spinTimeout = window.setTimeout(this.finishChargeing.bind(this), 500);
       }
 
       this.ticksPerFrame = 6;
@@ -2049,17 +2049,13 @@ function (_Entity) {
   }, {
     key: "playChargeSound",
     value: function playChargeSound() {
-      if (!this.cancelSpin) {
-        this.swordChargeSound.play();
-      }
+      this.swordChargeSound.play();
     }
   }, {
     key: "finishChargeing",
     value: function finishChargeing() {
-      if (!this.cancelSpin) {
-        this.spinCharged = true;
-        this.chargingSpin = false;
-      }
+      this.spinCharged = true;
+      this.chargingSpin = false;
     }
   }, {
     key: "hitByEnemy",

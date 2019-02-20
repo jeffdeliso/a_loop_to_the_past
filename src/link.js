@@ -121,23 +121,25 @@ class Link extends Entity {
     this.toggleInvinsible = this.toggleInvinsible.bind(this);
     this.createHurtBox = this.createHurtBox.bind(this);
     this.toggleSpin = this.toggleSpin.bind(this);
+    this.clearTimeouts = this.clearTimeouts.bind(this);
+  }
+
+  clearTimeouts() {
+    clearTimeout(this.soundTimeout);
+    clearTimeout(this.spinTimeout);
   }
 
   parseKeyUp(e) {
-    // e.preventDefault();
     if (e.keyCode === 32) {
       if (this.spinCharged) {
         this.frameIndex = 2;
         this.ticksPerFrame = 2;
         this.spinning = true;
         this.swordSpinSound.play();
-        this.cancelSpin = true;
         this.spinCharged = false;
         this.hurtBox = () => new Sword({ pos: [this.x() - 25, this.y() - 25], box: [85, 85] });
       } else {
-        clearTimeout(this.spinTimout);
-        clearTimeout(this.soundTimout);
-        this.cancelSpin = true;
+        this.clearTimeouts();
         this.chargingSpin = false;
         this.swordChargeSound.pause();
         this.swordChargeSound.currentTime = 0;
@@ -152,7 +154,6 @@ class Link extends Entity {
   }
 
   parseKeyDown(e) {
-    // e.preventDefault();
     if (e.keyCode === 32) this.swingSword();
     if (e.keyCode === 87 || e.keyCode === 38) this.up = true;
     if (e.keyCode === 65 || e.keyCode === 37) this.left = true;
@@ -246,11 +247,9 @@ class Link extends Entity {
       this.frameLen = WALK_SIDE.length;
     } else {
       this.chargingSpin = true;
-      this.cancelSpin = false;
-      clearTimeout(this.spinTimout);
-      clearTimeout(this.soundTimout);
-      this.soundTimeout = setTimeout(this.playChargeSound.bind(this), 250);
-      this.spinTimeout = setTimeout(this.finishChargeing.bind(this), 500);
+      this.clearTimeouts();
+      this.soundTimeout = window.setTimeout(this.playChargeSound.bind(this), 250);
+      this.spinTimeout = window.setTimeout(this.finishChargeing.bind(this), 500);
     }
     this.ticksPerFrame = 6;
     this.sword = !this.sword;
@@ -265,16 +264,12 @@ class Link extends Entity {
   }
 
   playChargeSound() {
-    if (!this.cancelSpin) {
-      this.swordChargeSound.play();
-    }
+    this.swordChargeSound.play();
   }
 
   finishChargeing() {
-    if (!this.cancelSpin) {
-      this.spinCharged = true;
-      this.chargingSpin = false;
-    }
+    this.spinCharged = true;
+    this.chargingSpin = false;
   }
 
   hitByEnemy(vect) {
