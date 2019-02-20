@@ -1721,7 +1721,7 @@ function (_Entity) {
       var _this2 = this;
 
       this.flash = true;
-      this.removeTimout = setTimeout(function () {
+      this.removeTimeout = setTimeout(function () {
         return _this2.game.removeItem(_this2);
       }, 5000);
     }
@@ -1729,7 +1729,7 @@ function (_Entity) {
     key: "removeTimeouts",
     value: function removeTimeouts() {
       clearTimeout(this.flashTimeout);
-      clearTimeout(this.removeTimout);
+      clearTimeout(this.removeTimeout);
     }
   }, {
     key: "draw",

@@ -15,12 +15,12 @@ class Heart extends Entity {
 
   startFlash() {
     this.flash = true;
-    this.removeTimout = setTimeout(() => this.game.removeItem(this), 5000);
+    this.removeTimeout = setTimeout(() => this.game.removeItem(this), 5000);
   }
 
   removeTimeouts() {
     clearTimeout(this.flashTimeout);
-    clearTimeout(this.removeTimout);
+    clearTimeout(this.removeTimeout);
   }
 
   draw(ctx) {
