@@ -32,7 +32,7 @@ The goal of the game is to kill as many enemies as possible before you run out o
 
 Enemies with move around obsticales to get to the player. This is achieved by creating a line at the angle between the enemy and the player.  If this line intersects with any obstacles the enemies angle is incremented both clockwise and counter clockwise until an angle is found that does not intersect with any obstacles.  Once an angle is found, a vector is created from that angle for the enemy to move.
 
-```javascipt
+```javascript
 findMoveAngle() {
   const angleToLink = this.angleToPos(this.link.pos);
   let angleToLink1 = angleToLink;
