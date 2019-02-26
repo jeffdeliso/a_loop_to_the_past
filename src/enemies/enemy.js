@@ -21,8 +21,8 @@ class Enemy extends Entity {
     this.walkDir = 'down';
     this.life = 3;
     this.delta = 1;
-    this.angle1 = true;
-    this.angle2 = true;
+    this.clockwise = true;
+    this.counterClockwise = true;
     this.dropChance = 0.2;
 
     this.move = this.move.bind(this);
@@ -39,8 +39,8 @@ class Enemy extends Entity {
 
   findMoveAngle() {
     const angleToLink = this.angleToPos(this.link.pos);
-    let angleToLink1 = angleToLink;
-    let angleToLink2 = angleToLink;
+    let clockwiseAngle = angleToLink;
+    let counterClockwiseAngle = angleToLink;
     let dist = this.distanceToObject(this.link);
 
     if (dist > 150) {
@@ -48,42 +48,48 @@ class Enemy extends Entity {
     }
 
     let timeOut;
+
     while (true) {
       if (this.link.walking) {
         if (timeOut) clearTimeout(timeOut);
-        this.angle1 = true;
-        this.angle2 = true;
+        this.clockwise = true;
+        this.counterClockwise = true;
       }
       
-      if (this.angle1 && !this.checkObstacles(angleToLink1, dist)) {
-      // if (!this.checkObstacles(angleToLink1, dist)) {
-        this.angle2 = false;
-        timeOut = setTimeout(() => this.angle2 = true, 4000);
-        return angleToLink1;
+      if (this.clockwise && !this.checkObstacles(clockwiseAngle, dist)) {
+        this.counterClockwise = false;
+        timeOut = setTimeout(() => this.counterClockwise = true, 4000);
+
+        return clockwiseAngle;
       }
-      if (this.angle2 && !this.checkObstacles(angleToLink2, dist)) {
-      // if (!this.checkObstacles(angleToLink2, dist)) {
-        this.angle1 = false;
-        timeOut = setTimeout(() => this.angle1 = true, 4000);
-        return angleToLink2;
+
+      if (this.counterClockwise && !this.checkObstacles(counterClockwiseAngle, dist)) {
+        this.clockwise = false;
+        timeOut = setTimeout(() => this.clockwise = true, 4000);
+
+        return counterClockwiseAngle;
       }
-      if (angleToLink1 > Math.PI + angleToLink) {
+
+      if (clockwiseAngle > Math.PI + angleToLink) {
         return angleToLink;
       }
 
-      angleToLink1 += 0.1;
-      angleToLink2 -= 0.1;
+      clockwiseAngle += 0.1;
+      counterClockwiseAngle -= 0.1;
     }
   }
 
   checkObstacles(angle, dist) {
     const obstacles = this.game.obstacles;
+
     for (let i = 0; i < obstacles.length; i++) {
       const obj = obstacles[i];
+
       if (this.objectBetweenSelfAndLink(obj, angle, dist)) {
         return true;
       }
     }
+
     return false;
   }
 
@@ -105,10 +111,9 @@ class Enemy extends Entity {
     for (let i = 0; i < borders.length; i++) {
       for (let j = 0; j < corners.length; j++) {
         const corner = corners[j];
-        
         const pos = borders[i];
-  
         const newPos = this.findNewPoint(corner[0], corner[1], angle, dist);
+        
         if (this.intersects(corner[0], corner[1], newPos.x, newPos.y, ...pos)) {
           return true;
         }
