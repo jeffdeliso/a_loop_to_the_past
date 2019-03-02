@@ -7,6 +7,7 @@ const DEATH = [
   [157, 5, 24, 22]
 ];
 
+
 class Enemy extends Entity {
   constructor(options) {
     super(options);
