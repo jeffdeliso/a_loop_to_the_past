@@ -1,6 +1,6 @@
 # A Loop to the Past
 
-[Live Site](http://www.jeffdeliso.com/a_loop_to_the_past/)
+[Live Site](https://jeffdeliso.github.io/a_loop_to_the_past/)
 
 ![alt text](https://s3.amazonaws.com/discors-dev/loop.jpg)
 
